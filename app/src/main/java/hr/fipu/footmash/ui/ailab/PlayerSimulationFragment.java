@@ -26,8 +26,8 @@ public class PlayerSimulationFragment extends Fragment {
     private FragmentPlayerSimulationBinding binding;
     private PlayerSimulationViewModel viewModel;
     
-    // Ključ koji nam je korisnik dao unaprijed: 
-    private final String GEMINI_API_KEY = "AIzaSyCQmFGmVTqOMQ6A_hvYT6_T6k84VHMFYTA";
+    // Ključ se sada dohvaća iz BuildConfig-a (local.properties)
+    private final String GEMINI_API_KEY = hr.fipu.footmash.BuildConfig.GEMINI_API_KEY;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,

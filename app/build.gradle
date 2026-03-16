@@ -2,6 +2,11 @@ plugins {
     alias(libs.plugins.android.application)
 }
 
+Properties properties = new Properties()
+if (project.rootProject.file('local.properties').exists()) {
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+}
+
 android {
     namespace 'hr.fipu.footmash'
     compileSdk 35
@@ -14,6 +19,9 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        
+        // Dodajemo ključ u BuildConfig (pripazi na navodnike u local.properties ili ovdje)
+        buildConfigField "String", "GEMINI_API_KEY", properties.getProperty('GEMINI_API_KEY', '""')
     }
 
     buildTypes {
@@ -28,6 +36,7 @@ android {
     }
     buildFeatures {
         viewBinding true
+        buildConfig true
     }
 }
 
