@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/nav_home">
+
+    <!-- Home -->
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="hr.fipu.footmash.ui.home.HomeFragment"
+        android:label="@string/nav_home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_home_to_countries"
+            app:destination="@id/nav_countries" />
+    </fragment>
+
+    <!-- Countries -->
+    <fragment
+        android:id="@+id/nav_countries"
+        android:name="hr.fipu.footmash.ui.leagues.CountriesFragment"
+        android:label="@string/countries_title"
+        tools:layout="@layout/fragment_countries">
+        <action
+            android:id="@+id/action_countries_to_leagues"
+            app:destination="@id/nav_leagues_list" />
+    </fragment>
+
+    <!-- Leagues (za odabranu zemlju) -->
+    <fragment
+        android:id="@+id/nav_leagues"
+        android:name="hr.fipu.footmash.ui.leagues.CountriesFragment"
+        android:label="@string/nav_leagues"
+        tools:layout="@layout/fragment_countries">
+        <action
+            android:id="@+id/action_leagues_tab_to_leagues"
+            app:destination="@id/nav_leagues_list" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_leagues_list"
+        android:name="hr.fipu.footmash.ui.leagues.LeaguesFragment"
+        android:label="@string/leagues_title"
+        tools:layout="@layout/fragment_leagues">
+        <argument
+            android:name="countryName"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_leagues_to_standings"
+            app:destination="@id/nav_standings" />
+        <action
+            android:id="@+id/action_leagues_to_teams"
+            app:destination="@id/nav_teams_list" />
+    </fragment>
+
+    <!-- Standings -->
+    <fragment
+        android:id="@+id/nav_standings"
+        android:name="hr.fipu.footmash.ui.leagues.StandingsFragment"
+        android:label="@string/standings_title"
+        tools:layout="@layout/fragment_standings">
+        <argument
+            android:name="leagueId"
+            app:argType="integer" />
+        <argument
+            android:name="season"
+            app:argType="integer" />
+        <argument
+            android:name="leagueName"
+            app:argType="string" />
+    </fragment>
+
+    <!-- Teams list -->
+    <fragment
+        android:id="@+id/nav_teams"
+        android:name="hr.fipu.footmash.ui.teams.TeamsFragment"
+        android:label="@string/nav_teams"
+        tools:layout="@layout/fragment_teams">
+        <action
+            android:id="@+id/action_teams_tab_to_detail"
+            app:destination="@id/nav_team_detail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_teams_list"
+        android:name="hr.fipu.footmash.ui.teams.TeamsFragment"
+        android:label="@string/teams_title"
+        tools:layout="@layout/fragment_teams">
+        <argument
+            android:name="leagueId"
+            app:argType="integer" />
+        <argument
+            android:name="season"
+            app:argType="integer" />
+        <argument
+            android:name="leagueName"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_teams_to_detail"
+            app:destination="@id/nav_team_detail" />
+    </fragment>
+
+    <!-- Team detail -->
+    <fragment
+        android:id="@+id/nav_team_detail"
+        android:name="hr.fipu.footmash.ui.teams.TeamDetailFragment"
+        android:label="@string/team_details"
+        tools:layout="@layout/fragment_team_detail">
+        <argument
+            android:name="teamId"
+            app:argType="integer" />
+        <argument
+            android:name="leagueId"
+            app:argType="integer" />
+        <argument
+            android:name="season"
+            app:argType="integer" />
+        <argument
+            android:name="teamName"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_team_to_players"
+            app:destination="@id/nav_players" />
+        <action
+            android:id="@+id/action_team_to_player_detail"
+            app:destination="@id/nav_player_detail" />
+    </fragment>
+
+    <!-- Players -->
+    <fragment
+        android:id="@+id/nav_players"
+        android:name="hr.fipu.footmash.ui.players.PlayersFragment"
+        android:label="@string/players_title"
+        tools:layout="@layout/fragment_players">
+        <argument
+            android:name="teamId"
+            app:argType="integer" />
+        <argument
+            android:name="season"
+            app:argType="integer" />
+        <argument
+            android:name="teamName"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_players_to_detail"
+            app:destination="@id/nav_player_detail" />
+    </fragment>
+
+    <!-- Player detail -->
+    <fragment
+        android:id="@+id/nav_player_detail"
+        android:name="hr.fipu.footmash.ui.players.PlayerDetailFragment"
+        android:label="@string/player_details"
+        tools:layout="@layout/fragment_player_detail">
+        <argument
+            android:name="playerData"
+            app:argType="string" />
+    </fragment>
+
+    <!-- AI Lab -->
+    <fragment
+        android:id="@+id/nav_ai_lab"
+        android:name="hr.fipu.footmash.ui.ailab.AILabFragment"
+        android:label="@string/nav_ai_lab"
+        tools:layout="@layout/fragment_ai_lab">
+        <action
+            android:id="@+id/action_aiLab_to_playerSimulation"
+            app:destination="@id/playerSimulation" />
+        <action
+            android:id="@+id/action_aiLab_to_teamSimulation"
+            app:destination="@id/teamSimulation" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/playerSimulation"
+        android:name="hr.fipu.footmash.ui.ailab.PlayerSimulationFragment"
+        android:label="Simulacija Igrača"
+        tools:layout="@layout/fragment_player_simulation">
+    </fragment>
+
+    <fragment
+        android:id="@+id/teamSimulation"
+        android:name="hr.fipu.footmash.ui.ailab.TeamSimulationFragment"
+        android:label="Simulacija Tima"
+        tools:layout="@layout/fragment_team_simulation">
+    </fragment>
+
+
+</navigation>

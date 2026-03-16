@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingVertical="12dp"
+    android:paddingHorizontal="16dp">
+
+    <!-- Text Row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/textValueLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2"
+            android:textColor="@color/text_primary"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textStatName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Shots on goal"
+            android:textAlignment="center"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/textValueRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="6"
+            android:textColor="@color/accent_blue"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Progress Bars container -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        android:weightSum="100">
+
+        <!-- Left Bar (Home) -->
+        <View
+            android:id="@+id/barLeft"
+            android:layout_width="0dp"
+            android:layout_height="6dp"
+            android:layout_weight="25"
+            android:background="@drawable/bg_pill_unselected"
+            android:backgroundTint="@color/stat_home"
+            android:layout_marginEnd="4dp" />
+
+        <!-- Right Bar (Away) -->
+        <View
+            android:id="@+id/barRight"
+            android:layout_width="0dp"
+            android:layout_height="6dp"
+            android:layout_weight="75"
+            android:background="@drawable/bg_pill_selected"
+            android:layout_marginStart="4dp" />
+
+    </LinearLayout>
+</LinearLayout>

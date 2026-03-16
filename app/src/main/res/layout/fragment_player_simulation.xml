@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Novi Igrač"
+        android:textColor="@color/accent_blue"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/editPlayerName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:hint="Ime igrača"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_secondary"
+        android:backgroundTint="@color/divider" />
+
+    <EditText
+        android:id="@+id/editPlayerPosition"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Pozicija (npr. Attacker)"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_secondary"
+        android:backgroundTint="@color/divider" />
+
+    <EditText
+        android:id="@+id/editTargetTeam"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="ID Kluba (npr. 33 za Man Utd)"
+        android:inputType="number"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_secondary"
+        android:backgroundTint="@color/divider" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnRunSimulation"
+        style="@style/PillButton.Active"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="POKRENI GEMINI SIMULACIJU" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="24dp">
+
+        <TextView
+            android:id="@+id/textSimulationResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
+            android:textSize="14sp" />
+    </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+</LinearLayout>

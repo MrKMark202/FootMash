@@ -1,3 +1,139 @@
 <resources>
     <string name="app_name">FootMash</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Početna</string>
+    <string name="nav_leagues">Lige</string>
+    <string name="nav_teams">Timovi</string>
+    <string name="nav_ai_lab">AI Lab</string>
+
+    <!-- Home -->
+    <string name="welcome_title">Dobrodošli u FootMash</string>
+    <string name="welcome_subtitle">Sve o svjetskom nogometu na jednom mjestu</string>
+    <string name="search_hint">Pretraži lige, klubove, igrače…</string>
+    <string name="featured_leagues">Popularne lige</string>
+    <string name="all_countries">Sve zemlje</string>
+
+    <!-- Countries -->
+    <string name="countries_title">Zemlje</string>
+    <string name="no_countries">Nema dostupnih zemalja</string>
+
+    <!-- Leagues -->
+    <string name="leagues_title">Lige</string>
+    <string name="no_leagues">Nema dostupnih liga</string>
+    <string name="league_type">Liga</string>
+    <string name="cup_type">Kup</string>
+    <string name="select_season">Odaberi sezonu</string>
+
+    <!-- Teams -->
+    <string name="teams_title">Timovi</string>
+    <string name="no_teams">Nema dostupnih timova</string>
+    <string name="team_details">Detalji tima</string>
+    <string name="founded">Osnovan</string>
+    <string name="stadium">Stadion</string>
+    <string name="capacity">Kapacitet</string>
+    <string name="country">Država</string>
+    <string name="squad">Roster</string>
+
+    <!-- Players -->
+    <string name="players_title">Igrači</string>
+    <string name="no_players">Nema dostupnih igrača</string>
+    <string name="player_details">Detalji igrača</string>
+    <string name="nationality">Nacionalnost</string>
+    <string name="age">Dob</string>
+    <string name="height">Visina</string>
+    <string name="weight">Težina</string>
+    <string name="position">Pozicija</string>
+    <string name="appearances">Nastupi</string>
+    <string name="goals">Golovi</string>
+    <string name="assists">Asistencije</string>
+    <string name="rating">Ocjena</string>
+    <string name="minutes_played">Minute</string>
+    <string name="yellow_cards">Žuti kartoni</string>
+    <string name="red_cards">Crveni kartoni</string>
+
+    <!-- Standings -->
+    <string name="standings_title">Tablica</string>
+    <string name="pos">Poz</string>
+    <string name="team">Tim</string>
+    <string name="played">OU</string>
+    <string name="won">P</string>
+    <string name="drawn">N</string>
+    <string name="lost">I</string>
+    <string name="gd">GR</string>
+    <string name="pts">Bod</string>
+
+    <!-- AI Lab -->
+    <string name="ai_lab_title">AI Laboratorij</string>
+    <string name="ai_lab_subtitle">Kreiraj vlastite igrače i timove</string>
+    <string name="create_player">Kreiraj igrača</string>
+    <string name="create_team">Kreiraj tim</string>
+    <string name="my_players">Moji igrači</string>
+    <string name="my_teams">Moji timovi</string>
+
+    <!-- Create player -->
+    <string name="first_name">Ime</string>
+    <string name="last_name">Prezime</string>
+    <string name="select_position">Odaberi poziciju</string>
+    <string name="select_nationality">Odaberi nacionalnost</string>
+    <string name="select_club">Odaberi klub</string>
+    <string name="attributes">Atributi</string>
+    <string name="pace">Brzina</string>
+    <string name="shooting">Udarac</string>
+    <string name="passing">Dodavanje</string>
+    <string name="dribbling">Dribling</string>
+    <string name="defending">Obrana</string>
+    <string name="physical">Fizička sprema</string>
+    <string name="overall">Ukupno</string>
+    <string name="save_player">Spremi igrača</string>
+    <string name="simulate">Simuliraj</string>
+
+    <!-- Create team -->
+    <string name="team_name">Naziv tima</string>
+    <string name="select_formation">Odaberi formaciju</string>
+    <string name="select_league">Odaberi ligu</string>
+    <string name="add_players">Dodaj igrače</string>
+    <string name="save_team">Spremi tim</string>
+
+    <!-- Simulation -->
+    <string name="simulation_results">Rezultati simulacije</string>
+    <string name="predicted_stats">Predviđena statistika</string>
+    <string name="predicted_position">Predviđena pozicija</string>
+    <string name="season_prediction">Predikcija sezone</string>
+
+    <!-- General -->
+    <string name="loading">Učitavanje…</string>
+    <string name="error_loading">Greška pri učitavanju podataka</string>
+    <string name="retry">Pokušaj ponovo</string>
+    <string name="no_api_key">Unesite API ključ u postavkama</string>
+    <string name="settings">Postavke</string>
+    <string name="api_key">API ključ</string>
+    <string name="save">Spremi</string>
+    <string name="cancel">Odustani</string>
+    <string name="delete">Obriši</string>
+    <string name="confirm_delete">Jeste li sigurni?</string>
+
+    <!-- Positions -->
+    <string name="pos_goalkeeper">Golman</string>
+    <string name="pos_defender">Branič</string>
+    <string name="pos_midfielder">Veznjak</string>
+    <string name="pos_forward">Napadač</string>
+
+    <!-- Formations -->
+    <string-array name="formations">
+        <item>4-4-2</item>
+        <item>4-3-3</item>
+        <item>3-5-2</item>
+        <item>4-2-3-1</item>
+        <item>3-4-3</item>
+        <item>5-3-2</item>
+        <item>4-1-4-1</item>
+    </string-array>
+
+    <string-array name="positions">
+        <item>GK</item>
+        <item>DF</item>
+        <item>MF</item>
+        <item>FW</item>
+    </string-array>
 </resources>

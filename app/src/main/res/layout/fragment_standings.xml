@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/primary"
+        android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar" />
+
+    <!-- Table Header (Legend) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:background="@color/surface">
+        
+        <TextView android:layout_width="24dp" android:layout_height="wrap_content" android:text="#" android:textColor="@color/text_secondary" android:textSize="12sp" android:textStyle="bold" />
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="8dp" android:text="@string/team" android:textColor="@color/text_secondary" android:textSize="12sp" android:textStyle="bold" />
+        
+        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal">
+            <TextView android:layout_width="28dp" android:layout_height="wrap_content" android:text="@string/played" android:gravity="center" android:textColor="@color/text_secondary" android:textSize="12sp" android:textStyle="bold" />
+            <TextView android:layout_width="24dp" android:layout_height="wrap_content" android:text="@string/won" android:gravity="center" android:textColor="@color/text_secondary" android:textSize="12sp" android:textStyle="bold" />
+            <TextView android:layout_width="24dp" android:layout_height="wrap_content" android:text="@string/drawn" android:gravity="center" android:textColor="@color/text_secondary" android:textSize="12sp" android:textStyle="bold" />
+            <TextView android:layout_width="24dp" android:layout_height="wrap_content" android:text="@string/lost" android:gravity="center" android:textColor="@color/text_secondary" android:textSize="12sp" android:textStyle="bold" />
+            <TextView android:layout_width="32dp" android:layout_height="wrap_content" android:text="@string/gd" android:gravity="center" android:textColor="@color/text_secondary" android:textSize="12sp" android:textStyle="bold" />
+            <TextView android:layout_width="32dp" android:layout_height="wrap_content" android:text="@string/pts" android:gravity="center" android:textColor="@color/text_primary" android:textSize="12sp" android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/divider" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerStandings"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="8dp" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/textEmpty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Nema dostupne tablice"
+            android:textColor="@color/text_secondary"
+            android:textSize="16sp"
+            android:visibility="gone" />
+    </FrameLayout>
+</LinearLayout>

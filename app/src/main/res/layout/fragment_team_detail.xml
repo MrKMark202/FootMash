@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="80dp">
+
+        <!-- Top Header Bar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="24dp"
+            android:paddingTop="32dp"
+            android:paddingBottom="16dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@android:drawable/ic_media_previous"
+                android:background="@drawable/bg_icon_circle"
+                android:padding="12dp"
+                android:tint="@color/text_primary" />
+
+            <TextView
+                android:id="@+id/textLeagueTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Team Details"
+                android:gravity="center"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@android:drawable/ic_menu_more"
+                android:background="@drawable/bg_icon_circle"
+                android:padding="12dp"
+                android:tint="@color/text_primary" />
+        </LinearLayout>
+
+        <!-- Big Blue Card (Match style stats for the team generally) -->
+        <com.google.android.material.card.MaterialCardView
+            style="@style/MatchCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <TextView
+                    android:id="@+id/textLeagueNameCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Team Profile"
+                    android:textAlignment="center"
+                    android:textColor="@color/text_on_dark"
+                    android:textStyle="bold"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/textSeasonInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="2023 Season"
+                    android:textAlignment="center"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"
+                    android:layout_marginTop="4dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginTop="24dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <ImageView
+                            android:id="@+id/imageTeamLogo"
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:src="@android:drawable/ic_menu_myplaces" />
+                        <TextView
+                            android:id="@+id/textTeamName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Team"
+                            android:textColor="@color/text_on_dark"
+                            android:textStyle="bold"
+                            android:layout_marginTop="8dp" />
+                        <TextView
+                            android:id="@+id/textTeamCountry"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Country"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Tabs: Stats | Line-up | Summary -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="24dp"
+            android:layout_marginTop="32dp"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Stats"
+                android:background="@drawable/bg_pill_selected"
+                android:textColor="@color/text_on_primary"
+                android:textStyle="bold"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="8dp"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/btnViewSquad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Line-up"
+                android:background="@drawable/bg_pill_unselected"
+                android:textColor="@color/text_secondary"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="8dp"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Summary"
+                android:background="@drawable/bg_pill_unselected"
+                android:textColor="@color/text_secondary"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="8dp" />
+        </LinearLayout>
+
+        <!-- Stats White/Dark Card with rows -->
+        <com.google.android.material.card.MaterialCardView
+            style="@style/FootMashCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="24dp">
+
+            <LinearLayout
+                android:id="@+id/layoutStatsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <!-- Here we would programmatically add layout_stats_row.xml -->
+                <include layout="@layout/layout_stats_row" />
+                <include layout="@layout/layout_stats_row" />
+                <include layout="@layout/layout_stats_row" />
+                <include layout="@layout/layout_stats_row" />
+
+                <!-- Some basic text until we populate -->
+                <TextView
+                    android:id="@+id/textForm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Forma: "
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="8dp" />
+
+                <TextView
+                    android:id="@+id/textFixtures"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Odigrano:"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginStart="8dp" />
+
+                <TextView
+                    android:id="@+id/textGoals"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Zabijeni:"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginStart="8dp" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
