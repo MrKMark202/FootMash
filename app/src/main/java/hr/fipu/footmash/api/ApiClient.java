@@ -15,9 +15,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ApiClient {
 
-    private static final String BASE_URL = "https://v3.football.api-sports.io/";
+    private static final String BASE_URL = "https://apiv2.allsportsapi.com/football/";
     private static Retrofit retrofit = null;
-    private static String apiKey = "";
+    private static String apiKey = hr.fipu.footmash.BuildConfig.FOOTBALL_API_KEY.replace("\"", "");
 
     public static void setApiKey(String key) {
         apiKey = key;
@@ -35,10 +35,11 @@ public class ApiClient {
 
             OkHttpClient client = new OkHttpClient.Builder()
                     .addInterceptor(chain -> {
-                        Request original = chain.request();
-                        Request request = original.newBuilder()
-                                .header("x-apisports-key", apiKey)
-                                .method(original.method(), original.body())
+                        okhttp3.HttpUrl url = chain.request().url().newBuilder()
+                                .addQueryParameter("APIkey", apiKey)
+                                .build();
+                        okhttp3.Request request = chain.request().newBuilder()
+                                .url(url)
                                 .build();
                         return chain.proceed(request);
                     })

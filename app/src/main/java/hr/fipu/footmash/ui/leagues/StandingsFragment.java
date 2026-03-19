@@ -56,6 +56,14 @@ public class StandingsFragment extends Fragment {
 
     private void setupRecyclerView() {
         adapter = new StandingsAdapter();
+        adapter.setOnTeamClickListener(standing -> {
+            Bundle args = new Bundle();
+            args.putInt("teamId", standing.getTeamKey());
+            args.putInt("leagueId", leagueId);
+            args.putInt("season", season);
+            args.putString("teamName", standing.getStandingTeam());
+            Navigation.findNavController(binding.getRoot()).navigate(R.id.nav_team_detail, args);
+        });
         binding.recyclerStandings.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.recyclerStandings.setAdapter(adapter);
     }
@@ -64,23 +72,13 @@ public class StandingsFragment extends Fragment {
         binding.progressBar.setVisibility(View.VISIBLE);
         binding.textEmpty.setVisibility(View.GONE);
 
-        viewModel.getStandings(leagueId, season).observe(getViewLifecycleOwner(), standingsResponses -> {
+        viewModel.getStandings(leagueId, season).observe(getViewLifecycleOwner(), standings -> {
             binding.progressBar.setVisibility(View.GONE);
             
-            if (standingsResponses != null && !standingsResponses.isEmpty()) {
-                // Obično tablica dolazi u listi listi (npr. grupirano). API-Football v3 struktura standings:
-                // Response -> League -> Standings[][] (list of lists of standing info)
-                if (standingsResponses.get(0).getLeague() != null && 
-                    standingsResponses.get(0).getLeague().getStandings() != null && 
-                    !standingsResponses.get(0).getLeague().getStandings().isEmpty()) {
-                    
-                    // Uzimamo prvu grupu tablice
-                    adapter.setStandings(standingsResponses.get(0).getLeague().getStandings().get(0));
-                    binding.recyclerStandings.setVisibility(View.VISIBLE);
-                    binding.textEmpty.setVisibility(View.GONE);
-                } else {
-                    showEmpty();
-                }
+            if (standings != null && !standings.isEmpty()) {
+                adapter.setStandings(standings);
+                binding.recyclerStandings.setVisibility(View.VISIBLE);
+                binding.textEmpty.setVisibility(View.GONE);
             } else {
                 showEmpty();
             }

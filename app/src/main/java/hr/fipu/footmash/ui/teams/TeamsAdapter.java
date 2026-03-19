@@ -58,24 +58,18 @@ public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.TeamViewHold
             this.binding = binding;
         }
 
-        public void bind(TeamResponse teamResponse) {
-            TeamResponse.TeamInfo team = teamResponse.getTeam();
-            binding.textTeamName.setText(team.getName());
-            binding.textTeamCountry.setText(team.getCountry());
-            
-            if (team.getFounded() > 0) {
-                binding.textFounded.setText(String.valueOf(team.getFounded()));
-            } else {
-                binding.textFounded.setText("-");
-            }
+        public void bind(TeamResponse team) {
+            binding.textTeamName.setText(team.getTeamName());
+            binding.textTeamCountry.setText(""); // Not directly in simple response
+            binding.textFounded.setText("-");
 
             Glide.with(itemView.getContext())
-                    .load(team.getLogo())
+                    .load(team.getTeamBadge())
                     .placeholder(R.drawable.ic_launcher_background)
                     .into(binding.imageTeamLogo);
 
             binding.getRoot().setOnClickListener(v -> {
-                if (listener != null) listener.onTeamClick(teamResponse);
+                if (listener != null) listener.onTeamClick(team);
             });
         }
     }

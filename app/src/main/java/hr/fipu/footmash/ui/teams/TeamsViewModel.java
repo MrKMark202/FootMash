@@ -21,7 +21,7 @@ public class TeamsViewModel extends ViewModel {
         return repository.getTeamsByLeague(leagueId, season);
     }
 
-    public LiveData<TeamStats> getTeamStatistics(int leagueId, int season, int teamId) {
-        return repository.getTeamStatistics(leagueId, teamId, season);
+    public LiveData<List<TeamResponse>> getTeamDetail(int teamId) {
+        return repository.getTeamDetail(teamId);
     }
 }

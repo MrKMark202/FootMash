@@ -20,9 +20,9 @@ public class TeamsFragment extends Fragment {
     private FragmentTeamsBinding binding;
     private TeamsViewModel viewModel;
     private TeamsAdapter adapter;
-    private int leagueId;
-    private int season;
-    private String leagueName;
+    private int leagueId = -1;
+    private int season = 2023;
+    private String leagueName = "";
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -41,6 +41,7 @@ public class TeamsFragment extends Fragment {
             season = getArguments().getInt("season", 2023);
             leagueName = getArguments().getString("leagueName", "");
         }
+        if (leagueName == null) leagueName = "";
         
         binding.toolbar.setTitle(leagueName.isEmpty() ? getString(R.string.teams_title) : leagueName);
         binding.toolbar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material);
@@ -55,12 +56,12 @@ public class TeamsFragment extends Fragment {
     }
 
     private void setupRecyclerView() {
-        adapter = new TeamsAdapter(teamResponse -> {
+        adapter = new TeamsAdapter(team -> {
             Bundle args = new Bundle();
-            args.putInt("teamId", teamResponse.getTeam().getId());
+            args.putInt("teamId", team.getTeamKey());
             args.putInt("leagueId", leagueId);
             args.putInt("season", season);
-            args.putString("teamName", teamResponse.getTeam().getName());
+            args.putString("teamName", team.getTeamName());
             
             Navigation.findNavController(binding.getRoot()).navigate(R.id.action_teams_to_detail, args);
         });

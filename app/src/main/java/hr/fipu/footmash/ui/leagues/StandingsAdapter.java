@@ -16,9 +16,18 @@ import hr.fipu.footmash.model.StandingResponse;
 
 public class StandingsAdapter extends RecyclerView.Adapter<StandingsAdapter.StandingViewHolder> {
 
-    private List<StandingResponse.StandingEntry> standings = new ArrayList<>();
+    public interface OnTeamClickListener {
+        void onTeamClick(StandingResponse team);
+    }
 
-    public void setStandings(List<StandingResponse.StandingEntry> standings) {
+    private List<StandingResponse> standings = new ArrayList<>();
+    private OnTeamClickListener listener;
+
+    public void setOnTeamClickListener(OnTeamClickListener listener) {
+        this.listener = listener;
+    }
+
+    public void setStandings(List<StandingResponse> standings) {
         this.standings = standings;
         notifyDataSetChanged();
     }
@@ -46,27 +55,29 @@ public class StandingsAdapter extends RecyclerView.Adapter<StandingsAdapter.Stan
         public StandingViewHolder(ItemStandingBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            
+            itemView.setOnClickListener(v -> {
+                int position = getBindingAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && listener != null) {
+                    listener.onTeamClick(standings.get(position));
+                }
+            });
         }
 
-        public void bind(StandingResponse.StandingEntry info) {
-            binding.textPos.setText(String.valueOf(info.getRank()));
-            binding.textTeamName.setText(info.getTeam() != null ? info.getTeam().getName() : "");
+        public void bind(StandingResponse info) {
+            binding.textPos.setText(String.valueOf(info.getStandingPlace()));
+            binding.textTeamName.setText(info.getStandingTeam());
             
-            if (info.getTeam() != null && info.getTeam().getLogo() != null) {
-                Glide.with(itemView.getContext())
-                        .load(info.getTeam().getLogo())
-                        .into(binding.imageTeamLogo);
-            }
+            // Note: AllSportsAPI standings might not provide logo in the flat response always
+            // We might need to handle this or load placeholder
+            
+            binding.textPlayed.setText(String.valueOf(info.getStandingW() + info.getStandingD() + info.getStandingL()));
+            binding.textWon.setText(String.valueOf(info.getStandingW()));
+            binding.textDrawn.setText(String.valueOf(info.getStandingD()));
+            binding.textLost.setText(String.valueOf(info.getStandingL()));
 
-            if (info.getAll() != null) {
-                binding.textPlayed.setText(String.valueOf(info.getAll().getPlayed()));
-                binding.textWon.setText(String.valueOf(info.getAll().getWin()));
-                binding.textDrawn.setText(String.valueOf(info.getAll().getDraw()));
-                binding.textLost.setText(String.valueOf(info.getAll().getLose()));
-            }
-
-            binding.textGD.setText(String.valueOf(info.getGoalsDiff()));
-            binding.textPts.setText(String.valueOf(info.getPoints()));
+            binding.textGD.setText(String.valueOf(info.getStandingGD()));
+            binding.textPts.setText(String.valueOf(info.getStandingPts()));
         }
     }
 }

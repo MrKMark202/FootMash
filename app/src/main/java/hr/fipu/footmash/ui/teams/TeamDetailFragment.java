@@ -67,33 +67,30 @@ public class TeamDetailFragment extends Fragment {
 
     private void observeViewModel() {
         binding.progressBar.setVisibility(View.VISIBLE);
-        viewModel.getTeamStatistics(leagueId, season, teamId).observe(getViewLifecycleOwner(), statsResponse -> {
+        viewModel.getTeamDetail(teamId).observe(getViewLifecycleOwner(), teams -> {
             binding.progressBar.setVisibility(View.GONE);
-            if (statsResponse != null) {
+            if (teams != null && !teams.isEmpty()) {
+                hr.fipu.footmash.model.TeamResponse team = teams.get(0);
+                
                 // Info o timu
-                if (statsResponse.getTeam() != null) {
-                    Glide.with(this)
-                            .load(statsResponse.getTeam().getLogo())
-                            .into(binding.imageTeamLogo);
-                    binding.textTeamName.setText(statsResponse.getTeam().getName());
-                }
+                Glide.with(this)
+                        .load(team.getTeamBadge())
+                        .placeholder(R.drawable.ic_launcher_background)
+                        .into(binding.imageTeamLogo);
+                binding.textTeamName.setText(team.getTeamName());
 
-                // Info o stadionu (dobiveno putem teams API prije, ali može i prazno zasad dok ne spojimo)
-                // Ako želimo baš detalje stadiona trebali bi ih dobiti iz Teams poziva,
-                // ali na ovom ekranu smo iz Statistics poziva. Ovdje prikazujemo formu:
+                // AllSportsAPI Teams detalji mogu sadržavati stadion i ostalo, 
+                // ali naša trenutna klasa TeamResponse ima samo osnovna polja.
+                // Privremeno sakrivamo ili stavljamo N/A za detaljne statistike 
+                // koje smo imali u API-Football (formu, odigrano, golove itd.)
                 
-                binding.textForm.setText("Forma: " + (statsResponse.getForm() != null ? statsResponse.getForm() : "N/A"));
-                
-                if (statsResponse.getFixtures() != null) {
-                    binding.textFixtures.setText("Odigrano utakmica: " + statsResponse.getFixtures().getPlayed().getTotal());
-                }
-                
-                if (statsResponse.getGoals() != null && statsResponse.getGoals().getGoalsFor() != null) {
-                    binding.textGoals.setText("Zabijeni golovi: " + statsResponse.getGoals().getGoalsFor().getTotal().getTotal());
-                }
-
-                // Privremeno stavljamo "N/A" za ove podatke dok ih ne spremimo i prenesemo iz Teams adaptera
-                binding.textTeamCountry.setText("Država tima");
+                binding.textForm.setText("Klub: " + team.getTeamName());
+                binding.textFixtures.setText("ID: " + team.getTeamKey());
+                binding.textGoals.setText("");
+                binding.textTeamCountry.setText(""); 
+            } else {
+                binding.textTeamName.setText(teamName);
+                binding.textForm.setText("Podaci o klubu nisu dostupni.");
             }
         });
     }

@@ -45,7 +45,7 @@ public class CountriesFragment extends Fragment {
     private void setupRecyclerView() {
         adapter = new CountriesAdapter(country -> {
             Bundle args = new Bundle();
-            args.putString("countryName", country.getName());
+            args.putString("countryName", country.getCountryName());
             
             // Provjera putanje (iz main nav grafa)
             try {

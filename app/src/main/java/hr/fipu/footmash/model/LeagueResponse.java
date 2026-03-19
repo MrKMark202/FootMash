@@ -8,62 +8,28 @@ import java.util.List;
  * Struktura: { "league": {...}, "country": {...}, "seasons": [...] }
  */
 public class LeagueResponse {
+    @SerializedName("league_key")
+    private int leagueKey;
 
-    @SerializedName("league")
-    private LeagueInfo league;
+    @SerializedName("league_name")
+    private String leagueName;
 
-    @SerializedName("country")
-    private CountryInfo country;
+    @SerializedName("country_key")
+    private int countryKey;
 
-    @SerializedName("seasons")
-    private List<Season> seasons;
+    @SerializedName("country_name")
+    private String countryName;
 
-    public LeagueInfo getLeague() { return league; }
-    public CountryInfo getCountry() { return country; }
-    public List<Season> getSeasons() { return seasons; }
+    @SerializedName("league_logo")
+    private String leagueLogo;
 
-    public static class LeagueInfo {
-        @SerializedName("id")
-        private int id;
-        @SerializedName("name")
-        private String name;
-        @SerializedName("type")
-        private String type;
-        @SerializedName("logo")
-        private String logo;
+    @SerializedName("country_logo")
+    private String countryLogo;
 
-        public int getId() { return id; }
-        public String getName() { return name; }
-        public String getType() { return type; }
-        public String getLogo() { return logo; }
-    }
-
-    public static class CountryInfo {
-        @SerializedName("name")
-        private String name;
-        @SerializedName("code")
-        private String code;
-        @SerializedName("flag")
-        private String flag;
-
-        public String getName() { return name; }
-        public String getCode() { return code; }
-        public String getFlag() { return flag; }
-    }
-
-    public static class Season {
-        @SerializedName("year")
-        private int year;
-        @SerializedName("start")
-        private String start;
-        @SerializedName("end")
-        private String end;
-        @SerializedName("current")
-        private boolean current;
-
-        public int getYear() { return year; }
-        public String getStart() { return start; }
-        public String getEnd() { return end; }
-        public boolean isCurrent() { return current; }
-    }
+    public int getLeagueKey() { return leagueKey; }
+    public String getLeagueName() { return leagueName; }
+    public int getCountryKey() { return countryKey; }
+    public String getCountryName() { return countryName; }
+    public String getLeagueLogo() { return leagueLogo; }
+    public String getCountryLogo() { return countryLogo; }
 }

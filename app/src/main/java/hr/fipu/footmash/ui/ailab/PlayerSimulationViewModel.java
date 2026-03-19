@@ -7,7 +7,9 @@ import androidx.lifecycle.ViewModel;
 import java.util.List;
 
 import hr.fipu.footmash.ai.GeminiRepository;
+import hr.fipu.footmash.model.LeagueResponse;
 import hr.fipu.footmash.model.PlayerResponse;
+import hr.fipu.footmash.model.TeamResponse;
 import hr.fipu.footmash.repository.FootballRepository;
 
 public class PlayerSimulationViewModel extends ViewModel {
@@ -23,6 +25,14 @@ public class PlayerSimulationViewModel extends ViewModel {
     // 1. Dohvati igrače kluba (kako bi znali tko je u ekipi)
     public LiveData<List<PlayerResponse>> getTeamRoster(int teamId, int season) {
         return footballRepository.getPlayersByTeam(teamId, season);
+    }
+
+    public LiveData<List<LeagueResponse>> getLeagues() {
+        return footballRepository.getAllLeagues();
+    }
+
+    public LiveData<List<TeamResponse>> getTeamsByLeague(int leagueId, int season) {
+        return footballRepository.getTeamsByLeague(leagueId, season);
     }
 
     // 2. Pošalji prompt Geminiju

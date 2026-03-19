@@ -51,60 +51,29 @@ public class PlayerDetailFragment extends Fragment {
     private void populateUI() {
         if (playerResponse == null) return;
 
-        PlayerResponse.PlayerInfo p = playerResponse.getPlayer();
-        if (p != null) {
-            binding.textPlayerName.setText(p.getName());
-            binding.textNationality.setText(p.getNationality());
-            binding.textAge.setText(String.valueOf(p.getAge()));
-            binding.textHeight.setText(p.getHeight() != null ? p.getHeight() : "N/A");
-            binding.textWeight.setText(p.getWeight() != null ? p.getWeight() : "N/A");
+        binding.textPlayerName.setText(playerResponse.getPlayerName());
+        binding.textNationality.setText(playerResponse.getPlayerCountry());
+        binding.textAge.setText(playerResponse.getPlayerAge() != null ? playerResponse.getPlayerAge() : "N/A");
+        binding.textHeight.setText(playerResponse.getPlayerNumber() != null ? "Broj: " + playerResponse.getPlayerNumber() : "N/A");
+        binding.textWeight.setText("-");
 
-            Glide.with(this)
-                    .load(p.getPhoto())
-                    .transform(new CircleCrop())
-                    .placeholder(R.drawable.ic_launcher_background)
-                    .into(binding.imagePlayerPhoto);
-        }
+        Glide.with(this)
+                .load(playerResponse.getPlayerImage())
+                .transform(new CircleCrop())
+                .placeholder(R.drawable.ic_launcher_background)
+                .into(binding.imagePlayerPhoto);
 
-        if (playerResponse.getStatistics() != null && !playerResponse.getStatistics().isEmpty()) {
-            PlayerResponse.Statistics stat = playerResponse.getStatistics().get(0);
-            
-            // Postavi osnovni info o tekucem klubu i ligi 
-            if (stat.getTeam() != null) {
-                binding.textClubInfo.setText(stat.getTeam().getName());
-            }
+        binding.textClubInfo.setText(""); // This info might be missing in simple player response
+        binding.textPosition.setText(playerResponse.getPlayerType() != null ? playerResponse.getPlayerType() : "N/A");
+        binding.textAppearances.setText(playerResponse.getPlayerMatchPlayed() != null ? playerResponse.getPlayerMatchPlayed() : "0");
+        binding.textMinutes.setText("-");
+        binding.textRating.setText("-");
 
-            // Statistika utakmica
-            if (stat.getGames() != null) {
-                binding.textPosition.setText(stat.getGames().getPosition() != null ? stat.getGames().getPosition() : "N/A");
-                binding.textAppearances.setText(String.valueOf(stat.getGames().getAppearences()));
-                binding.textMinutes.setText(stat.getGames().getMinutes() + " min");
-                binding.textRating.setText(stat.getGames().getRating() != null ? stat.getGames().getRating() : "N/A");
-            } else {
-                binding.textPosition.setText("N/A");
-                binding.textAppearances.setText("0");
-                binding.textMinutes.setText("0 min");
-                binding.textRating.setText("N/A");
-            }
+        binding.textGoals.setText(playerResponse.getPlayerGoals() != null ? playerResponse.getPlayerGoals() : "0");
+        binding.textAssists.setText("-");
 
-            // Ofenzivna statistika
-            if (stat.getGoals() != null) {
-                binding.textGoals.setText(String.valueOf(stat.getGoals().getTotal()));
-                binding.textAssists.setText(String.valueOf(stat.getGoals().getAssists()));
-            } else {
-                binding.textGoals.setText("0");
-                binding.textAssists.setText("0");
-            }
-
-            // Kartoni
-            if (stat.getCards() != null) {
-                binding.textYellow.setText(String.valueOf(stat.getCards().getYellow()));
-                binding.textRed.setText(String.valueOf(stat.getCards().getRed()));
-            } else {
-                binding.textYellow.setText("0");
-                binding.textRed.setText("0");
-            }
-        }
+        binding.textYellow.setText(playerResponse.getPlayerYellowCards() != null ? playerResponse.getPlayerYellowCards() : "0");
+        binding.textRed.setText(playerResponse.getPlayerRedCards() != null ? playerResponse.getPlayerRedCards() : "0");
     }
 
     @Override

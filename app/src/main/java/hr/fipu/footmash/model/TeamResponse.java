@@ -8,62 +8,51 @@ import com.google.gson.annotations.SerializedName;
  */
 public class TeamResponse {
 
-    @SerializedName("team")
-    private TeamInfo team;
+    @SerializedName("team_key")
+    private int teamKey;
 
-    @SerializedName("venue")
-    private VenueInfo venue;
+    @SerializedName("team_name")
+    private String teamName;
 
-    public TeamInfo getTeam() { return team; }
-    public VenueInfo getVenue() { return venue; }
+    @SerializedName("team_badge")
+    private String teamBadge;
 
-    public static class TeamInfo {
-        @SerializedName("id")
-        private int id;
-        @SerializedName("name")
-        private String name;
-        @SerializedName("code")
-        private String code;
-        @SerializedName("country")
-        private String country;
-        @SerializedName("founded")
-        private int founded;
-        @SerializedName("national")
-        private boolean national;
-        @SerializedName("logo")
-        private String logo;
+    @SerializedName("players")
+    private java.util.List<PlayerInfo> players;
 
-        public int getId() { return id; }
-        public String getName() { return name; }
-        public String getCode() { return code; }
-        public String getCountry() { return country; }
-        public int getFounded() { return founded; }
-        public boolean isNational() { return national; }
-        public String getLogo() { return logo; }
-    }
+    public int getTeamKey() { return teamKey; }
+    public String getTeamName() { return teamName; }
+    public String getTeamBadge() { return teamBadge; }
+    public java.util.List<PlayerInfo> getPlayers() { return players; }
 
-    public static class VenueInfo {
-        @SerializedName("id")
-        private int id;
-        @SerializedName("name")
-        private String name;
-        @SerializedName("address")
-        private String address;
-        @SerializedName("city")
-        private String city;
-        @SerializedName("capacity")
-        private int capacity;
-        @SerializedName("surface")
-        private String surface;
-        @SerializedName("image")
-        private String image;
+    public static class PlayerInfo {
+        @SerializedName("player_key")
+        private long playerKey;
 
-        public int getId() { return id; }
-        public String getName() { return name; }
-        public String getAddress() { return address; }
-        public String getCity() { return city; }
-        public int getCapacity() { return capacity; }
-        public String getSurface() { return surface; }
-        public String getImage() { return image; }
+        @SerializedName("player_name")
+        private String playerName;
+
+        @SerializedName("player_number")
+        private String playerNumber;
+
+        @SerializedName("player_country")
+        private String playerCountry;
+
+        @SerializedName("player_type")
+        private String playerType;
+
+        @SerializedName("player_age")
+        private String playerAge;
+
+        @SerializedName("player_image")
+        private String playerImage;
+
+        public long getPlayerKey() { return playerKey; }
+        public String getPlayerName() { return playerName; }
+        public String getPlayerNumber() { return playerNumber; }
+        public String getPlayerCountry() { return playerCountry; }
+        public String getPlayerType() { return playerType; }
+        public String getPlayerAge() { return playerAge; }
+        public String getPlayerImage() { return playerImage; }
     }
 }

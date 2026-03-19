@@ -20,7 +20,7 @@ public class LeaguesFragment extends Fragment {
     private FragmentLeaguesBinding binding;
     private LeaguesViewModel viewModel;
     private LeaguesAdapter adapter;
-    private String countryName;
+    private String countryName = "World";
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -49,12 +49,10 @@ public class LeaguesFragment extends Fragment {
     private void setupRecyclerView() {
         adapter = new LeaguesAdapter(league -> {
             Bundle args = new Bundle();
-            args.putInt("leagueId", league.getLeague().getId());
-            args.putInt("season", 2023); // Default to current season
-            args.putString("leagueName", league.getLeague().getName());
+            args.putInt("leagueId", league.getLeagueKey());
+            args.putInt("season", 2024); 
+            args.putString("leagueName", league.getLeagueName());
             
-            // Prikazati ćemo Standings za ligu, ili Teams ako je korisnik s "Teams" taba
-            // Ovdje po defaultu idemo na standings
             Navigation.findNavController(binding.getRoot()).navigate(R.id.action_leagues_to_standings, args);
         });
 
@@ -66,7 +64,7 @@ public class LeaguesFragment extends Fragment {
         binding.progressBar.setVisibility(View.VISIBLE);
         binding.textEmpty.setVisibility(View.GONE);
 
-        viewModel.getLeaguesByCountry(countryName).observe(getViewLifecycleOwner(), leagues -> {
+        viewModel.getLeagues().observe(getViewLifecycleOwner(), leagues -> {
             binding.progressBar.setVisibility(View.GONE);
             if (leagues != null && !leagues.isEmpty()) {
                 adapter.setLeagues(leagues);

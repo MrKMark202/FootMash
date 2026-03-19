@@ -41,14 +41,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Live"
+                    android:text="Foot"
                     android:textColor="@color/accent_blue"
                     android:textSize="22sp"
                     android:textStyle="bold" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Score"
+                    android:text="Mash"
                     android:textColor="@color/text_primary"
                     android:textSize="22sp"
                     android:textStyle="bold" />
@@ -63,6 +63,7 @@
 
             <!-- Search Icon -->
             <FrameLayout
+                android:id="@+id/btnSearch"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:background="@drawable/bg_icon_circle">
@@ -91,6 +92,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/chipPremierLeague"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Premier League"
@@ -99,27 +101,22 @@
                     android:textStyle="bold"
                     android:paddingHorizontal="20dp"
                     android:paddingVertical="12dp"
-                    android:layout_marginEnd="12dp" />
+                    android:layout_marginEnd="12dp"
+                    android:clickable="true"
+                    android:focusable="true" />
 
                 <TextView
+                    android:id="@+id/chipCup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="La Liga"
+                    android:text="Cup"
                     android:background="@drawable/bg_pill_unselected"
                     android:textColor="@color/text_secondary"
                     android:paddingHorizontal="20dp"
                     android:paddingVertical="12dp"
-                    android:layout_marginEnd="12dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Serie A"
-                    android:background="@drawable/bg_pill_unselected"
-                    android:textColor="@color/text_secondary"
-                    android:paddingHorizontal="20dp"
-                    android:paddingVertical="12dp"
-                    android:layout_marginEnd="12dp" />
+                    android:layout_marginEnd="12dp"
+                    android:clickable="true"
+                    android:focusable="true" />
             </LinearLayout>
         </HorizontalScrollView>
 
@@ -149,6 +146,7 @@
 
         <!-- Featured Match Card (Blue gradient like in Behance) -->
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/featuredMatchCard"
             style="@style/MatchCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

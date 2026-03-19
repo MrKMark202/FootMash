@@ -21,7 +21,7 @@ public class LeaguesViewModel extends ViewModel {
         return repository.getCountries();
     }
 
-    public LiveData<List<LeagueResponse>> getLeaguesByCountry(String countryName) {
-        return repository.getLeaguesByCountry(countryName);
+    public LiveData<List<LeagueResponse>> getLeagues() {
+        return repository.getAllLeagues();
     }
 }

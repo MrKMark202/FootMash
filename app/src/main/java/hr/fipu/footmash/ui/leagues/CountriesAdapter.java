@@ -42,7 +42,7 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Coun
         } else {
             String q = query.toLowerCase();
             for (CountryResponse c : countriesFull) {
-                if (c.getName().toLowerCase().contains(q)) {
+                if (c.getCountryName().toLowerCase().contains(q)) {
                     countries.add(c);
                 }
             }
@@ -76,15 +76,16 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Coun
         }
 
         public void bind(CountryResponse country) {
-            binding.textCountryName.setText(country.getName());
-            binding.textCountryCode.setText(country.getCode() != null ? country.getCode() : "");
+            binding.textCountryName.setText(country.getCountryName());
+            binding.textCountryCode.setText(""); 
 
-            if (country.getFlag() != null && !country.getFlag().isEmpty()) {
+            if (country.getCountryLogo() != null && !country.getCountryLogo().isEmpty()) {
                 Glide.with(itemView.getContext())
-                        .load(country.getFlag())
+                        .load(country.getCountryLogo())
+                        .placeholder(R.drawable.ic_launcher_background)
                         .into(binding.imageFlag);
             } else {
-                binding.imageFlag.setImageResource(android.R.drawable.ic_menu_myplaces); // Placeholder
+                binding.imageFlag.setImageResource(R.drawable.ic_launcher_background);
             }
 
             binding.getRoot().setOnClickListener(v -> {

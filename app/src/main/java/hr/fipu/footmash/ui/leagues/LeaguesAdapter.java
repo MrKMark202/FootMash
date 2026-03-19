@@ -56,20 +56,17 @@ public class LeaguesAdapter extends RecyclerView.Adapter<LeaguesAdapter.LeagueVi
             this.binding = binding;
         }
 
-        public void bind(LeagueResponse leagueResponse) {
-            LeagueResponse.LeagueInfo league = leagueResponse.getLeague();
-            binding.textLeagueName.setText(league.getName());
-            
-            String type = league.getType() != null ? league.getType() : "Unknown";
-            binding.textLeagueType.setText(type.equals("League") ? R.string.league_type : R.string.cup_type);
+        public void bind(LeagueResponse league) {
+            binding.textLeagueName.setText(league.getLeagueName());
+            binding.textLeagueType.setText(league.getCountryName()); // Show country name as detail
 
             Glide.with(itemView.getContext())
-                    .load(league.getLogo())
+                    .load(league.getLeagueLogo())
                     .placeholder(R.drawable.ic_launcher_background)
                     .into(binding.imageLeagueLogo);
 
             binding.getRoot().setOnClickListener(v -> {
-                if (listener != null) listener.onLeagueClick(leagueResponse);
+                if (listener != null) listener.onLeagueClick(league);
             });
         }
     }

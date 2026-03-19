@@ -43,16 +43,33 @@ public class HomeFragment extends Fragment {
     }
 
     private void setupClickListeners() {
-        // Uklonjeno jer su gumbi maknuti s novim Behance UI dizajnom
-        // Navigacija se sada odvija primarno kroz donju navigacijsku traku
+        binding.btnSearch.setOnClickListener(v -> 
+            Navigation.findNavController(v).navigate(R.id.nav_leagues));
+            
+        binding.featuredMatchCard.setOnClickListener(v -> navigateToStandings(177, "Premier League"));
+
+        binding.chipPremierLeague.setOnClickListener(v -> navigateToStandings(177, "Premier League"));
+        
+        binding.chipCup.setOnClickListener(v -> navigateToStandings(423, "Cup"));
+
+        binding.textAllMatches.setOnClickListener(v -> 
+            Navigation.findNavController(v).navigate(R.id.nav_leagues));
+    }
+
+    private void navigateToStandings(int leagueId, String leagueName) {
+        Bundle args = new Bundle();
+        args.putInt("leagueId", leagueId);
+        args.putInt("season", 0); 
+        args.putString("leagueName", leagueName);
+        Navigation.findNavController(binding.getRoot()).navigate(R.id.nav_standings, args);
     }
 
     private void setupRecyclerView() {
         featuredLeaguesAdapter = new LeaguesAdapter(league -> {
             Bundle args = new Bundle();
-            args.putInt("leagueId", league.getLeague().getId());
-            args.putInt("season", 2023); // Default to current season
-            args.putString("leagueName", league.getLeague().getName());
+            args.putInt("leagueId", league.getLeagueKey());
+            args.putInt("season", 2024); 
+            args.putString("leagueName", league.getLeagueName());
             Navigation.findNavController(binding.getRoot()).navigate(R.id.nav_standings, args);
         });
 

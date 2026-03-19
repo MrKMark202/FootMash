@@ -59,42 +59,32 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.PlayerVi
             this.binding = binding;
         }
 
-        public void bind(PlayerResponse playerResponse) {
-            if (playerResponse.getPlayer() != null) {
-                PlayerResponse.PlayerInfo p = playerResponse.getPlayer();
-                binding.textPlayerName.setText(p.getName());
-                binding.textPlayerInfo.setText(p.getAge() + " god. | " + p.getNationality());
+        public void bind(PlayerResponse player) {
+            binding.textPlayerName.setText(player.getPlayerName());
+            binding.textPlayerInfo.setText(player.getPlayerType());
 
-                Glide.with(itemView.getContext())
-                        .load(p.getPhoto())
-                        .transform(new CircleCrop())
-                        .placeholder(R.drawable.ic_launcher_background)
-                        .into(binding.imagePlayerPhoto);
-            }
+            Glide.with(itemView.getContext())
+                    .load(player.getPlayerImage())
+                    .transform(new CircleCrop())
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .into(binding.imagePlayerPhoto);
 
-            if (playerResponse.getStatistics() != null && !playerResponse.getStatistics().isEmpty()) {
-                PlayerResponse.Statistics stat = playerResponse.getStatistics().get(0);
-                if (stat.getGames() != null && stat.getGames().getPosition() != null) {
-                    binding.textPlayerPosition.setText(stat.getGames().getPosition());
-                    
-                    // Postavi boju ovisno o poziciji
-                    String pos = stat.getGames().getPosition();
-                    int colorRes = R.color.primary_light;
-                    if (pos.equals("Attacker")) colorRes = R.color.position_fw;
-                    else if (pos.equals("Midfielder")) colorRes = R.color.position_mf;
-                    else if (pos.equals("Defender")) colorRes = R.color.position_df;
-                    else if (pos.equals("Goalkeeper")) colorRes = R.color.position_gk;
-                    
-                    binding.textPlayerPosition.setBackgroundColor(itemView.getContext().getResources().getColor(colorRes, itemView.getContext().getTheme()));
-                } else {
-                    binding.textPlayerPosition.setText("UNK");
-                }
-            } else {
-                binding.textPlayerPosition.setText("UNK");
+            binding.textPlayerPosition.setText(player.getPlayerType());
+            
+            // Postavi boju ovisno o poziciji (tipu)
+            String pos = player.getPlayerType();
+            int colorRes = R.color.primary_light;
+            if (pos != null) {
+                if (pos.contains("Forward")) colorRes = R.color.position_fw;
+                else if (pos.contains("Midfield")) colorRes = R.color.position_mf;
+                else if (pos.contains("Defend")) colorRes = R.color.position_df;
+                else if (pos.contains("Goalkeeper")) colorRes = R.color.position_gk;
             }
+            
+            binding.textPlayerPosition.setBackgroundColor(itemView.getContext().getResources().getColor(colorRes, itemView.getContext().getTheme()));
 
             binding.getRoot().setOnClickListener(v -> {
-                if (listener != null) listener.onPlayerClick(playerResponse);
+                if (listener != null) listener.onPlayerClick(player);
             });
         }
     }

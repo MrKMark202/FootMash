@@ -21,15 +21,12 @@ public class HomeViewModel extends ViewModel {
 
     public LiveData<List<LeagueResponse>> getFeaturedLeagues() {
         if (featuredLeagues == null) {
-            // Fetch top 5 leagues (England, Spain, Germany, Italy, France)
-            // As a simplified approach for home, we can just call world or a specific country.
-            // For showcase, let's fetch World (World Cup, Champions League etc)
-            featuredLeagues = repository.getLeaguesByCountry("World"); 
+            featuredLeagues = repository.getAllLeagues(); 
         }
         return featuredLeagues;
     }
 
     public void refreshFeaturedLeagues() {
-        featuredLeagues = repository.getLeaguesByCountry("World");
+        featuredLeagues = repository.getAllLeagues();
     }
 }

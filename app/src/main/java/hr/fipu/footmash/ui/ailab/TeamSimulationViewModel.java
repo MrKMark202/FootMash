@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 import java.util.List;
 
 import hr.fipu.footmash.ai.GeminiRepository;
+import hr.fipu.footmash.model.LeagueResponse;
 import hr.fipu.footmash.model.StandingResponse;
 import hr.fipu.footmash.repository.FootballRepository;
 
@@ -17,6 +18,10 @@ public class TeamSimulationViewModel extends ViewModel {
     public TeamSimulationViewModel() {
         footballRepository = new FootballRepository();
         geminiRepository = new GeminiRepository();
+    }
+
+    public LiveData<List<LeagueResponse>> getLeagues() {
+        return footballRepository.getAllLeagues();
     }
 
     // 1. Dohvati trenutnu tablicu lige
