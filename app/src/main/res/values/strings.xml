@@ -6,6 +6,7 @@
     <string name="nav_leagues">Lige</string>
     <string name="nav_teams">Timovi</string>
     <string name="nav_ai_lab">AI Lab</string>
+    <string name="nav_season">Sezona</string>
 
     <!-- Home -->
     <string name="welcome_title">Dobrodošli u FootMash</string>

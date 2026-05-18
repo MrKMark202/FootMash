@@ -3,6 +3,7 @@ package hr.fipu.footmash.ai;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,5 +48,26 @@ public class GeminiRepository {
         });
 
         return liveData;
+    }
+
+    /** Blocking call — must be called from a background thread. */
+    public String callSync(String prompt, String apiKey) {
+        GeminiRequest.Part part = new GeminiRequest.Part(prompt);
+        List<GeminiRequest.Part> parts = new ArrayList<>();
+        parts.add(part);
+        GeminiRequest.Content content = new GeminiRequest.Content("user", parts);
+        List<GeminiRequest.Content> contents = new ArrayList<>();
+        contents.add(content);
+        GeminiRequest request = new GeminiRequest(contents);
+
+        try {
+            Response<GeminiResponse> response = api.generateContent(apiKey, request).execute();
+            if (response.isSuccessful() && response.body() != null) {
+                return response.body().getResponseText();
+            }
+        } catch (IOException e) {
+            // network error — return null to trigger fallback
+        }
+        return null;
     }
 }

@@ -186,5 +186,96 @@
         tools:layout="@layout/fragment_team_simulation">
     </fragment>
 
+    <!-- Season Mode -->
+    <fragment
+        android:id="@+id/nav_season"
+        android:name="hr.fipu.footmash.ui.season.LeaguePickerFragment"
+        android:label="Sezona"
+        tools:layout="@layout/fragment_league_picker">
+        <action
+            android:id="@+id/action_leaguePicker_to_clubSetup"
+            app:destination="@id/nav_club_setup" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_club_setup"
+        android:name="hr.fipu.footmash.ui.season.ClubSetupFragment"
+        android:label="Osnivanje kluba"
+        tools:layout="@layout/fragment_club_setup">
+        <argument
+            android:name="leagueId"
+            app:argType="integer" />
+        <argument
+            android:name="leagueName"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_clubSetup_to_transferMarket"
+            app:destination="@id/nav_transfer_market" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_transfer_market"
+        android:name="hr.fipu.footmash.ui.season.TransferMarketFragment"
+        android:label="Tržište prijelaza"
+        tools:layout="@layout/fragment_transfer_market">
+        <argument
+            android:name="clubId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_transferMarket_to_squadBuilder"
+            app:destination="@id/nav_squad_builder" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_squad_builder"
+        android:name="hr.fipu.footmash.ui.season.SquadBuilderFragment"
+        android:label="Sastavi momčad"
+        tools:layout="@layout/fragment_squad_builder">
+        <argument
+            android:name="clubId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_squadBuilder_to_seasonHub"
+            app:destination="@id/nav_season_hub" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_season_hub"
+        android:name="hr.fipu.footmash.ui.season.SeasonHubFragment"
+        android:label="Sezona"
+        tools:layout="@layout/fragment_season_hub">
+        <argument
+            android:name="clubId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_seasonHub_to_matchday"
+            app:destination="@id/nav_matchday" />
+        <action
+            android:id="@+id/action_seasonHub_to_summary"
+            app:destination="@id/nav_season_summary" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_season_summary"
+        android:name="hr.fipu.footmash.ui.season.SeasonSummaryFragment"
+        android:label="Kraj sezone"
+        tools:layout="@layout/fragment_season_summary">
+        <argument
+            android:name="clubId"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_matchday"
+        android:name="hr.fipu.footmash.ui.season.MatchdayFragment"
+        android:label="Kolo"
+        tools:layout="@layout/fragment_matchday">
+        <argument
+            android:name="clubId"
+            app:argType="integer" />
+        <argument
+            android:name="matchday"
+            app:argType="integer" />
+    </fragment>
 
 </navigation>

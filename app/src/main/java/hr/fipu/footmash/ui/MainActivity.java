@@ -34,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             int id = destination.getId();
             if (id == R.id.nav_home || id == R.id.nav_leagues
-                    || id == R.id.nav_teams || id == R.id.nav_ai_lab) {
+                    || id == R.id.nav_teams || id == R.id.nav_ai_lab
+                    || id == R.id.nav_season || id == R.id.nav_season_hub) {
                 bottomNav.setVisibility(View.VISIBLE);
             } else {
                 bottomNav.setVisibility(View.GONE);

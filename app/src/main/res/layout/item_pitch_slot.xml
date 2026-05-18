@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="60dp"
+    android:layout_height="52dp"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="4dp"
+    android:background="@drawable/bg_pitch_slot_empty">
+
+    <TextView
+        android:id="@+id/text_slot_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_secondary"
+        android:gravity="center"
+        android:maxLines="1"
+        android:ellipsize="end" />
+
+    <TextView
+        android:id="@+id/text_slot_extra"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="9sp"
+        android:textColor="@color/text_secondary"
+        android:gravity="center" />
+
+</LinearLayout>

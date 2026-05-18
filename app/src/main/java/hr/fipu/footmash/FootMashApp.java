@@ -2,10 +2,8 @@ package hr.fipu.footmash;
 
 import android.app.Application;
 
-/**
- * Application klasa za FootMash.
- * Inicijalizira globalne resurse.
- */
+import hr.fipu.footmash.db.SeedLoader;
+
 public class FootMashApp extends Application {
 
     private static FootMashApp instance;
@@ -14,6 +12,7 @@ public class FootMashApp extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        SeedLoader.loadIfNeeded(this);
     }
 
     public static FootMashApp getInstance() {

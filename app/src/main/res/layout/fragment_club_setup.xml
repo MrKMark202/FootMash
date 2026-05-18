@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background"
+    android:padding="24dp">
+
+    <!-- Header -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Osnivanje kluba"
+        android:textColor="@color/text_secondary"
+        android:textSize="14sp"
+        android:paddingTop="16dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="4dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tvoj "
+            android:textColor="@color/text_primary"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="klub"
+            android:textColor="@color/accent_blue"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <!-- League info pill -->
+    <TextView
+        android:id="@+id/textSelectedLeague"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_pill_selected"
+        android:textColor="@color/text_on_primary"
+        android:textSize="13sp"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp" />
+
+    <!-- Club name input -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layoutClubName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        app:boxBackgroundColor="@color/surface"
+        app:boxStrokeColor="@color/accent_blue"
+        app:hintTextColor="@color/text_secondary"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editClubName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Naziv kluba"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp"
+            android:inputType="textCapWords"
+            android:maxLength="30" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Proračun: €100,000,000"
+        android:textColor="@color/success"
+        android:textSize="15sp"
+        android:layout_marginTop="24dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sezona: 2024/25"
+        android:textColor="@color/text_secondary"
+        android:textSize="14sp"
+        android:layout_marginTop="8dp" />
+
+    <View android:layout_width="0dp" android:layout_height="0dp" android:layout_weight="1" />
+
+    <!-- Confirm button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnConfirm"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="Osnuj klub i idi na tržište"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:cornerRadius="12dp"
+        android:backgroundTint="@color/accent_blue"
+        android:layout_marginBottom="24dp" />
+
+</LinearLayout>

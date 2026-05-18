@@ -16,4 +16,8 @@
         android:id="@+id/nav_ai_lab"
         android:icon="@android:drawable/ic_menu_manage"
         android:title="@string/nav_ai_lab" />
+    <item
+        android:id="@+id/nav_season"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="@string/nav_season" />
 </menu>
