@@ -6,15 +6,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import hr.fipu.footmash.R;
 import hr.fipu.footmash.databinding.ItemPlayerBinding;
 import hr.fipu.footmash.model.PlayerResponse;
+import hr.fipu.footmash.ui.util.InitialsBadgeDrawable;
 
 public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.PlayerViewHolder> {
 
@@ -63,11 +61,7 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.PlayerVi
             binding.textPlayerName.setText(player.getPlayerName());
             binding.textPlayerInfo.setText(player.getPlayerType());
 
-            Glide.with(itemView.getContext())
-                    .load(player.getPlayerImage())
-                    .transform(new CircleCrop())
-                    .placeholder(R.drawable.ic_launcher_background)
-                    .into(binding.imagePlayerPhoto);
+            binding.imagePlayerPhoto.setImageDrawable(new InitialsBadgeDrawable(player.getPlayerName()));
 
             binding.textPlayerPosition.setText(player.getPlayerType());
             

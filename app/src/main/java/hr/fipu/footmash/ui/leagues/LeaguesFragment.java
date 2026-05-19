@@ -20,7 +20,6 @@ public class LeaguesFragment extends Fragment {
     private FragmentLeaguesBinding binding;
     private LeaguesViewModel viewModel;
     private LeaguesAdapter adapter;
-    private String countryName = "World";
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -34,13 +33,7 @@ public class LeaguesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(LeaguesViewModel.class);
 
-        if (getArguments() != null) {
-            countryName = getArguments().getString("countryName", "World");
-        }
-        
-        binding.toolbar.setTitle(countryName + " " + getString(R.string.leagues_title));
-        binding.toolbar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material);
-        binding.toolbar.setNavigationOnClickListener(v -> Navigation.findNavController(v).navigateUp());
+        binding.toolbar.setTitle(getString(R.string.leagues_title));
 
         setupRecyclerView();
         observeViewModel();
@@ -50,10 +43,11 @@ public class LeaguesFragment extends Fragment {
         adapter = new LeaguesAdapter(league -> {
             Bundle args = new Bundle();
             args.putInt("leagueId", league.getLeagueKey());
-            args.putInt("season", 2024); 
+            args.putInt("season", 2024);
             args.putString("leagueName", league.getLeagueName());
-            
-            Navigation.findNavController(binding.getRoot()).navigate(R.id.action_leagues_to_standings, args);
+
+            Navigation.findNavController(binding.getRoot())
+                    .navigate(R.id.action_leagues_to_teams, args);
         });
 
         binding.recyclerLeagues.setLayoutManager(new LinearLayoutManager(requireContext()));

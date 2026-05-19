@@ -22,6 +22,9 @@ public interface RealPlayerDao {
     @Query("SELECT * FROM real_players WHERE teamId = :teamId ORDER BY overall DESC")
     LiveData<List<RealPlayer>> getPlayersByTeam(int teamId);
 
+    @Query("SELECT * FROM real_players WHERE teamId = :teamId ORDER BY overall DESC")
+    List<RealPlayer> getPlayersByTeamSync(int teamId);
+
     @Query("SELECT * FROM real_players WHERE leagueId = :leagueId AND position = :position ORDER BY overall DESC")
     LiveData<List<RealPlayer>> getPlayersByLeagueAndPosition(int leagueId, String position);
 

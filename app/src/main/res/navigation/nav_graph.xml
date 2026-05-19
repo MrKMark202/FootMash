@@ -10,65 +10,17 @@
         android:id="@+id/nav_home"
         android:name="hr.fipu.footmash.ui.home.HomeFragment"
         android:label="@string/nav_home"
-        tools:layout="@layout/fragment_home">
-        <action
-            android:id="@+id/action_home_to_countries"
-            app:destination="@id/nav_countries" />
-    </fragment>
+        tools:layout="@layout/fragment_home" />
 
-    <!-- Countries -->
-    <fragment
-        android:id="@+id/nav_countries"
-        android:name="hr.fipu.footmash.ui.leagues.CountriesFragment"
-        android:label="@string/countries_title"
-        tools:layout="@layout/fragment_countries">
-        <action
-            android:id="@+id/action_countries_to_leagues"
-            app:destination="@id/nav_leagues_list" />
-    </fragment>
-
-    <!-- Leagues (za odabranu zemlju) -->
+    <!-- Lige tab (bottom-nav target) — direct list of seeded leagues -->
     <fragment
         android:id="@+id/nav_leagues"
-        android:name="hr.fipu.footmash.ui.leagues.CountriesFragment"
-        android:label="@string/nav_leagues"
-        tools:layout="@layout/fragment_countries">
-        <action
-            android:id="@+id/action_leagues_tab_to_leagues"
-            app:destination="@id/nav_leagues_list" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/nav_leagues_list"
         android:name="hr.fipu.footmash.ui.leagues.LeaguesFragment"
-        android:label="@string/leagues_title"
+        android:label="@string/nav_leagues"
         tools:layout="@layout/fragment_leagues">
-        <argument
-            android:name="countryName"
-            app:argType="string" />
-        <action
-            android:id="@+id/action_leagues_to_standings"
-            app:destination="@id/nav_standings" />
         <action
             android:id="@+id/action_leagues_to_teams"
             app:destination="@id/nav_teams_list" />
-    </fragment>
-
-    <!-- Standings -->
-    <fragment
-        android:id="@+id/nav_standings"
-        android:name="hr.fipu.footmash.ui.leagues.StandingsFragment"
-        android:label="@string/standings_title"
-        tools:layout="@layout/fragment_standings">
-        <argument
-            android:name="leagueId"
-            app:argType="integer" />
-        <argument
-            android:name="season"
-            app:argType="integer" />
-        <argument
-            android:name="leagueName"
-            app:argType="string" />
     </fragment>
 
     <!-- Teams list -->
@@ -176,15 +128,13 @@
         android:id="@+id/playerSimulation"
         android:name="hr.fipu.footmash.ui.ailab.PlayerSimulationFragment"
         android:label="Simulacija Igrača"
-        tools:layout="@layout/fragment_player_simulation">
-    </fragment>
+        tools:layout="@layout/fragment_player_simulation" />
 
     <fragment
         android:id="@+id/teamSimulation"
         android:name="hr.fipu.footmash.ui.ailab.TeamSimulationFragment"
         android:label="Simulacija Tima"
-        tools:layout="@layout/fragment_team_simulation">
-    </fragment>
+        tools:layout="@layout/fragment_team_simulation" />
 
     <!-- Season Mode -->
     <fragment
@@ -193,8 +143,27 @@
         android:label="Sezona"
         tools:layout="@layout/fragment_league_picker">
         <action
-            android:id="@+id/action_leaguePicker_to_clubSetup"
+            android:id="@+id/action_leaguePicker_to_clubMode"
+            app:destination="@id/nav_club_mode" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_club_mode"
+        android:name="hr.fipu.footmash.ui.season.ClubModeFragment"
+        android:label="Način igre"
+        tools:layout="@layout/fragment_club_mode">
+        <argument
+            android:name="leagueId"
+            app:argType="integer" />
+        <argument
+            android:name="leagueName"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_clubMode_to_clubSetup"
             app:destination="@id/nav_club_setup" />
+        <action
+            android:id="@+id/action_clubMode_to_existingClubPicker"
+            app:destination="@id/nav_existing_club_picker" />
     </fragment>
 
     <fragment
@@ -209,33 +178,49 @@
             android:name="leagueName"
             app:argType="string" />
         <action
-            android:id="@+id/action_clubSetup_to_transferMarket"
-            app:destination="@id/nav_transfer_market" />
+            android:id="@+id/action_clubSetup_to_formationPicker"
+            app:destination="@id/nav_formation_picker" />
     </fragment>
 
     <fragment
-        android:id="@+id/nav_transfer_market"
-        android:name="hr.fipu.footmash.ui.season.TransferMarketFragment"
-        android:label="Tržište prijelaza"
-        tools:layout="@layout/fragment_transfer_market">
+        android:id="@+id/nav_formation_picker"
+        android:name="hr.fipu.footmash.ui.season.FormationPickerFragment"
+        android:label="Formacija"
+        tools:layout="@layout/fragment_formation_picker">
         <argument
             android:name="clubId"
             app:argType="integer" />
         <action
-            android:id="@+id/action_transferMarket_to_squadBuilder"
-            app:destination="@id/nav_squad_builder" />
+            android:id="@+id/action_formationPicker_to_draftCanvas"
+            app:destination="@id/nav_draft_canvas" />
     </fragment>
 
     <fragment
-        android:id="@+id/nav_squad_builder"
-        android:name="hr.fipu.footmash.ui.season.SquadBuilderFragment"
-        android:label="Sastavi momčad"
-        tools:layout="@layout/fragment_squad_builder">
+        android:id="@+id/nav_existing_club_picker"
+        android:name="hr.fipu.footmash.ui.season.ExistingClubPickerFragment"
+        android:label="Postojeći klubovi"
+        tools:layout="@layout/fragment_existing_club_picker">
+        <argument
+            android:name="leagueId"
+            app:argType="integer" />
+        <argument
+            android:name="leagueName"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_existingClubPicker_to_draftCanvas"
+            app:destination="@id/nav_draft_canvas" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_draft_canvas"
+        android:name="hr.fipu.footmash.ui.season.DraftCanvasFragment"
+        android:label="Draft"
+        tools:layout="@layout/fragment_draft_canvas">
         <argument
             android:name="clubId"
             app:argType="integer" />
         <action
-            android:id="@+id/action_squadBuilder_to_seasonHub"
+            android:id="@+id/action_draftCanvas_to_seasonHub"
             app:destination="@id/nav_season_hub" />
     </fragment>
 

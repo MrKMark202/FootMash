@@ -28,12 +28,15 @@ public class MatchSimulator {
         public final String name;
         public final String formation;
         public final int avgOverall;
+        public final int avgChemistry;
         public final List<PlayerEntry> players;
 
-        public UserTeamInfo(String name, String formation, int avgOverall, List<PlayerEntry> players) {
+        public UserTeamInfo(String name, String formation, int avgOverall,
+                            int avgChemistry, List<PlayerEntry> players) {
             this.name = name;
             this.formation = formation;
             this.avgOverall = avgOverall;
+            this.avgChemistry = avgChemistry;
             this.players = players;
         }
     }
@@ -66,7 +69,9 @@ public class MatchSimulator {
                 sb.append("  ").append(userTeam.name)
                   .append(" (").append(isHome ? "home" : "away")
                   .append(", ").append(userTeam.formation)
-                  .append(", avg OVR ").append(userTeam.avgOverall).append(") Starting XI:");
+                  .append(", avg OVR ").append(userTeam.avgOverall)
+                  .append(", chemistry ").append(userTeam.avgChemistry).append("%")
+                  .append(") Starting XI:");
                 for (PlayerEntry p : userTeam.players) {
                     sb.append(" ").append(p.name).append("(").append(p.overall).append(")");
                 }

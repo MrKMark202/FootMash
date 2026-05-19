@@ -5,13 +5,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 
-import hr.fipu.footmash.R;
 import hr.fipu.footmash.databinding.ItemLeagueBinding;
 import hr.fipu.footmash.model.LeagueResponse;
+import hr.fipu.footmash.ui.util.InitialsBadgeDrawable;
 
 public class LeaguesAdapter extends RecyclerView.Adapter<LeaguesAdapter.LeagueViewHolder> {
 
@@ -60,10 +59,7 @@ public class LeaguesAdapter extends RecyclerView.Adapter<LeaguesAdapter.LeagueVi
             binding.textLeagueName.setText(league.getLeagueName());
             binding.textLeagueType.setText(league.getCountryName()); // Show country name as detail
 
-            Glide.with(itemView.getContext())
-                    .load(league.getLeagueLogo())
-                    .placeholder(R.drawable.ic_launcher_background)
-                    .into(binding.imageLeagueLogo);
+            binding.imageLeagueLogo.setImageDrawable(new InitialsBadgeDrawable(league.getLeagueName()));
 
             binding.getRoot().setOnClickListener(v -> {
                 if (listener != null) listener.onLeagueClick(league);

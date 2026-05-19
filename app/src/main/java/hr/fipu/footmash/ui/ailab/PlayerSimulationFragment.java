@@ -1,47 +1,38 @@
 package hr.fipu.footmash.ui.ailab;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.os.Handler;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import hr.fipu.footmash.databinding.FragmentPlayerSimulationBinding;
-import hr.fipu.footmash.model.PlayerResponse;
+import hr.fipu.footmash.model.LeagueInfo;
+import hr.fipu.footmash.model.RealPlayer;
+import hr.fipu.footmash.model.RealTeam;
 
 public class PlayerSimulationFragment extends Fragment {
 
     private FragmentPlayerSimulationBinding binding;
     private PlayerSimulationViewModel viewModel;
-    
-    // Ključ se sada dohvaća iz BuildConfig-a (local.properties)
+
     private final String GEMINI_API_KEY = hr.fipu.footmash.BuildConfig.GEMINI_API_KEY;
 
-    private List<hr.fipu.footmash.model.LeagueResponse> allLeagues = new ArrayList<>();
-    private List<hr.fipu.footmash.model.TeamResponse> leagueTeams = new ArrayList<>();
-    
-    private int selectedLeagueId = -1;
-    private int selectedTeamId = -1;
+    private List<LeagueInfo> allLeagues = new ArrayList<>();
+    private List<RealTeam> leagueTeams = new ArrayList<>();
+
+    private LeagueInfo selectedLeague;
+    private RealTeam selectedTeam;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -66,16 +57,17 @@ public class PlayerSimulationFragment extends Fragment {
                 this.allLeagues = leagues;
                 setupLeagueAutocomplete();
             } else {
-                Toast.makeText(requireContext(), "API nije vratio lige. Provjerite ključ i internet.", Toast.LENGTH_LONG).show();
+                Toast.makeText(requireContext(),
+                        "Nema lokalnih liga. Pokreni aplikaciju ponovno da se učitaju seed podaci.",
+                        Toast.LENGTH_LONG).show();
             }
         });
     }
 
     private void setupLeagueAutocomplete() {
-        if (allLeagues == null) return;
         List<String> leagueNames = new ArrayList<>();
-        for (hr.fipu.footmash.model.LeagueResponse league : allLeagues) {
-            leagueNames.add(league.getLeagueName());
+        for (LeagueInfo league : allLeagues) {
+            if (league.getName() != null) leagueNames.add(league.getName());
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(),
@@ -83,13 +75,13 @@ public class PlayerSimulationFragment extends Fragment {
         binding.autoCompleteLeague.setAdapter(adapter);
 
         binding.autoCompleteLeague.setOnItemClickListener((parent, view, position, id) -> {
-            String selectedHeader = (String) parent.getItemAtPosition(position);
-            for (hr.fipu.footmash.model.LeagueResponse league : allLeagues) {
-                if (league.getLeagueName().equals(selectedHeader)) {
-                    selectedLeagueId = league.getLeagueKey();
-                    binding.autoCompleteTeam.setText(""); // Reset teams
-                    selectedTeamId = -1;
-                    loadTeams(selectedLeagueId);
+            String selectedName = (String) parent.getItemAtPosition(position);
+            for (LeagueInfo league : allLeagues) {
+                if (selectedName != null && selectedName.equals(league.getName())) {
+                    selectedLeague = league;
+                    binding.autoCompleteTeam.setText("", false);
+                    selectedTeam = null;
+                    loadTeams(selectedLeague.getId());
                     break;
                 }
             }
@@ -97,7 +89,7 @@ public class PlayerSimulationFragment extends Fragment {
     }
 
     private void loadTeams(int leagueId) {
-        viewModel.getTeamsByLeague(leagueId, 0).observe(getViewLifecycleOwner(), teams -> {
+        viewModel.getTeamsByLeague(leagueId).observe(getViewLifecycleOwner(), teams -> {
             if (teams != null && !teams.isEmpty()) {
                 this.leagueTeams = teams;
                 setupTeamAutocomplete();
@@ -106,21 +98,20 @@ public class PlayerSimulationFragment extends Fragment {
     }
 
     private void setupTeamAutocomplete() {
-        if (leagueTeams == null) return;
         List<String> teamNames = new ArrayList<>();
-        for (hr.fipu.footmash.model.TeamResponse team : leagueTeams) {
-            teamNames.add(team.getTeamName());
+        for (RealTeam team : leagueTeams) {
+            if (team.getName() != null) teamNames.add(team.getName());
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(),
                 android.R.layout.simple_dropdown_item_1line, teamNames);
         binding.autoCompleteTeam.setAdapter(adapter);
 
-        binding.autoCompleteTeam.setOnItemClickListener((parent, view, position, id1) -> {
-            String selectedHeader = (String) parent.getItemAtPosition(position);
-            for (hr.fipu.footmash.model.TeamResponse team : leagueTeams) {
-                if (team.getTeamName().equals(selectedHeader)) {
-                    selectedTeamId = team.getTeamKey();
+        binding.autoCompleteTeam.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedName = (String) parent.getItemAtPosition(position);
+            for (RealTeam team : leagueTeams) {
+                if (selectedName != null && selectedName.equals(team.getName())) {
+                    selectedTeam = team;
                     break;
                 }
             }
@@ -131,42 +122,40 @@ public class PlayerSimulationFragment extends Fragment {
         String name = binding.editPlayerName.getText().toString().trim();
         String position = binding.editPlayerPosition.getText().toString().trim();
 
-        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(position) || selectedTeamId == -1) {
-            Toast.makeText(requireContext(), "Popunite sva polja i odaberite klub", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(position) || selectedTeam == null) {
+            Toast.makeText(requireContext(), "Popunite sva polja i odaberite klub",
+                    Toast.LENGTH_SHORT).show();
             return;
         }
 
         binding.progressBar.setVisibility(View.VISIBLE);
         binding.textSimulationResult.setText("Dohvaćam roster kluba...");
 
-        startRosterFetch(name, position, selectedTeamId);
+        startRosterFetch(name, position, selectedTeam);
     }
 
-    private void startRosterFetch(String name, String position, int teamId) {
-        binding.textSimulationResult.setText("Dohvaćam podatke rostera kluba...");
-
-        // Faza 1: Dohvati roster trenutnog kluba
-        viewModel.getTeamRoster(teamId, 0).observe(getViewLifecycleOwner(), players -> {
-            if (players != null && !players.isEmpty()) {
-                binding.textSimulationResult.setText("Roster dohvaćen. Šaljem podatke Gemini umjetnoj inteligenciji...");
-                
-                // Serijaliziramo roster (samo prva 3 bitna imena da ne probijemo token limit, ili cijelu listu)
-                StringBuilder sb = new StringBuilder();
-                for (hr.fipu.footmash.model.PlayerResponse p : players) {
-                    sb.append("- ").append(p.getPlayerName()).append(" (").append(p.getPlayerType()).append(")\n");
-                }
-                
-                String teamJson = sb.toString();
-                
-                viewModel.runSimulation(name, position, teamJson, GEMINI_API_KEY)
-                        .observe(getViewLifecycleOwner(), result -> {
-                            binding.progressBar.setVisibility(View.GONE);
-                            binding.textSimulationResult.setText(result);
-                        });
-            } else {
+    private void startRosterFetch(String name, String position, RealTeam team) {
+        viewModel.getTeamRoster(team.getId()).observe(getViewLifecycleOwner(), players -> {
+            if (players == null || players.isEmpty()) {
                 binding.progressBar.setVisibility(View.GONE);
-                binding.textSimulationResult.setText("Greška pri dohvaćanju rostera. Provjerite API ključ.");
+                binding.textSimulationResult.setText("Nema igrača za taj klub.");
+                return;
             }
+
+            StringBuilder sb = new StringBuilder();
+            for (RealPlayer p : players) {
+                sb.append("- ").append(p.getName())
+                        .append(" (").append(p.getPosition())
+                        .append(", OVR ").append(p.getOverall()).append(")\n");
+            }
+
+            binding.textSimulationResult.setText("Šaljem podatke Gemini-ju...");
+
+            viewModel.runSimulation(name, position, team.getName(), sb.toString(), GEMINI_API_KEY)
+                    .observe(getViewLifecycleOwner(), result -> {
+                        binding.progressBar.setVisibility(View.GONE);
+                        binding.textSimulationResult.setText(result);
+                    });
         });
     }
 

@@ -1,32 +1,43 @@
 package hr.fipu.footmash.ui.home;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+import android.app.Application;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Transformations;
+
+import java.util.ArrayList;
 import java.util.List;
 
-import hr.fipu.footmash.api.ApiClient;
+import hr.fipu.footmash.db.AppDatabase;
+import hr.fipu.footmash.model.LeagueInfo;
 import hr.fipu.footmash.model.LeagueResponse;
-import hr.fipu.footmash.repository.FootballRepository;
 
-public class HomeViewModel extends ViewModel {
+public class HomeViewModel extends AndroidViewModel {
 
-    private final FootballRepository repository;
+    private final AppDatabase db;
     private LiveData<List<LeagueResponse>> featuredLeagues;
 
-    public HomeViewModel() {
-        repository = new FootballRepository();
+    public HomeViewModel(@NonNull Application application) {
+        super(application);
+        db = AppDatabase.getInstance(application);
     }
 
     public LiveData<List<LeagueResponse>> getFeaturedLeagues() {
         if (featuredLeagues == null) {
-            featuredLeagues = repository.getAllLeagues(); 
+            featuredLeagues = Transformations.map(db.realTeamDao().getDistinctLeagues(), leagues -> {
+                List<LeagueResponse> mapped = new ArrayList<>();
+                if (leagues == null) return mapped;
+                for (LeagueInfo info : leagues) {
+                    LeagueResponse r = new LeagueResponse();
+                    r.setLeagueKey(info.getId());
+                    r.setLeagueName(info.getName());
+                    mapped.add(r);
+                }
+                return mapped;
+            });
         }
         return featuredLeagues;
-    }
-
-    public void refreshFeaturedLeagues() {
-        featuredLeagues = repository.getAllLeagues();
     }
 }

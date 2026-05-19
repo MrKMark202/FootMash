@@ -117,6 +117,7 @@ public class SeasonRepository {
     private MatchSimulator.UserTeamInfo buildUserTeamInfo(UserClub club) {
         List<UserSquad> squad = userClubDao.getSquadByClubSync(club.getId());
         List<MatchSimulator.PlayerEntry> players = new ArrayList<>();
+        List<RealPlayer> realPlayers = new ArrayList<>();
         int sum = 0;
         for (UserSquad s : squad) {
             if (!s.isStartingXI()) continue;
@@ -124,12 +125,37 @@ public class SeasonRepository {
             if (p == null) continue;
             players.add(new MatchSimulator.PlayerEntry(
                 s.getPitchPosition(), p.getName(), p.getOverall()));
+            realPlayers.add(p);
             sum += p.getOverall();
         }
         int avg = players.isEmpty() ? 75 : sum / players.size();
+        int chemistry = computeChemistry(realPlayers);
         return new MatchSimulator.UserTeamInfo(
             club.getClubName(), club.getFormation() != null ? club.getFormation() : "4-4-2",
-            avg, players);
+            avg, chemistry, players);
+    }
+
+    /**
+     * Chemistry % = share of starting XI who share nationality or original real team
+     * with at least one teammate. Rewards Case B identity-preservation and penalizes
+     * scattershot Case A drafting.
+     */
+    private static int computeChemistry(List<RealPlayer> xi) {
+        int n = xi.size();
+        if (n < 2) return 0;
+        int linked = 0;
+        for (int i = 0; i < n; i++) {
+            RealPlayer a = xi.get(i);
+            for (int j = 0; j < n; j++) {
+                if (i == j) continue;
+                RealPlayer b = xi.get(j);
+                boolean sameNation = a.getNationality() != null
+                    && a.getNationality().equals(b.getNationality());
+                boolean sameTeam = a.getTeamId() != 0 && a.getTeamId() == b.getTeamId();
+                if (sameNation || sameTeam) { linked++; break; }
+            }
+        }
+        return (int) Math.round(100.0 * linked / n);
     }
 
     private void saveResults(int seasonId, List<Fixture> fixtures,

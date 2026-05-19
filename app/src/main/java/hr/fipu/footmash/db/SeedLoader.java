@@ -21,7 +21,13 @@ public class SeedLoader {
 
     private static final String TAG = "SeedLoader";
     private static final String PREFS_NAME = "footmash_prefs";
-    private static final String KEY_SEED_LOADED = "seed_loaded";
+
+    /**
+     * Bump this key whenever the bundled JSON files change so existing installs
+     * pick up the new data on next launch. Old rows are wiped before reload so
+     * stale players from a previous season don't linger.
+     */
+    private static final String KEY_SEED_LOADED = "seed_loaded_v2_2025_26";
 
     private static final String[] SEED_FILES = {
         "data/premierleague.json",
@@ -38,6 +44,10 @@ public class SeedLoader {
             try {
                 AppDatabase db = AppDatabase.getInstance(context);
                 Gson gson = new Gson();
+
+                // Wipe any rows from a prior seed version before reloading.
+                db.realPlayerDao().deleteAll();
+                db.realTeamDao().deleteAll();
 
                 for (String fileName : SEED_FILES) {
                     loadFile(context, db, gson, fileName);

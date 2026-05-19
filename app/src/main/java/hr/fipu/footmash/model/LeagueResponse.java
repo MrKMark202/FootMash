@@ -1,11 +1,9 @@
 package hr.fipu.footmash.model;
 
 import com.google.gson.annotations.SerializedName;
-import java.util.List;
 
 /**
- * Model za League odgovor iz /leagues endpoint-a.
- * Struktura: { "league": {...}, "country": {...}, "seasons": [...] }
+ * Plain POJO for a league. Populated from local seed data.
  */
 public class LeagueResponse {
     @SerializedName("league_key")
@@ -32,4 +30,11 @@ public class LeagueResponse {
     public String getCountryName() { return countryName; }
     public String getLeagueLogo() { return leagueLogo; }
     public String getCountryLogo() { return countryLogo; }
+
+    public void setLeagueKey(int leagueKey) { this.leagueKey = leagueKey; }
+    public void setLeagueName(String leagueName) { this.leagueName = leagueName; }
+    public void setCountryKey(int countryKey) { this.countryKey = countryKey; }
+    public void setCountryName(String countryName) { this.countryName = countryName; }
+    public void setLeagueLogo(String leagueLogo) { this.leagueLogo = leagueLogo; }
+    public void setCountryLogo(String countryLogo) { this.countryLogo = countryLogo; }
 }

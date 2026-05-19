@@ -20,9 +20,8 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         
-        // Dodajemo ključeve u BuildConfig
+        // Gemini API key sourced from local.properties
         buildConfigField "String", "GEMINI_API_KEY", properties.getProperty('GEMINI_API_KEY', '""')
-        buildConfigField "String", "FOOTBALL_API_KEY", properties.getProperty('FOOTBALL_API_KEY', '""')
     }
 
     buildTypes {
@@ -55,10 +54,6 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0'
     implementation 'com.google.code.gson:gson:2.10.1'
-
-    // Glide (image loading)
-    implementation 'com.github.bumptech.glide:glide:4.16.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.16.0'
 
     // Room (local database)
     implementation 'androidx.room:room-runtime:2.6.1'

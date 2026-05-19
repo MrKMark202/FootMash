@@ -10,13 +10,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.google.gson.Gson;
 
 import hr.fipu.footmash.R;
 import hr.fipu.footmash.databinding.FragmentPlayerDetailBinding;
 import hr.fipu.footmash.model.PlayerResponse;
+import hr.fipu.footmash.ui.util.InitialsBadgeDrawable;
 
 public class PlayerDetailFragment extends Fragment {
 
@@ -57,11 +56,7 @@ public class PlayerDetailFragment extends Fragment {
         binding.textHeight.setText(playerResponse.getPlayerNumber() != null ? "Broj: " + playerResponse.getPlayerNumber() : "N/A");
         binding.textWeight.setText("-");
 
-        Glide.with(this)
-                .load(playerResponse.getPlayerImage())
-                .transform(new CircleCrop())
-                .placeholder(R.drawable.ic_launcher_background)
-                .into(binding.imagePlayerPhoto);
+        binding.imagePlayerPhoto.setImageDrawable(new InitialsBadgeDrawable(playerResponse.getPlayerName()));
 
         binding.textClubInfo.setText(""); // This info might be missing in simple player response
         binding.textPosition.setText(playerResponse.getPlayerType() != null ? playerResponse.getPlayerType() : "N/A");

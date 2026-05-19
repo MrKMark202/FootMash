@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(xargs ls *)"
+      "Bash(xargs ls *)",
+      "Bash(./gradlew compileDebugJavaWithJavac)",
+      "Bash(python -c \"import json; data=json.load\\(open\\('app/src/main/assets/data/premierleague.json'\\)\\); print\\(f\\\\\"Teams: {len\\(data['teams']\\)}\\\\\"\\); print\\(f\\\\\"Total players: {sum\\(len\\(t['players']\\) for t in data['teams']\\)}\\\\\"\\); ids=[p['player_id'] for t in data['teams'] for p in t['players']]; print\\(f\\\\\"Unique player IDs: {len\\(set\\(ids\\)\\)} of {len\\(ids\\)}\\\\\"\\)\")"
     ]
   }
 }

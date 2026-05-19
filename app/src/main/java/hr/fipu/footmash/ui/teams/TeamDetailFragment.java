@@ -12,11 +12,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
-import com.bumptech.glide.Glide;
-
 import hr.fipu.footmash.R;
 import hr.fipu.footmash.databinding.FragmentTeamDetailBinding;
-import hr.fipu.footmash.model.TeamStatisticsResponse.TeamStats;
+import hr.fipu.footmash.ui.util.TeamBadges;
 
 public class TeamDetailFragment extends Fragment {
 
@@ -42,20 +40,18 @@ public class TeamDetailFragment extends Fragment {
         if (getArguments() != null) {
             teamId = getArguments().getInt("teamId", -1);
             leagueId = getArguments().getInt("leagueId", -1);
-            season = getArguments().getInt("season", 2023);
+            season = getArguments().getInt("season", 2024);
             teamName = getArguments().getString("teamName", "");
         }
 
         binding.textTeamName.setText(teamName);
 
-        // Fetch team statistics
-        if (teamId != -1 && leagueId != -1) {
+        if (teamId != -1) {
             observeViewModel();
         } else {
-            Log.e("TeamDetail", "Nedostaje teamId ili leagueId za dohvaćanje statistike");
+            Log.e("TeamDetail", "Nedostaje teamId za dohvaćanje kluba");
         }
 
-        // Navegacija na roster
         binding.btnViewSquad.setOnClickListener(v -> {
             Bundle args = new Bundle();
             args.putInt("teamId", teamId);
@@ -71,23 +67,15 @@ public class TeamDetailFragment extends Fragment {
             binding.progressBar.setVisibility(View.GONE);
             if (teams != null && !teams.isEmpty()) {
                 hr.fipu.footmash.model.TeamResponse team = teams.get(0);
-                
-                // Info o timu
-                Glide.with(this)
-                        .load(team.getTeamBadge())
-                        .placeholder(R.drawable.ic_launcher_background)
-                        .into(binding.imageTeamLogo);
+
+                binding.imageTeamLogo.setImageDrawable(
+                        TeamBadges.badgeFor(requireContext(), team.getTeamKey(), team.getTeamName()));
                 binding.textTeamName.setText(team.getTeamName());
 
-                // AllSportsAPI Teams detalji mogu sadržavati stadion i ostalo, 
-                // ali naša trenutna klasa TeamResponse ima samo osnovna polja.
-                // Privremeno sakrivamo ili stavljamo N/A za detaljne statistike 
-                // koje smo imali u API-Football (formu, odigrano, golove itd.)
-                
                 binding.textForm.setText("Klub: " + team.getTeamName());
                 binding.textFixtures.setText("ID: " + team.getTeamKey());
                 binding.textGoals.setText("");
-                binding.textTeamCountry.setText(""); 
+                binding.textTeamCountry.setText("");
             } else {
                 binding.textTeamName.setText(teamName);
                 binding.textForm.setText("Podaci o klubu nisu dostupni.");

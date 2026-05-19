@@ -8,6 +8,7 @@ import androidx.room.Query;
 
 import java.util.List;
 
+import hr.fipu.footmash.model.LeagueInfo;
 import hr.fipu.footmash.model.RealTeam;
 
 @Dao
@@ -24,6 +25,9 @@ public interface RealTeamDao {
 
     @Query("SELECT * FROM real_teams WHERE leagueId = :leagueId ORDER BY name ASC")
     List<RealTeam> getTeamsByLeagueSync(int leagueId);
+
+    @Query("SELECT DISTINCT leagueId, leagueName FROM real_teams ORDER BY leagueName ASC")
+    LiveData<List<LeagueInfo>> getDistinctLeagues();
 
     @Query("SELECT COUNT(*) FROM real_teams")
     int getCount();

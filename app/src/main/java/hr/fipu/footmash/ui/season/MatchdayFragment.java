@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.List;
@@ -69,9 +70,11 @@ public class MatchdayFragment extends Fragment {
                 break;
             case DONE:
                 binding.progressSimulation.setVisibility(View.GONE);
-                binding.btnSimulateMatchday.setEnabled(false);
-                binding.btnSimulateMatchday.setText("Kolo odigrano");
-                binding.btnSimulateMatchday.setAlpha(0.6f);
+                binding.btnSimulateMatchday.setEnabled(true);
+                binding.btnSimulateMatchday.setText("Nazad na sezonu");
+                binding.btnSimulateMatchday.setAlpha(1f);
+                binding.btnSimulateMatchday.setOnClickListener(v ->
+                    Navigation.findNavController(v).popBackStack());
                 break;
             case ERROR:
                 binding.progressSimulation.setVisibility(View.GONE);

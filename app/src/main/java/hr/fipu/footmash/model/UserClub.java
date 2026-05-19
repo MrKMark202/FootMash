@@ -1,5 +1,6 @@
 package hr.fipu.footmash.model;
 
+import androidx.annotation.Nullable;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -17,7 +18,11 @@ public class UserClub {
     private int seasonYear;
     private boolean isActive;
 
+    @Nullable
+    private Integer realTeamSourceId;
+
     public static final long STARTING_BUDGET = 100_000_000L;
+    public static final long HALF_BUDGET     = 50_000_000L;
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
@@ -42,4 +47,10 @@ public class UserClub {
 
     public boolean isActive() { return isActive; }
     public void setActive(boolean active) { isActive = active; }
+
+    @Nullable
+    public Integer getRealTeamSourceId() { return realTeamSourceId; }
+    public void setRealTeamSourceId(@Nullable Integer realTeamSourceId) {
+        this.realTeamSourceId = realTeamSourceId;
+    }
 }

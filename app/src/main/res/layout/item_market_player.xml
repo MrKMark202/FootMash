@@ -17,7 +17,6 @@
         android:padding="14dp"
         android:gravity="center_vertical">
 
-        <!-- Overall badge -->
         <TextView
             android:id="@+id/textOverall"
             android:layout_width="44dp"
@@ -28,7 +27,6 @@
             android:textStyle="bold"
             android:background="@drawable/bg_icon_circle" />
 
-        <!-- Player info -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -56,7 +54,8 @@
                     android:id="@+id/textPosition"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
+                    android:textColor="@color/text_on_primary"
+                    android:textSize="11sp"
                     android:textStyle="bold"
                     android:paddingHorizontal="6dp"
                     android:paddingVertical="2dp"
@@ -84,18 +83,16 @@
 
         </LinearLayout>
 
-        <!-- Sign button -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSign"
+            android:id="@+id/btnBuy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Potpiši"
+            android:text="Kupi"
             android:textSize="12sp"
-            android:paddingHorizontal="12dp"
+            android:paddingHorizontal="14dp"
             app:cornerRadius="8dp"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            app:strokeColor="@color/accent_blue"
-            android:textColor="@color/accent_blue" />
+            android:backgroundTint="@color/accent_blue"
+            android:textColor="@color/text_on_primary" />
 
     </LinearLayout>
 

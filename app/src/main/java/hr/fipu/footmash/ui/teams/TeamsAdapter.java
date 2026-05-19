@@ -6,14 +6,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import hr.fipu.footmash.R;
 import hr.fipu.footmash.databinding.ItemTeamBinding;
 import hr.fipu.footmash.model.TeamResponse;
+import hr.fipu.footmash.ui.util.TeamBadges;
 
 public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.TeamViewHolder> {
 
@@ -63,10 +61,8 @@ public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.TeamViewHold
             binding.textTeamCountry.setText(""); // Not directly in simple response
             binding.textFounded.setText("-");
 
-            Glide.with(itemView.getContext())
-                    .load(team.getTeamBadge())
-                    .placeholder(R.drawable.ic_launcher_background)
-                    .into(binding.imageTeamLogo);
+            binding.imageTeamLogo.setImageDrawable(
+                    TeamBadges.badgeFor(itemView.getContext(), team.getTeamKey(), team.getTeamName()));
 
             binding.getRoot().setOnClickListener(v -> {
                 if (listener != null) listener.onTeamClick(team);

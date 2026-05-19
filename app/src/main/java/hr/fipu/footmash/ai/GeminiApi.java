@@ -8,8 +8,8 @@ import retrofit2.http.Query;
 
 public interface GeminiApi {
     
-    // Model koristimo gemini-1.5-flash ili gemini-1.5-pro
+    // Koristimo aktualni Gemini 2.0 Flash model (gemini-1.5-flash je povučen).
     @Headers("Content-Type: application/json")
-    @POST("models/gemini-1.5-flash:generateContent")
+    @POST("models/gemini-2.0-flash:generateContent")
     Call<GeminiResponse> generateContent(@Query("key") String apiKey, @Body GeminiRequest request);
 }

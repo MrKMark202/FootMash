@@ -10,7 +10,6 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import hr.fipu.footmash.R;
-import hr.fipu.footmash.api.ApiClient;
 
 public class MainActivity extends AppCompatActivity {
 

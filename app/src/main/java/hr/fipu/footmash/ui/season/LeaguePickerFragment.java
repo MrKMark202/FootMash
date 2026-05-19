@@ -60,7 +60,7 @@ public class LeaguePickerFragment extends Fragment {
             Bundle args = new Bundle();
             args.putInt("leagueId", option.leagueId);
             args.putString("leagueName", option.name);
-            Navigation.findNavController(view).navigate(R.id.action_leaguePicker_to_clubSetup, args);
+            Navigation.findNavController(view).navigate(R.id.action_leaguePicker_to_clubMode, args);
         }));
     }
 

@@ -74,7 +74,7 @@ public class ClubSetupFragment extends Fragment {
                 Bundle args = new Bundle();
                 args.putInt("clubId", (int) newId);
                 Navigation.findNavController(navView)
-                          .navigate(R.id.action_clubSetup_to_transferMarket, args);
+                          .navigate(R.id.action_clubSetup_to_formationPicker, args);
             });
         }).start();
     }
