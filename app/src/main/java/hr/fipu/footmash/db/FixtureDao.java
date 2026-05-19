@@ -39,6 +39,9 @@ public interface FixtureDao {
     @Query("SELECT * FROM fixture WHERE seasonId = :seasonId AND isUserTeam = 1 AND isSimulated = 0 ORDER BY matchday ASC LIMIT 1")
     LiveData<Fixture> getNextUserFixture(int seasonId);
 
+    @Query("SELECT * FROM fixture WHERE seasonId = :seasonId AND isUserTeam = 1 AND isSimulated = 1 ORDER BY matchday DESC LIMIT 1")
+    LiveData<Fixture> getLastPlayedUserFixture(int seasonId);
+
     @Query("SELECT * FROM fixture WHERE seasonId = :seasonId AND matchday = :matchday ORDER BY id ASC")
     LiveData<List<Fixture>> getFixturesByMatchday(int seasonId, int matchday);
 
@@ -51,11 +54,17 @@ public interface FixtureDao {
     @Query("SELECT * FROM match_result WHERE fixtureId = :fixtureId LIMIT 1")
     MatchResult getMatchResultSync(int fixtureId);
 
+    @Query("SELECT * FROM match_result WHERE fixtureId = :fixtureId LIMIT 1")
+    LiveData<MatchResult> getMatchResult(int fixtureId);
+
     @Query("SELECT * FROM fixture WHERE seasonId = :seasonId AND isSimulated = 1")
     List<Fixture> getSimulatedFixturesSync(int seasonId);
 
     @Query("SELECT * FROM goal_scorer WHERE fixtureId = :fixtureId ORDER BY minute ASC")
     List<GoalScorer> getGoalScorersByFixture(int fixtureId);
+
+    @Query("SELECT * FROM goal_scorer WHERE fixtureId = :fixtureId ORDER BY minute ASC")
+    LiveData<List<GoalScorer>> getGoalScorersByFixtureLive(int fixtureId);
 
     @Query("SELECT * FROM goal_scorer WHERE seasonId = :seasonId AND playerName = :playerName")
     List<GoalScorer> getGoalsByPlayer(int seasonId, String playerName);

@@ -52,6 +52,17 @@ public class SeasonRepository {
         if (club == null) return;
 
         List<RealTeam> allTeams = realTeamDao.getTeamsByLeagueSync(club.getLeagueId());
+        
+        if (club.getRealTeamSourceId() != null) {
+            int sourceId = club.getRealTeamSourceId();
+            for (int i = 0; i < allTeams.size(); i++) {
+                if (allTeams.get(i).getId() == sourceId) {
+                    allTeams.remove(i);
+                    break;
+                }
+            }
+        }
+        
         int take = Math.min(19, allTeams.size());
         List<RealTeam> teams19 = new ArrayList<>(allTeams.subList(0, take));
 
@@ -63,6 +74,10 @@ public class SeasonRepository {
         userRow.setTeamId(club.getId());
         userRow.setTeamName(club.getClubName());
         userRow.setUserTeam(true);
+        if (club.getRealTeamSourceId() != null) {
+            RealTeam sourceTeam = realTeamDao.getTeamById(club.getRealTeamSourceId());
+            if (sourceTeam != null) userRow.setBadgeUrl(sourceTeam.getBadgeUrl());
+        }
         standings.add(userRow);
         for (RealTeam rt : teams19) {
             SeasonStanding row = new SeasonStanding();
@@ -70,6 +85,7 @@ public class SeasonRepository {
             row.setTeamId(rt.getId());
             row.setTeamName(rt.getName());
             row.setUserTeam(false);
+            row.setBadgeUrl(rt.getBadgeUrl());
             standings.add(row);
         }
         standingDao.insertAll(standings);
@@ -106,7 +122,30 @@ public class SeasonRepository {
         if (results == null) {
             int avg = (userInfo != null) ? userInfo.avgOverall : 78;
             String name = (userInfo != null) ? userInfo.name : "";
-            results = LocalSimulator.simulateAll(fixtures, avg, name);
+            
+            Map<String, List<RealPlayer>> rosters = new HashMap<>();
+            
+            if (userInfo != null && userInfo.players != null) {
+                List<RealPlayer> userPlayers = new ArrayList<>();
+                for (MatchSimulator.PlayerEntry pe : userInfo.players) {
+                    RealPlayer rp = new RealPlayer();
+                    rp.setName(pe.name);
+                    userPlayers.add(rp);
+                }
+                rosters.put(userInfo.name, userPlayers);
+            }
+            
+            for (Fixture f : fixtures) {
+                if (!rosters.containsKey(f.getHomeTeamName())) {
+                    List<RealPlayer> p = realPlayerDao.getPlayersByTeamSync(f.getHomeTeamId());
+                    rosters.put(f.getHomeTeamName(), p != null ? p : new ArrayList<>());
+                }
+                if (!rosters.containsKey(f.getAwayTeamName())) {
+                    List<RealPlayer> p = realPlayerDao.getPlayersByTeamSync(f.getAwayTeamId());
+                    rosters.put(f.getAwayTeamName(), p != null ? p : new ArrayList<>());
+                }
+            }
+            results = LocalSimulator.simulateAll(fixtures, avg, name, rosters);
         }
 
         saveResults(clubId, fixtures, results);

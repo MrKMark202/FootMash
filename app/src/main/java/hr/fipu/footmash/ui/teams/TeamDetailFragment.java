@@ -15,6 +15,7 @@ import androidx.navigation.Navigation;
 import hr.fipu.footmash.R;
 import hr.fipu.footmash.databinding.FragmentTeamDetailBinding;
 import hr.fipu.footmash.ui.util.TeamBadges;
+import com.bumptech.glide.Glide;
 
 public class TeamDetailFragment extends Fragment {
 
@@ -68,8 +69,19 @@ public class TeamDetailFragment extends Fragment {
             if (teams != null && !teams.isEmpty()) {
                 hr.fipu.footmash.model.TeamResponse team = teams.get(0);
 
-                binding.imageTeamLogo.setImageDrawable(
-                        TeamBadges.badgeFor(requireContext(), team.getTeamKey(), team.getTeamName()));
+                String badgeUrl = team.getTeamBadge();
+                if (badgeUrl == null || badgeUrl.isEmpty()) {
+                    String kebabName = team.getTeamName().toLowerCase()
+                        .replace(" & ", "-")
+                        .replace("&", "")
+                        .replace(" ", "-")
+                        .replace(".", "");
+                    badgeUrl = "https://apiv2.allsportsapi.com/logo/" + team.getTeamKey() + "_" + kebabName + ".jpg";
+                }
+                Glide.with(this)
+                     .load(badgeUrl)
+                     .placeholder(TeamBadges.badgeFor(requireContext(), team.getTeamKey(), team.getTeamName()))
+                     .into(binding.imageTeamLogo);
                 binding.textTeamName.setText(team.getTeamName());
 
                 binding.textForm.setText("Klub: " + team.getTeamName());

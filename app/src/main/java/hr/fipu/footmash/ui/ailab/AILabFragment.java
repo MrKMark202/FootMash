@@ -31,10 +31,6 @@ public class AILabFragment extends Fragment {
                 .navigate(hr.fipu.footmash.R.id.action_aiLab_to_playerSimulation);
         });
 
-        binding.btnSimulateTeam.setOnClickListener(v -> {
-            androidx.navigation.Navigation.findNavController(v)
-                .navigate(hr.fipu.footmash.R.id.action_aiLab_to_teamSimulation);
-        });
     }
 
     @Override

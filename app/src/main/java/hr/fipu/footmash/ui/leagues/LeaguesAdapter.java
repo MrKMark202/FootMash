@@ -11,6 +11,7 @@ import java.util.List;
 import hr.fipu.footmash.databinding.ItemLeagueBinding;
 import hr.fipu.footmash.model.LeagueResponse;
 import hr.fipu.footmash.ui.util.InitialsBadgeDrawable;
+import com.bumptech.glide.Glide;
 
 public class LeaguesAdapter extends RecyclerView.Adapter<LeaguesAdapter.LeagueViewHolder> {
 
@@ -59,7 +60,14 @@ public class LeaguesAdapter extends RecyclerView.Adapter<LeaguesAdapter.LeagueVi
             binding.textLeagueName.setText(league.getLeagueName());
             binding.textLeagueType.setText(league.getCountryName()); // Show country name as detail
 
-            binding.imageLeagueLogo.setImageDrawable(new InitialsBadgeDrawable(league.getLeagueName()));
+            if (league.getLeagueLogo() != null && !league.getLeagueLogo().isEmpty()) {
+                Glide.with(binding.getRoot().getContext())
+                     .load(league.getLeagueLogo())
+                     .placeholder(new InitialsBadgeDrawable(league.getLeagueName()))
+                     .into(binding.imageLeagueLogo);
+            } else {
+                binding.imageLeagueLogo.setImageDrawable(new InitialsBadgeDrawable(league.getLeagueName()));
+            }
 
             binding.getRoot().setOnClickListener(v -> {
                 if (listener != null) listener.onLeagueClick(league);

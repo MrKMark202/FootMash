@@ -25,6 +25,9 @@ import hr.fipu.footmash.model.RealTeam;
 import hr.fipu.footmash.model.UserClub;
 import hr.fipu.footmash.repository.DraftRepository;
 import hr.fipu.footmash.season.FormationCatalog;
+import com.bumptech.glide.Glide;
+import hr.fipu.footmash.ui.util.InitialsBadgeDrawable;
+import android.widget.ImageView;
 
 public class ExistingClubPickerFragment extends Fragment {
 
@@ -132,27 +135,35 @@ public class ExistingClubPickerFragment extends Fragment {
             RealTeam team = teams.get(position);
             holder.name.setText(team.getName());
             holder.meta.setText(team.getCountry() != null ? team.getCountry() : "");
-            holder.initials.setText(initialsOf(team.getName()));
+            
+            String badgeUrl = team.getBadgeUrl();
+            if (badgeUrl == null || badgeUrl.isEmpty()) {
+                String kebabName = team.getName().toLowerCase()
+                    .replace(" & ", "-")
+                    .replace("&", "")
+                    .replace(" ", "-")
+                    .replace(".", "");
+                badgeUrl = "https://apiv2.allsportsapi.com/logo/" + team.getId() + "_" + kebabName + ".jpg";
+            }
+            Glide.with(holder.itemView.getContext())
+                 .load(badgeUrl)
+                 .placeholder(new InitialsBadgeDrawable(team.getName()))
+                 .into(holder.badge);
+            
             holder.itemView.setOnClickListener(v -> listener.onSelected(team));
         }
 
         @Override
         public int getItemCount() { return teams.size(); }
 
-        private String initialsOf(String name) {
-            if (name == null || name.isEmpty()) return "";
-            String[] parts = name.trim().split("\\s+");
-            if (parts.length == 1) return parts[0].substring(0, Math.min(2, parts[0].length())).toUpperCase();
-            return ("" + parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
-        }
-
         static class VH extends RecyclerView.ViewHolder {
-            TextView name, meta, initials;
+            TextView name, meta;
+            ImageView badge;
             VH(@NonNull View v) {
                 super(v);
                 name = v.findViewById(R.id.textTeamName);
                 meta = v.findViewById(R.id.textTeamMeta);
-                initials = v.findViewById(R.id.textTeamInitials);
+                badge = v.findViewById(R.id.imageTeamBadge);
             }
         }
     }

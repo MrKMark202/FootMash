@@ -14,6 +14,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import java.util.List;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import androidx.palette.graphics.Palette;
+import androidx.core.graphics.ColorUtils;
 
 import hr.fipu.footmash.R;
 import hr.fipu.footmash.databinding.FragmentSeasonHubBinding;
@@ -113,10 +120,40 @@ public class SeasonHubFragment extends Fragment {
             ((TextView) row.findViewById(R.id.text_pts)).setText(String.valueOf(s.getPoints()));
 
             if (s.isUserTeam()) {
-                row.setBackgroundColor(0x332962FF); // 20% opaque accent blue
                 ((TextView) row.findViewById(R.id.text_team_name))
                     .setTextColor(ContextCompat.getColor(requireContext(), R.color.accent_blue));
+                ((TextView) row.findViewById(R.id.text_team_name)).setTypeface(null, android.graphics.Typeface.BOLD);
             }
+
+            String bUrl = s.getBadgeUrl();
+            if (bUrl == null || bUrl.isEmpty()) {
+                String kebabName = s.getTeamName().toLowerCase()
+                    .replace(" & ", "-")
+                    .replace("&", "")
+                    .replace(" ", "-")
+                    .replace(".", "");
+                bUrl = "https://apiv2.allsportsapi.com/logo/" + s.getTeamId() + "_" + kebabName + ".jpg";
+            }
+
+            Glide.with(this)
+                .asBitmap()
+                .load(bUrl)
+                .into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        Palette.from(resource).generate(palette -> {
+                            if (palette != null && isAdded()) {
+                                int defaultColor = ContextCompat.getColor(requireContext(), R.color.background);
+                                int dominantColor = palette.getDominantColor(defaultColor);
+                                int alpha = s.isUserTeam() ? 100 : 40; 
+                                int transparentColor = ColorUtils.setAlphaComponent(dominantColor, alpha); 
+                                row.setBackgroundColor(transparentColor);
+                            }
+                        });
+                    }
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {}
+                });
 
             container.addView(row);
         }

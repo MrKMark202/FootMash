@@ -31,6 +31,11 @@ public class LeaguesViewModel extends AndroidViewModel {
                 LeagueResponse r = new LeagueResponse();
                 r.setLeagueKey(info.getId());
                 r.setLeagueName(info.getName());
+                if (info.getId() == 177) {
+                    r.setLeagueLogo("https://apiv2.allsportsapi.com/logo/logo_leagues/177_premier-league.png");
+                } else if (info.getId() == 302) {
+                    r.setLeagueLogo("https://apiv2.allsportsapi.com/logo/logo_leagues/302_la-liga.png");
+                }
                 mapped.add(r);
             }
             return mapped;

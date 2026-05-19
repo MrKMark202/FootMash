@@ -13,15 +13,41 @@ import java.util.List;
 import hr.fipu.footmash.db.AppDatabase;
 import hr.fipu.footmash.model.LeagueInfo;
 import hr.fipu.footmash.model.LeagueResponse;
+import hr.fipu.footmash.model.UserClub;
+import hr.fipu.footmash.model.Fixture;
+import hr.fipu.footmash.model.MatchResult;
 
 public class HomeViewModel extends AndroidViewModel {
 
     private final AppDatabase db;
     private LiveData<List<LeagueResponse>> featuredLeagues;
 
+    private LiveData<UserClub> activeClub;
+
     public HomeViewModel(@NonNull Application application) {
         super(application);
         db = AppDatabase.getInstance(application);
+        activeClub = db.userClubDao().getActiveClub();
+    }
+
+    public LiveData<UserClub> getActiveClub() {
+        return activeClub;
+    }
+
+    public LiveData<Fixture> getLastPlayedUserFixture(int seasonId) {
+        return db.fixtureDao().getLastPlayedUserFixture(seasonId);
+    }
+
+    public LiveData<MatchResult> getMatchResult(int fixtureId) {
+        return db.fixtureDao().getMatchResult(fixtureId);
+    }
+
+    public LiveData<List<hr.fipu.footmash.model.GoalScorer>> getGoalScorers(int fixtureId) {
+        return db.fixtureDao().getGoalScorersByFixtureLive(fixtureId);
+    }
+
+    public LiveData<String> getTeamBadgeUrl(int teamId) {
+        return db.realTeamDao().getBadgeUrlLive(teamId);
     }
 
     public LiveData<List<LeagueResponse>> getFeaturedLeagues() {

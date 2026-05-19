@@ -23,6 +23,9 @@ public interface RealTeamDao {
     @Query("SELECT * FROM real_teams WHERE id = :teamId")
     RealTeam getTeamById(int teamId);
 
+    @Query("SELECT badgeUrl FROM real_teams WHERE id = :teamId LIMIT 1")
+    LiveData<String> getBadgeUrlLive(int teamId);
+
     @Query("SELECT * FROM real_teams WHERE leagueId = :leagueId ORDER BY name ASC")
     List<RealTeam> getTeamsByLeagueSync(int leagueId);
 

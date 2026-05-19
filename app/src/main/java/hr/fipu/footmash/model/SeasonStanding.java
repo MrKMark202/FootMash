@@ -20,6 +20,7 @@ public class SeasonStanding {
     private int goalsAgainst;
     private int points;
     private boolean isUserTeam;
+    private String badgeUrl;
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
@@ -56,6 +57,9 @@ public class SeasonStanding {
 
     public boolean isUserTeam() { return isUserTeam; }
     public void setUserTeam(boolean userTeam) { isUserTeam = userTeam; }
+
+    public String getBadgeUrl() { return badgeUrl; }
+    public void setBadgeUrl(String badgeUrl) { this.badgeUrl = badgeUrl; }
 
     public int getGoalDiff() { return goalsFor - goalsAgainst; }
 }

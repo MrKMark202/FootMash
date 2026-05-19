@@ -1,4 +1,4 @@
-﻿{
+{
   "league": {
     "id": 302,
     "name": "La Liga",
@@ -487,28 +487,21 @@
       ]
     },
     {
-      "team_id": 117,
-      "name": "RCD Espanyol",
-      "badge_url": "https://apiv2.allsportsapi.com/logo/117_espanyol.jpg",
+      "team_id": 153,
+      "name": "Levante UD",
+      "badge_url": "https://apiv2.allsportsapi.com/logo/153_levante.jpg",
       "players": [
-        {"player_id":5348,"name":"Joan Garcia","position":"GK","nationality":"Spain","age":23,"pace":46,"shooting":12,"passing":60,"dribbling":30,"defending":9,"physical":64,"overall":74},
-        {"player_id":5349,"name":"Francisco Pacheco","position":"GK","nationality":"Spain","age":26,"pace":44,"shooting":10,"passing":54,"dribbling":26,"defending":8,"physical":60,"overall":68},
-        {"player_id":5350,"name":"Alvaro Aguado","position":"RB","nationality":"Spain","age":26,"pace":72,"shooting":44,"passing":54,"dribbling":50,"defending":62,"physical":56,"overall":63},
-        {"player_id":5351,"name":"Leandro Cabrera","position":"CB","nationality":"Uruguay","age":33,"pace":62,"shooting":34,"passing":52,"dribbling":42,"defending":68,"physical":68,"overall":66},
-        {"player_id":5352,"name":"Sergi Gomez","position":"CB","nationality":"Spain","age":30,"pace":64,"shooting":32,"passing":52,"dribbling":40,"defending":66,"physical":64,"overall":64},
-        {"player_id":5353,"name":"Martin Aguirregabiria","position":"RB","nationality":"Spain","age":31,"pace":72,"shooting":44,"passing":56,"dribbling":50,"defending":60,"physical":56,"overall":63},
-        {"player_id":5354,"name":"Ruben Sanchez","position":"LB","nationality":"Spain","age":24,"pace":74,"shooting":42,"passing":54,"dribbling":50,"defending":58,"physical":54,"overall":62},
-        {"player_id":5355,"name":"Jofre Carreras","position":"CB","nationality":"Spain","age":21,"pace":68,"shooting":28,"passing":46,"dribbling":38,"defending":62,"physical":60,"overall":60},
-        {"player_id":5356,"name":"Pol Lozano","position":"CM","nationality":"Spain","age":25,"pace":66,"shooting":54,"passing":62,"dribbling":54,"defending":54,"physical":56,"overall":63},
-        {"player_id":5357,"name":"Carlos Romero","position":"CM","nationality":"Spain","age":24,"pace":66,"shooting":50,"passing":56,"dribbling":52,"defending":50,"physical":52,"overall":60},
-        {"player_id":5358,"name":"Brian Olivan","position":"LB","nationality":"Spain","age":25,"pace":74,"shooting":40,"passing":52,"dribbling":48,"defending":56,"physical":52,"overall":59},
-        {"player_id":5359,"name":"Javi Puado","position":"RW","nationality":"Spain","age":25,"pace":78,"shooting":60,"passing":52,"dribbling":60,"defending":24,"physical":52,"overall":63},
-        {"player_id":5360,"name":"Alejo Veliz","position":"ST","nationality":"Argentina","age":20,"pace":72,"shooting":64,"passing":44,"dribbling":52,"defending":20,"physical":64,"overall":65},
-        {"player_id":5361,"name":"Luka Romero","position":"CAM","nationality":"Mexico","age":21,"pace":72,"shooting":58,"passing":60,"dribbling":64,"defending":30,"physical":48,"overall":63},
-        {"player_id":5362,"name":"Miquel Llambrich","position":"CM","nationality":"Spain","age":24,"pace":62,"shooting":46,"passing":54,"dribbling":48,"defending":46,"physical":48,"overall":57},
-        {"player_id":5363,"name":"Youssef En-Nesyri","position":"ST","nationality":"Morocco","age":27,"pace":78,"shooting":76,"passing":52,"dribbling":60,"defending":24,"physical":74,"overall":76},
-        {"player_id":5364,"name":"Omar El Hilali","position":"CM","nationality":"Morocco","age":21,"pace":66,"shooting":44,"passing":50,"dribbling":46,"defending":42,"physical":48,"overall":55},
-        {"player_id":5365,"name":"Jesus Medina","position":"ST","nationality":"Paraguay","age":24,"pace":74,"shooting":62,"passing":44,"dribbling":50,"defending":18,"physical":60,"overall":62}
+        {"player_id":5348,"name":"Mathew Ryan","position":"GK","nationality":"Australia","age":32,"pace":50,"shooting":16,"passing":66,"dribbling":40,"defending":12,"physical":74,"overall":80},
+        {"player_id":5349,"name":"Jeremy Toljan","position":"RB","nationality":"Germany","age":29,"pace":82,"shooting":46,"passing":68,"dribbling":64,"defending":72,"physical":70,"overall":77},
+        {"player_id":5350,"name":"Matías Moreno","position":"CB","nationality":"Argentina","age":20,"pace":70,"shooting":32,"passing":54,"dribbling":50,"defending":74,"physical":76,"overall":74},
+        {"player_id":5351,"name":"Adrián De la Fuente","position":"CB","nationality":"Spain","age":25,"pace":68,"shooting":38,"passing":56,"dribbling":48,"defending":72,"physical":74,"overall":73},
+        {"player_id":5352,"name":"Manu Sánchez","position":"LB","nationality":"Spain","age":23,"pace":76,"shooting":50,"passing":66,"dribbling":64,"defending":68,"physical":62,"overall":75},
+        {"player_id":5353,"name":"Kervin Arriaga","position":"CDM","nationality":"Honduras","age":26,"pace":68,"shooting":54,"passing":66,"dribbling":60,"defending":70,"physical":78,"overall":73},
+        {"player_id":5354,"name":"Pablo Martínez","position":"CM","nationality":"Spain","age":26,"pace":72,"shooting":64,"passing":72,"dribbling":70,"defending":60,"physical":68,"overall":74},
+        {"player_id":5355,"name":"Jon Ander Olasagasti","position":"CM","nationality":"Spain","age":23,"pace":68,"shooting":58,"passing":66,"dribbling":62,"defending":60,"physical":64,"overall":72},
+        {"player_id":5356,"name":"Iván Romero","position":"ST","nationality":"Spain","age":23,"pace":80,"shooting":66,"passing":60,"dribbling":70,"defending":30,"physical":62,"overall":73},
+        {"player_id":5357,"name":"Carlos Espí","position":"ST","nationality":"Spain","age":19,"pace":74,"shooting":64,"passing":52,"dribbling":62,"defending":24,"physical":68,"overall":69},
+        {"player_id":5358,"name":"Iker Losada","position":"CAM","nationality":"Spain","age":22,"pace":76,"shooting":68,"passing":72,"dribbling":74,"defending":38,"physical":56,"overall":75}
       ]
     }
   ]

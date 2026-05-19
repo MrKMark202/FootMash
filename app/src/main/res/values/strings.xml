@@ -5,7 +5,7 @@
     <string name="nav_home">Početna</string>
     <string name="nav_leagues">Lige</string>
     <string name="nav_teams">Timovi</string>
-    <string name="nav_ai_lab">AI Lab</string>
+    <string name="nav_ai_lab">Kreiranje igrača</string>
     <string name="nav_season">Sezona</string>
 
     <!-- Home -->
@@ -65,7 +65,7 @@
     <string name="pts">Bod</string>
 
     <!-- AI Lab -->
-    <string name="ai_lab_title">AI Laboratorij</string>
+    <string name="ai_lab_title">Kreiranje igrača</string>
     <string name="ai_lab_subtitle">Kreiraj vlastite igrače i timove</string>
     <string name="create_player">Kreiraj igrača</string>
     <string name="create_team">Kreiraj tim</string>

@@ -27,7 +27,7 @@ public class SeedLoader {
      * pick up the new data on next launch. Old rows are wiped before reload so
      * stale players from a previous season don't linger.
      */
-    private static final String KEY_SEED_LOADED = "seed_loaded_v2_2025_26";
+    private static final String KEY_SEED_LOADED = "seed_loaded_v4_2025_26";
 
     private static final String[] SEED_FILES = {
         "data/premierleague.json",
@@ -83,7 +83,17 @@ public class SeedLoader {
             RealTeam team = new RealTeam();
             team.setId(teamData.teamId);
             team.setName(teamData.name);
-            team.setBadgeUrl(teamData.badgeUrl);
+            
+            String bUrl = teamData.badgeUrl;
+            if (bUrl == null || bUrl.isEmpty()) {
+                String kebabName = teamData.name.toLowerCase()
+                    .replace(" & ", "-")
+                    .replace("&", "")
+                    .replace(" ", "-")
+                    .replace(".", "");
+                bUrl = "https://apiv2.allsportsapi.com/logo/" + teamData.teamId + "_" + kebabName + ".jpg";
+            }
+            team.setBadgeUrl(bUrl);
             team.setLeagueId(leagueId);
             team.setLeagueName(leagueName);
             team.setCountry(country);
