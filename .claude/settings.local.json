@@ -3,7 +3,13 @@
     "allow": [
       "Bash(xargs ls *)",
       "Bash(./gradlew compileDebugJavaWithJavac)",
-      "Bash(python -c \"import json; data=json.load\\(open\\('app/src/main/assets/data/premierleague.json'\\)\\); print\\(f\\\\\"Teams: {len\\(data['teams']\\)}\\\\\"\\); print\\(f\\\\\"Total players: {sum\\(len\\(t['players']\\) for t in data['teams']\\)}\\\\\"\\); ids=[p['player_id'] for t in data['teams'] for p in t['players']]; print\\(f\\\\\"Unique player IDs: {len\\(set\\(ids\\)\\)} of {len\\(ids\\)}\\\\\"\\)\")"
+      "Bash(python -c \"import json; data=json.load\\(open\\('app/src/main/assets/data/premierleague.json'\\)\\); print\\(f\\\\\"Teams: {len\\(data['teams']\\)}\\\\\"\\); print\\(f\\\\\"Total players: {sum\\(len\\(t['players']\\) for t in data['teams']\\)}\\\\\"\\); ids=[p['player_id'] for t in data['teams'] for p in t['players']]; print\\(f\\\\\"Unique player IDs: {len\\(set\\(ids\\)\\)} of {len\\(ids\\)}\\\\\"\\)\")",
+      "Bash(./gradlew assembleDebug -q --console=plain)",
+      "Bash(grep -E '\\\\.txt$|cmd_output|build_errors')",
+      "Bash(sed 's/.*: //')",
+      "Bash(python *)",
+      "Bash(./gradlew assembleDebug testDebugUnitTest -q --console=plain)",
+      "PowerShell(Select-String -Path \"app\\\\src\\\\main\\\\java\\\\hr\\\\fipu\\\\footmash\\\\ui\\\\season\\\\DraftCanvasFragment.java\" -Pattern 'Šut|Fizički|LOŠE KOMBINACIJE|igrača|×' | ForEach-Object { \"$\\($_.LineNumber\\): $\\($_.Line.Trim\\(\\)\\)\" } | Select-Object -First 6)"
     ]
   }
 }

@@ -45,6 +45,11 @@ public class UserClub {
     public int getSeasonYear() { return seasonYear; }
     public void setSeasonYear(int seasonYear) { this.seasonYear = seasonYear; }
 
+    /** Season formatted for display, e.g. "2025/26". */
+    public String getSeasonLabel() {
+        return seasonYear + "/" + String.format("%02d", (seasonYear + 1) % 100);
+    }
+
     public boolean isActive() { return isActive; }
     public void setActive(boolean active) { isActive = active; }
 

@@ -27,6 +27,13 @@ public class RealPlayer {
     private int leagueId;
     private String leagueName;
 
+    /**
+     * Dynamic form: points added to {@link #overall} from in-season performance
+     * (goals, assists, results). 0 at the start of every season; see
+     * {@code SeasonRepository.applyPlayerGrowth}.
+     */
+    private int formDelta;
+
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -62,6 +69,14 @@ public class RealPlayer {
 
     public int getOverall() { return overall; }
     public void setOverall(int overall) { this.overall = overall; }
+
+    public int getFormDelta() { return formDelta; }
+    public void setFormDelta(int formDelta) { this.formDelta = formDelta; }
+
+    /** Overall rating including in-season form growth/decline. */
+    public int getEffectiveOverall() {
+        return overall + formDelta;
+    }
 
     public int getTeamId() { return teamId; }
     public void setTeamId(int teamId) { this.teamId = teamId; }

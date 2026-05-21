@@ -81,7 +81,7 @@ public class ExistingClubPickerFragment extends Fragment {
             club.setLeagueName(leagueName);
             club.setBudget(UserClub.HALF_BUDGET);
             club.setFormation(formation);
-            club.setSeasonYear(2024);
+            club.setSeasonYear(2025);
             club.setActive(true);
             club.setRealTeamSourceId(team.getId());
 

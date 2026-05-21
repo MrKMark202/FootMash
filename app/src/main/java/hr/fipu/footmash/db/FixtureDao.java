@@ -71,4 +71,14 @@ public interface FixtureDao {
 
     @Query("SELECT COUNT(*) FROM goal_scorer WHERE seasonId = :seasonId AND playerName = :playerName")
     int getGoalCountByPlayer(int seasonId, String playerName);
+
+    @Query("DELETE FROM match_result WHERE fixtureId IN " +
+           "(SELECT id FROM fixture WHERE seasonId = :seasonId)")
+    void deleteMatchResultsForSeason(int seasonId);
+
+    @Query("DELETE FROM goal_scorer WHERE seasonId = :seasonId")
+    void deleteGoalScorersForSeason(int seasonId);
+
+    @Query("DELETE FROM fixture WHERE seasonId = :seasonId")
+    void deleteFixturesForSeason(int seasonId);
 }

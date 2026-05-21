@@ -39,4 +39,7 @@ public interface StandingDao {
     @Query("SELECT playerName, teamName, COUNT(*) AS goals FROM goal_scorer " +
            "WHERE seasonId = :seasonId GROUP BY playerName, teamName ORDER BY goals DESC LIMIT 20")
     List<TopScorerRow> getTopScorers(int seasonId);
+
+    @Query("DELETE FROM season_standing WHERE seasonId = :seasonId")
+    void deleteStandingsForSeason(int seasonId);
 }

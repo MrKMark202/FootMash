@@ -7,6 +7,7 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import hr.fipu.footmash.model.Fixture;
 
@@ -22,6 +23,8 @@ public class MatchSimulator {
         public String name;
         public String team;
         public int minute;
+        /** Optional — name of the team-mate who assisted the goal; may be null. */
+        public String assist;
     }
 
     public static class UserTeamInfo {
@@ -29,15 +32,22 @@ public class MatchSimulator {
         public final String formation;
         public final int avgOverall;
         public final int avgChemistry;
+        public final int synergyDelta;
         public final List<PlayerEntry> players;
 
         public UserTeamInfo(String name, String formation, int avgOverall,
-                            int avgChemistry, List<PlayerEntry> players) {
+                            int avgChemistry, int synergyDelta, List<PlayerEntry> players) {
             this.name = name;
             this.formation = formation;
             this.avgOverall = avgOverall;
             this.avgChemistry = avgChemistry;
+            this.synergyDelta = synergyDelta;
             this.players = players;
+        }
+
+        /** Average overall plus the squad's trait synergy delta. */
+        public int effectiveOverall() {
+            return avgOverall + synergyDelta;
         }
     }
 
@@ -45,15 +55,23 @@ public class MatchSimulator {
         public final String position;
         public final String name;
         public final int overall;
+        public final String traits;
 
-        public PlayerEntry(String position, String name, int overall) {
+        public PlayerEntry(String position, String name, int overall, String traits) {
             this.position = position;
             this.name = name;
             this.overall = overall;
+            this.traits = traits;
         }
     }
 
-    public static String buildPrompt(List<Fixture> fixtures, UserTeamInfo userTeam) {
+    /**
+     * Builds the full simulation prompt. {@code ratings} maps each team name to its
+     * effective rating (average overall + trait synergy) so Gemini can weight every
+     * match — not just the user's — by squad strength.
+     */
+    public static String buildPrompt(List<Fixture> fixtures, UserTeamInfo userTeam,
+                                     Map<String, Integer> ratings) {
         StringBuilder sb = new StringBuilder();
         sb.append("Simulate ").append(fixtures.size())
           .append(" football matches. Return ONLY a JSON array with exactly ")
@@ -62,46 +80,71 @@ public class MatchSimulator {
         for (int i = 0; i < fixtures.size(); i++) {
             Fixture f = fixtures.get(i);
             sb.append("Match ").append(i + 1).append(": ")
-              .append(f.getHomeTeamName()).append(" vs ").append(f.getAwayTeamName()).append("\n");
+              .append(f.getHomeTeamName()).append(ratingTag(ratings, f.getHomeTeamName()))
+              .append(" vs ")
+              .append(f.getAwayTeamName()).append(ratingTag(ratings, f.getAwayTeamName()))
+              .append("\n");
 
             if (f.isUserTeam() && userTeam != null) {
                 boolean isHome = f.getHomeTeamName().equals(userTeam.name);
                 sb.append("  ").append(userTeam.name)
                   .append(" (").append(isHome ? "home" : "away")
                   .append(", ").append(userTeam.formation)
-                  .append(", avg OVR ").append(userTeam.avgOverall)
+                  .append(", effective OVR ").append(userTeam.effectiveOverall())
                   .append(", chemistry ").append(userTeam.avgChemistry).append("%")
+                  .append(", squad synergy ").append(signed(userTeam.synergyDelta))
                   .append(") Starting XI:");
                 for (PlayerEntry p : userTeam.players) {
-                    sb.append(" ").append(p.name).append("(").append(p.overall).append(")");
+                    sb.append(" ").append(p.name).append("(").append(p.overall);
+                    if (p.traits != null && !p.traits.isEmpty()) {
+                        sb.append("; ").append(p.traits);
+                    }
+                    sb.append(")");
                 }
                 sb.append("\n  Scorers for ").append(userTeam.name)
-                  .append(" must use the names listed above.\n");
+                  .append(" must use the names listed above; favour attacking traits.\n");
             }
         }
 
         sb.append("\nReturn ONLY this JSON (no other text):\n");
-        sb.append("[{\"home_goals\":1,\"away_goals\":0,\"scorers\":[{\"name\":\"Player\",\"team\":\"home\",\"minute\":67}]}, ...]\n\n");
+        sb.append("[{\"home_goals\":1,\"away_goals\":0,\"scorers\":[")
+          .append("{\"name\":\"Player\",\"team\":\"home\",\"minute\":67,\"assist\":\"Team-mate\"}]}, ...]\n\n");
         sb.append("Rules: exactly ").append(fixtures.size())
           .append(" objects; scorers.length == home_goals+away_goals; max 4 goals per match; ")
-          .append("minutes 1-90; team is \"home\" or \"away\"; realistic scorelines.\n");
+          .append("minutes 1-90; team is \"home\" or \"away\"; optionally add \"assist\" naming the ")
+          .append("team-mate who set up the goal (omit it for solo goals); the higher OVR team ")
+          .append("should win more often (squad synergy tilts close games) but upsets still happen.\n");
 
         return sb.toString();
     }
 
-    public static String buildSimplePrompt(List<Fixture> fixtures) {
+    public static String buildSimplePrompt(List<Fixture> fixtures, Map<String, Integer> ratings) {
         StringBuilder sb = new StringBuilder();
         sb.append("Simulate ").append(fixtures.size())
           .append(" football matches. Return ONLY a JSON array.\n");
         for (int i = 0; i < fixtures.size(); i++) {
             Fixture f = fixtures.get(i);
             sb.append(i + 1).append(". ")
-              .append(f.getHomeTeamName()).append(" vs ").append(f.getAwayTeamName()).append("\n");
+              .append(f.getHomeTeamName()).append(ratingTag(ratings, f.getHomeTeamName()))
+              .append(" vs ")
+              .append(f.getAwayTeamName()).append(ratingTag(ratings, f.getAwayTeamName()))
+              .append("\n");
         }
         sb.append("\n[{\"home_goals\":1,\"away_goals\":0,\"scorers\":[{\"name\":\"Player\",\"team\":\"home\",\"minute\":67}]}, ...]\n");
         sb.append("Exactly ").append(fixtures.size())
-          .append(" elements. scorers.length==home_goals+away_goals. Max 4 goals. JSON only.\n");
+          .append(" elements. scorers.length==home_goals+away_goals. Max 4 goals. ")
+          .append("Higher OVR wins more often. JSON only.\n");
         return sb.toString();
+    }
+
+    private static String ratingTag(Map<String, Integer> ratings, String teamName) {
+        if (ratings == null) return "";
+        Integer r = ratings.get(teamName);
+        return r != null ? " (OVR " + r + ")" : "";
+    }
+
+    private static String signed(int v) {
+        return v > 0 ? "+" + v : String.valueOf(v);
     }
 
     public static List<ParsedMatch> parseResponse(String raw, int expected) {

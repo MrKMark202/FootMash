@@ -19,9 +19,16 @@ import hr.fipu.footmash.model.MatchResult;
 public class MatchdayAdapter extends RecyclerView.Adapter<MatchdayAdapter.ViewHolder> {
 
     private List<MatchdayViewModel.FixtureDisplay> items = new ArrayList<>();
+    /** Colour used to highlight the user's club; overridden by the inherited club theme. */
+    private int accentColor = 0xFF2962FF;
 
     public void setItems(List<MatchdayViewModel.FixtureDisplay> items) {
         this.items = items != null ? items : new ArrayList<>();
+        notifyDataSetChanged();
+    }
+
+    public void setAccentColor(int color) {
+        this.accentColor = color;
         notifyDataSetChanged();
     }
 
@@ -49,8 +56,8 @@ public class MatchdayAdapter extends RecyclerView.Adapter<MatchdayAdapter.ViewHo
             holder.textScore.setTextColor(Color.WHITE);
 
             if (f.isUserTeam()) {
-                if (f.getHomeTeamId() == 0) holder.textHome.setTextColor(0xFF2962FF);
-                else holder.textAway.setTextColor(0xFF2962FF);
+                if (f.getHomeTeamId() == 0) holder.textHome.setTextColor(accentColor);
+                else holder.textAway.setTextColor(accentColor);
             }
 
             String[] parts = d.scorersText.split("\\|", -1);

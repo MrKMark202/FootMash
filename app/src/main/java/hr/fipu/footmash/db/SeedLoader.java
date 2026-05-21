@@ -27,11 +27,14 @@ public class SeedLoader {
      * pick up the new data on next launch. Old rows are wiped before reload so
      * stale players from a previous season don't linger.
      */
-    private static final String KEY_SEED_LOADED = "seed_loaded_v4_2025_26";
+    private static final String KEY_SEED_LOADED = "seed_loaded_v5_2025_26";
 
     private static final String[] SEED_FILES = {
         "data/premierleague.json",
-        "data/laliga.json"
+        "data/laliga.json",
+        "data/bundesliga.json",
+        "data/seriea.json",
+        "data/ligue1.json"
     };
 
     public static void loadIfNeeded(Context context) {

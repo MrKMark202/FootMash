@@ -17,7 +17,7 @@ public final class FormationCatalog {
 
     static {
         FORMATIONS.put("4-4-2", Arrays.asList(
-            new FormationSlot("GK",   "GK",  "GK",  0.50f, 0.88f),
+            new FormationSlot("GK",   "GK",  "GK",  0.50f, 0.85f),
             new FormationSlot("LB",   "LB",  "DF",  0.10f, 0.72f),
             new FormationSlot("CB1",  "CB",  "DF",  0.33f, 0.72f),
             new FormationSlot("CB2",  "CB",  "DF",  0.67f, 0.72f),
@@ -30,7 +30,7 @@ public final class FormationCatalog {
             new FormationSlot("ST2",  "ST",  "FW",  0.67f, 0.20f)
         ));
         FORMATIONS.put("4-3-3", Arrays.asList(
-            new FormationSlot("GK",   "GK",  "GK",  0.50f, 0.88f),
+            new FormationSlot("GK",   "GK",  "GK",  0.50f, 0.85f),
             new FormationSlot("LB",   "LB",  "DF",  0.10f, 0.72f),
             new FormationSlot("CB1",  "CB",  "DF",  0.33f, 0.72f),
             new FormationSlot("CB2",  "CB",  "DF",  0.67f, 0.72f),
@@ -43,7 +43,7 @@ public final class FormationCatalog {
             new FormationSlot("RW",   "RW",  "FW",  0.85f, 0.20f)
         ));
         FORMATIONS.put("3-5-2", Arrays.asList(
-            new FormationSlot("GK",   "GK",  "GK",  0.50f, 0.88f),
+            new FormationSlot("GK",   "GK",  "GK",  0.50f, 0.85f),
             new FormationSlot("CB1",  "CB",  "DF",  0.25f, 0.72f),
             new FormationSlot("CB2",  "CB",  "DF",  0.50f, 0.72f),
             new FormationSlot("CB3",  "CB",  "DF",  0.75f, 0.72f),
@@ -56,7 +56,7 @@ public final class FormationCatalog {
             new FormationSlot("ST2",  "ST",  "FW",  0.67f, 0.20f)
         ));
         FORMATIONS.put("4-2-3-1", Arrays.asList(
-            new FormationSlot("GK",   "GK",  "GK",  0.50f, 0.88f),
+            new FormationSlot("GK",   "GK",  "GK",  0.50f, 0.85f),
             new FormationSlot("LB",   "LB",  "DF",  0.10f, 0.74f),
             new FormationSlot("CB1",  "CB",  "DF",  0.33f, 0.74f),
             new FormationSlot("CB2",  "CB",  "DF",  0.67f, 0.74f),

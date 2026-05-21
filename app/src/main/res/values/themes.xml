@@ -110,4 +110,45 @@
         <item name="android:textColor">@color/text_secondary</item>
         <item name="android:textSize">14sp</item>
     </style>
+    <!-- Dark, rounded dialog matching the app theme -->
+    <style name="FootMashDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="colorPrimary">@color/accent_blue</item>
+        <item name="android:backgroundDimAmount">0.65</item>
+        <item name="shapeAppearanceMediumComponent">@style/FootMashDialog.Shape</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/FootMashDialog.Title</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/FootMashDialog.Body</item>
+        <item name="buttonBarPositiveButtonStyle">@style/FootMashDialog.Button</item>
+        <item name="buttonBarNegativeButtonStyle">@style/FootMashDialog.Button.Muted</item>
+        <item name="buttonBarNeutralButtonStyle">@style/FootMashDialog.Button.Muted</item>
+    </style>
+
+    <style name="FootMashDialog.Shape">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">20dp</item>
+    </style>
+
+    <style name="FootMashDialog.Title" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">17sp</item>
+    </style>
+
+    <style name="FootMashDialog.Body" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:lineSpacingExtra">3dp</item>
+    </style>
+
+    <style name="FootMashDialog.Button" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/accent_blue</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="FootMashDialog.Button.Muted" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
 </resources>

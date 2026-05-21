@@ -25,7 +25,7 @@ import hr.fipu.footmash.model.UserSquad;
     entities = {CustomPlayer.class, CustomTeam.class, RealPlayer.class, RealTeam.class,
                 UserClub.class, UserSquad.class,
                 Fixture.class, MatchResult.class, GoalScorer.class, SeasonStanding.class},
-    version = 6,
+    version = 7,
     exportSchema = false
 )
 @TypeConverters(Converters.class)
@@ -167,6 +167,14 @@ public abstract class AppDatabase extends RoomDatabase {
         }
     };
 
+    static final Migration MIGRATION_6_7 = new Migration(6, 7) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL(
+                "ALTER TABLE real_players ADD COLUMN formDelta INTEGER NOT NULL DEFAULT 0");
+        }
+    };
+
     public static AppDatabase getInstance(Context context) {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
@@ -176,7 +184,8 @@ public abstract class AppDatabase extends RoomDatabase {
                             AppDatabase.class,
                             "footmash_database"
                     )
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5,
+                                   MIGRATION_5_6, MIGRATION_6_7)
                     .build();
                 }
             }

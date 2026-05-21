@@ -16,6 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import java.util.List;
 
 import hr.fipu.footmash.databinding.FragmentMatchdayBinding;
+import hr.fipu.footmash.db.AppDatabase;
+import hr.fipu.footmash.model.UserClub;
+import hr.fipu.footmash.ui.util.ClubColors;
 
 public class MatchdayFragment extends Fragment {
 
@@ -55,6 +58,25 @@ public class MatchdayFragment extends Fragment {
 
         binding.btnSimulateMatchday.setOnClickListener(v ->
             viewModel.simulate(GEMINI_API_KEY));
+
+        applyClubTheme(clubId);
+    }
+
+    /** Loads the club off-thread and re-skins the matchday screen with its colours. */
+    private void applyClubTheme(int clubId) {
+        AppDatabase db = AppDatabase.getInstance(requireContext());
+        new Thread(() -> {
+            UserClub club = db.userClubDao().getClubByIdSync(clubId);
+            if (club == null || !isAdded()) return;
+            ClubColors.Theme theme = ClubColors.of(club.getRealTeamSourceId());
+            requireActivity().runOnUiThread(() -> {
+                if (binding == null) return;
+                ClubColors.styleButton(binding.btnSimulateMatchday, theme);
+                binding.progressSimulation.setIndeterminateTintList(
+                    android.content.res.ColorStateList.valueOf(theme.primary));
+                adapter.setAccentColor(theme.primary);
+            });
+        }).start();
     }
 
     private void bindFixtures(List<MatchdayViewModel.FixtureDisplay> items) {

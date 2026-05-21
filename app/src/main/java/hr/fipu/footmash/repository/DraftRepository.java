@@ -48,5 +48,17 @@ public class DraftRepository {
                 break;
             }
         }
+
+        // Everyone else from the real roster joins the bench, so the whole
+        // squad is available for substitutions and re-drafting.
+        for (RealPlayer p : roster) {
+            if (used.contains(p.getId())) continue;
+            UserSquad sub = new UserSquad();
+            sub.setClubId(clubId);
+            sub.setPlayerId(p.getId());
+            sub.setStartingXI(false);
+            sub.setPitchPosition(null);
+            db.userClubDao().insertSquadPlayer(sub);
+        }
     }
 }

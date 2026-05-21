@@ -27,6 +27,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/text_season_label"
             android:text="Sezona 2024/25"
             android:textColor="#88FFFFFF"
             android:textSize="14sp"
@@ -129,6 +130,7 @@
 
         <!-- User team result card -->
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_user_result"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
@@ -144,6 +146,7 @@
                 android:padding="16dp">
 
                 <TextView
+                    android:id="@+id/text_user_result_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="VAŠ REZULTAT"
@@ -295,14 +298,27 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- New season button -->
+        <!-- Continue with the same club into the next season -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_next_season"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:text="Sljede&#263;a sezona"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            app:backgroundTint="#2962FF"
+            app:cornerRadius="10dp" />
+
+        <!-- Start over with a brand-new club -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_new_season"
             android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:text="Nova sezona"
+            android:layout_height="46dp"
+            android:layout_marginTop="8dp"
+            android:text="Nova mom&#269;ad"
             android:textColor="#FFFFFF"
-            app:backgroundTint="#2962FF"
+            android:textSize="13sp"
+            app:backgroundTint="@color/divider"
             app:cornerRadius="10dp" />
 
     </LinearLayout>

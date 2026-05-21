@@ -64,11 +64,49 @@
         android:layout_height="1dp"
         android:background="@color/divider" />
 
+    <!-- Search by name -->
+    <EditText
+        android:id="@+id/inputSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_search_field"
+        android:hint="Pretraži po imenu"
+        android:textColorHint="@color/text_secondary"
+        android:textColor="@color/text_primary"
+        android:textSize="14sp"
+        android:paddingHorizontal="14dp"
+        android:paddingVertical="10dp"
+        android:inputType="textPersonName"
+        android:maxLines="1"
+        android:imeOptions="actionSearch"
+        android:drawableStart="@drawable/ic_search"
+        android:drawableTint="@color/text_secondary"
+        android:drawablePadding="8dp" />
+
+    <!-- Position filter -->
+    <HorizontalScrollView
+        android:id="@+id/filterChipsScroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingHorizontal="20dp"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/filterChips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
+
+    </HorizontalScrollView>
+
     <TextView
         android:id="@+id/textEmpty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nema dostupnih igrača za ovaj proračun."
+        android:text="Nema rezultata pretrage."
         android:textColor="@color/text_secondary"
         android:textSize="14sp"
         android:gravity="center"

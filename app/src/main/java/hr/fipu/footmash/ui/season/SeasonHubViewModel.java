@@ -52,4 +52,32 @@ public class SeasonHubViewModel extends AndroidViewModel {
     public LiveData<Fixture> getNextUserFixture() { return nextUserFixture; }
     public LiveData<Integer> getNextMatchday() { return nextMatchday; }
     public int getClubId() { return clubId; }
+
+    // --- Whole-season simulation ---
+
+    public enum SeasonSimState { IDLE, RUNNING, DONE }
+
+    private final MutableLiveData<SeasonSimState> seasonSimState =
+        new MutableLiveData<>(SeasonSimState.IDLE);
+    private final MutableLiveData<String> seasonSimProgress = new MutableLiveData<>("");
+
+    public LiveData<SeasonSimState> getSeasonSimState() { return seasonSimState; }
+    public LiveData<String> getSeasonSimProgress() { return seasonSimProgress; }
+
+    /** Simulates every remaining matchday back-to-back on a background thread. */
+    public void simulateWholeSeason(String apiKey) {
+        if (seasonSimState.getValue() == SeasonSimState.RUNNING) return;
+        seasonSimState.setValue(SeasonSimState.RUNNING);
+        new Thread(() -> {
+            int guard = 0;
+            int matchday;
+            while ((matchday = db.fixtureDao().getNextMatchdaySync(clubId)) > 0 && guard < 60) {
+                guard++;
+                seasonSimProgress.postValue("Simuliram kolo " + matchday + " / 38");
+                if (!seasonRepo.simulateMatchday(clubId, matchday, apiKey)) break;
+            }
+            seasonSimProgress.postValue("");
+            seasonSimState.postValue(SeasonSimState.DONE);
+        }).start();
+    }
 }

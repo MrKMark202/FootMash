@@ -65,7 +65,7 @@ public class ClubSetupFragment extends Fragment {
             club.setLeagueName(leagueName);
             club.setBudget(UserClub.STARTING_BUDGET);
             club.setFormation("4-3-3");
-            club.setSeasonYear(2024);
+            club.setSeasonYear(2025);
             club.setActive(true);
 
             long newId = db.userClubDao().insertClub(club);

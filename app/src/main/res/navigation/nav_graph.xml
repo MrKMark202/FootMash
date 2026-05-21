@@ -219,6 +219,10 @@
         <argument
             android:name="clubId"
             app:argType="integer" />
+        <argument
+            android:name="editMode"
+            app:argType="boolean"
+            android:defaultValue="false" />
         <action
             android:id="@+id/action_draftCanvas_to_seasonHub"
             app:destination="@id/nav_season_hub" />
@@ -238,6 +242,9 @@
         <action
             android:id="@+id/action_seasonHub_to_summary"
             app:destination="@id/nav_season_summary" />
+        <action
+            android:id="@+id/action_seasonHub_to_draft"
+            app:destination="@id/nav_draft_canvas" />
     </fragment>
 
     <fragment

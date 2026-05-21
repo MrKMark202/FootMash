@@ -14,6 +14,10 @@ import androidx.navigation.Navigation;
 
 import hr.fipu.footmash.R;
 import hr.fipu.footmash.databinding.FragmentSeasonSummaryBinding;
+import hr.fipu.footmash.db.AppDatabase;
+import hr.fipu.footmash.model.UserClub;
+import hr.fipu.footmash.repository.SeasonRepository;
+import hr.fipu.footmash.ui.util.ClubColors;
 
 public class SeasonSummaryFragment extends Fragment {
 
@@ -71,6 +75,46 @@ public class SeasonSummaryFragment extends Fragment {
                 .build();
             Navigation.findNavController(v).navigate(R.id.nav_season, null, opts);
         });
+
+        binding.btnNextSeason.setOnClickListener(v -> {
+            binding.btnNextSeason.setEnabled(false);
+            binding.btnNextSeason.setText("Pripremam sezonu...");
+            SeasonRepository repo = new SeasonRepository(requireContext());
+            new Thread(() -> {
+                repo.startNextSeason(clubId);
+                if (!isAdded()) return;
+                requireActivity().runOnUiThread(() -> {
+                    Bundle args = new Bundle();
+                    args.putInt("clubId", clubId);
+                    NavOptions opts = new NavOptions.Builder()
+                        .setPopUpTo(R.id.nav_season_hub, true)
+                        .build();
+                    Navigation.findNavController(v).navigate(R.id.nav_season_hub, args, opts);
+                });
+            }).start();
+        });
+
+        applyClubTheme(clubId);
+    }
+
+    /** Loads the club off-thread and re-skins the user-result card with its colours. */
+    private void applyClubTheme(int clubId) {
+        AppDatabase db = AppDatabase.getInstance(requireContext());
+        new Thread(() -> {
+            UserClub club = db.userClubDao().getClubByIdSync(clubId);
+            if (club == null || !isAdded()) return;
+            ClubColors.Theme theme = ClubColors.of(club.getRealTeamSourceId());
+            requireActivity().runOnUiThread(() -> {
+                if (binding == null) return;
+                ClubColors.styleButton(binding.btnNextSeason, theme);
+                binding.textSeasonLabel.setText("Sezona " + club.getSeasonLabel());
+                binding.cardUserResult.setStrokeColor(theme.primary);
+                binding.textUserResultLabel.setTextColor(theme.primary);
+                binding.textUserPosition.setBackgroundTintList(
+                    android.content.res.ColorStateList.valueOf(theme.primary));
+                binding.textUserPosition.setTextColor(theme.onPrimary);
+            });
+        }).start();
     }
 
     @Override

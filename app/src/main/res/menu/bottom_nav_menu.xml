@@ -9,10 +9,6 @@
         android:icon="@android:drawable/ic_menu_sort_by_size"
         android:title="@string/nav_leagues" />
     <item
-        android:id="@+id/nav_teams"
-        android:icon="@android:drawable/ic_menu_myplaces"
-        android:title="@string/nav_teams" />
-    <item
         android:id="@+id/nav_ai_lab"
         android:icon="@android:drawable/ic_menu_manage"
         android:title="@string/nav_ai_lab" />

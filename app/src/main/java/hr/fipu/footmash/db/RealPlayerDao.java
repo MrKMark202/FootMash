@@ -36,4 +36,12 @@ public interface RealPlayerDao {
 
     @Query("DELETE FROM real_players")
     void deleteAll();
+
+    /** Sets a player's dynamic form delta (added to overall in-season). */
+    @Query("UPDATE real_players SET formDelta = :delta WHERE id = :playerId")
+    void setFormDelta(int playerId, int delta);
+
+    /** Clears all form growth/decline — called when a new season begins. */
+    @Query("UPDATE real_players SET formDelta = 0")
+    void resetAllFormDelta();
 }

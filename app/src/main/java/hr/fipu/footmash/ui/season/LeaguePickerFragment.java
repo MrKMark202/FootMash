@@ -40,7 +40,10 @@ public class LeaguePickerFragment extends Fragment {
 
     private static final List<LeagueOption> LEAGUES = Arrays.asList(
         new LeagueOption(177, "Premier League", "Engleska", "🏴󠁧󠁢󠁥󠁮󠁧󠁿", 20),
-        new LeagueOption(302, "La Liga", "Španjolska", "🇪🇸", 20)
+        new LeagueOption(302, "La Liga", "Španjolska", "🇪🇸", 20),
+        new LeagueOption(78, "Bundesliga", "Njemačka", "🇩🇪", 20),
+        new LeagueOption(207, "Serie A", "Italija", "🇮🇹", 20),
+        new LeagueOption(168, "Ligue 1", "Francuska", "🇫🇷", 20)
     );
 
     @Nullable
@@ -99,7 +102,7 @@ public class LeaguePickerFragment extends Fragment {
             holder.emoji.setText(opt.emoji);
             holder.name.setText(opt.name);
             holder.country.setText(opt.country);
-            holder.teams.setText(opt.teamCount + " klubova · Sezona 2024/25");
+            holder.teams.setText(opt.teamCount + " klubova · Sezona 2025/26");
             holder.itemView.setOnClickListener(v -> listener.onSelected(opt));
         }
 

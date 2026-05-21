@@ -22,8 +22,10 @@ import hr.fipu.footmash.model.MatchResult;
 import hr.fipu.footmash.model.RealPlayer;
 import hr.fipu.footmash.model.RealTeam;
 import hr.fipu.footmash.model.SeasonStanding;
+import hr.fipu.footmash.model.Trait;
 import hr.fipu.footmash.model.UserClub;
 import hr.fipu.footmash.model.UserSquad;
+import hr.fipu.footmash.season.TraitEngine;
 
 public class SeasonRepository {
 
@@ -89,6 +91,30 @@ public class SeasonRepository {
             standings.add(row);
         }
         standingDao.insertAll(standings);
+
+        // A fresh season starts with every player back at their base rating.
+        realPlayerDao.resetAllFormDelta();
+    }
+
+    /**
+     * Ends the current season and rolls the same club into the next one: wipes
+     * last season's fixtures/results/standings, advances the year, and lets a
+     * fresh fixture list be generated. The squad and formation carry over.
+     * Must be called from a background thread.
+     */
+    public void startNextSeason(int clubId) {
+        UserClub club = userClubDao.getClubByIdSync(clubId);
+        if (club == null) return;
+
+        fixtureDao.deleteMatchResultsForSeason(clubId);
+        fixtureDao.deleteGoalScorersForSeason(clubId);
+        fixtureDao.deleteFixturesForSeason(clubId);
+        standingDao.deleteStandingsForSeason(clubId);
+
+        club.setSeasonYear(club.getSeasonYear() + 1);
+        userClubDao.updateClub(club);
+
+        startSeasonIfNeeded(clubId);
     }
 
     // ─── Simulation ───────────────────────────────────────────────────────────
@@ -107,22 +133,22 @@ public class SeasonRepository {
 
         MatchSimulator.UserTeamInfo userInfo = buildUserTeamInfo(club);
 
+        // Effective rating (avg overall + trait synergy) for every team this matchday.
+        Map<String, Integer> ratings = buildRatingsMap(fixtures, club, userInfo);
+
         // Try Gemini with full prompt
         GeminiRepository gemini = new GeminiRepository();
-        String raw = gemini.callSync(MatchSimulator.buildPrompt(fixtures, userInfo), apiKey);
+        String raw = gemini.callSync(MatchSimulator.buildPrompt(fixtures, userInfo, ratings), apiKey);
         List<MatchSimulator.ParsedMatch> results = MatchSimulator.parseResponse(raw, fixtures.size());
 
         // Retry with simplified prompt
         if (results == null) {
-            raw = gemini.callSync(MatchSimulator.buildSimplePrompt(fixtures), apiKey);
+            raw = gemini.callSync(MatchSimulator.buildSimplePrompt(fixtures, ratings), apiKey);
             results = MatchSimulator.parseResponse(raw, fixtures.size());
         }
 
         // Fall back to local simulator
         if (results == null) {
-            int avg = (userInfo != null) ? userInfo.avgOverall : 78;
-            String name = (userInfo != null) ? userInfo.name : "";
-            
             Map<String, List<RealPlayer>> rosters = new HashMap<>();
             
             if (userInfo != null && userInfo.players != null) {
@@ -145,12 +171,147 @@ public class SeasonRepository {
                     rosters.put(f.getAwayTeamName(), p != null ? p : new ArrayList<>());
                 }
             }
-            results = LocalSimulator.simulateAll(fixtures, avg, name, rosters);
+            results = LocalSimulator.simulateAll(fixtures, ratings, rosters);
         }
 
         saveResults(clubId, fixtures, results);
         recalculateStandings(clubId);
+        applyPlayerGrowth(clubId, fixtures, results);
         return true;
+    }
+
+    // ─── Dynamic player growth ────────────────────────────────────────────────
+
+    /**
+     * Adjusts every player's {@code formDelta} after a matchday: goals (+2),
+     * assists (+1), and the team result (win +1 / loss -1) for the players who
+     * featured. The user's club uses its real starting XI; AI clubs use their
+     * strongest XI as a proxy lineup. Cumulative form is clamped to a sane band.
+     */
+    private void applyPlayerGrowth(int clubId, List<Fixture> fixtures,
+                                   List<MatchSimulator.ParsedMatch> results) {
+        Map<Integer, Integer> growth = new HashMap<>();
+        Map<Integer, List<RealPlayer>> teamCache = new HashMap<>();
+        List<RealPlayer> userXi = userStartingXi(clubId);
+
+        for (int i = 0; i < fixtures.size() && i < results.size(); i++) {
+            Fixture f = fixtures.get(i);
+            MatchSimulator.ParsedMatch pm = results.get(i);
+
+            List<RealPlayer> homeXi = lineupFor(f.getHomeTeamId(), userXi, teamCache);
+            List<RealPlayer> awayXi = lineupFor(f.getAwayTeamId(), userXi, teamCache);
+
+            int homeResult = Integer.compare(pm.homeGoals, pm.awayGoals); // 1/0/-1
+            for (RealPlayer p : homeXi) bump(growth, p.getId(), homeResult);
+            for (RealPlayer p : awayXi) bump(growth, p.getId(), -homeResult);
+
+            if (pm.scorers != null) {
+                for (MatchSimulator.Scorer sc : pm.scorers) {
+                    List<RealPlayer> lineup = "home".equals(sc.team) ? homeXi : awayXi;
+                    RealPlayer scorer = matchByName(sc.name, lineup);
+                    if (scorer != null) bump(growth, scorer.getId(), 2);
+                    RealPlayer assister = matchByName(sc.assist, lineup);
+                    if (assister != null) bump(growth, assister.getId(), 1);
+                }
+            }
+        }
+
+        for (Map.Entry<Integer, Integer> e : growth.entrySet()) {
+            RealPlayer p = realPlayerDao.getPlayerById(e.getKey());
+            if (p == null) continue;
+            int updated = clampInt(p.getFormDelta() + e.getValue(), -10, 12);
+            if (updated != p.getFormDelta()) {
+                realPlayerDao.setFormDelta(p.getId(), updated);
+            }
+        }
+    }
+
+    private List<RealPlayer> userStartingXi(int clubId) {
+        List<RealPlayer> xi = new ArrayList<>();
+        for (UserSquad s : userClubDao.getSquadByClubSync(clubId)) {
+            if (!s.isStartingXI()) continue;
+            RealPlayer p = realPlayerDao.getPlayerById(s.getPlayerId());
+            if (p != null) xi.add(p);
+        }
+        return xi;
+    }
+
+    /** The user's club (teamId 0) uses its real XI; AI clubs use a best-XI proxy. */
+    private List<RealPlayer> lineupFor(int teamId, List<RealPlayer> userXi,
+                                       Map<Integer, List<RealPlayer>> cache) {
+        if (teamId == 0) return userXi;
+        List<RealPlayer> cached = cache.get(teamId);
+        if (cached != null) return cached;
+        List<RealPlayer> xi = TraitEngine.bestXi(realPlayerDao.getPlayersByTeamSync(teamId));
+        cache.put(teamId, xi);
+        return xi;
+    }
+
+    private static void bump(Map<Integer, Integer> growth, int playerId, int amount) {
+        Integer cur = growth.get(playerId);
+        growth.put(playerId, (cur == null ? 0 : cur) + amount);
+    }
+
+    /** Matches a simulated scorer/assist name to a player in the given lineup. */
+    private static RealPlayer matchByName(String name, List<RealPlayer> lineup) {
+        if (name == null || lineup == null) return null;
+        String n = name.trim().toLowerCase();
+        if (n.isEmpty()) return null;
+        for (RealPlayer p : lineup) {
+            if (p.getName() != null && p.getName().trim().toLowerCase().equals(n)) return p;
+        }
+        String last = lastToken(n);
+        for (RealPlayer p : lineup) {
+            if (p.getName() != null && lastToken(p.getName().toLowerCase()).equals(last)) return p;
+        }
+        return null;
+    }
+
+    private static String lastToken(String s) {
+        String[] parts = s.trim().split("\\s+");
+        return parts.length == 0 ? s : parts[parts.length - 1];
+    }
+
+    private static int clampInt(int v, int lo, int hi) {
+        return Math.max(lo, Math.min(hi, v));
+    }
+
+    /**
+     * Builds a team-name → effective-rating map for every team in the matchday.
+     * The user's club uses its drafted XI; opponents use their strongest XI.
+     */
+    private Map<String, Integer> buildRatingsMap(List<Fixture> fixtures, UserClub club,
+                                                 MatchSimulator.UserTeamInfo userInfo) {
+        Map<String, Integer> ratings = new HashMap<>();
+        Map<Integer, Integer> teamCache = new HashMap<>();
+
+        if (userInfo != null) {
+            ratings.put(club.getClubName(), clampRating(userInfo.effectiveOverall()));
+        }
+        for (Fixture f : fixtures) {
+            if (!ratings.containsKey(f.getHomeTeamName())) {
+                ratings.put(f.getHomeTeamName(), teamEffective(f.getHomeTeamId(), teamCache));
+            }
+            if (!ratings.containsKey(f.getAwayTeamName())) {
+                ratings.put(f.getAwayTeamName(), teamEffective(f.getAwayTeamId(), teamCache));
+            }
+        }
+        return ratings;
+    }
+
+    /** Effective rating of a real team, cached by team id within a matchday run. */
+    private int teamEffective(int teamId, Map<Integer, Integer> cache) {
+        if (teamId == 0) return 78; // user club — already keyed by name
+        Integer cached = cache.get(teamId);
+        if (cached != null) return cached;
+        List<RealPlayer> roster = realPlayerDao.getPlayersByTeamSync(teamId);
+        int eff = clampRating(TraitEngine.effectiveRating(TraitEngine.bestXi(roster)));
+        cache.put(teamId, eff);
+        return eff;
+    }
+
+    private static int clampRating(int r) {
+        return Math.max(40, Math.min(99, r));
     }
 
     private MatchSimulator.UserTeamInfo buildUserTeamInfo(UserClub club) {
@@ -163,15 +324,26 @@ public class SeasonRepository {
             RealPlayer p = realPlayerDao.getPlayerById(s.getPlayerId());
             if (p == null) continue;
             players.add(new MatchSimulator.PlayerEntry(
-                s.getPitchPosition(), p.getName(), p.getOverall()));
+                s.getPitchPosition(), p.getName(), p.getOverall(), traitLabelsOf(p)));
             realPlayers.add(p);
             sum += p.getOverall();
         }
         int avg = players.isEmpty() ? 75 : sum / players.size();
         int chemistry = computeChemistry(realPlayers);
+        int synergyDelta = TraitEngine.computeSynergy(realPlayers).delta;
         return new MatchSimulator.UserTeamInfo(
             club.getClubName(), club.getFormation() != null ? club.getFormation() : "4-4-2",
-            avg, chemistry, players);
+            avg, chemistry, synergyDelta, players);
+    }
+
+    /** Comma-joined trait labels for a player, e.g. "Lovac na golove, Realizator". */
+    private static String traitLabelsOf(RealPlayer p) {
+        StringBuilder sb = new StringBuilder();
+        for (Trait t : TraitEngine.deriveTraits(p)) {
+            if (sb.length() > 0) sb.append(", ");
+            sb.append(t.label);
+        }
+        return sb.toString();
     }
 
     /**

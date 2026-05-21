@@ -15,16 +15,30 @@ public class LocalSimulator {
     private static final Random RNG = new Random();
     private static final int DEFAULT_OVR = 78;
 
+    /**
+     * Probability fallback. {@code effectiveRatings} maps each team name to its
+     * effective rating (average overall + trait synergy); teams not present fall
+     * back to {@link #DEFAULT_OVR}.
+     */
     public static List<MatchSimulator.ParsedMatch> simulateAll(
-            List<Fixture> fixtures, int userAvgOvr, String userTeamName, Map<String, List<RealPlayer>> rosters) {
+            List<Fixture> fixtures, Map<String, Integer> effectiveRatings,
+            Map<String, List<RealPlayer>> rosters) {
         List<MatchSimulator.ParsedMatch> results = new ArrayList<>();
         for (Fixture f : fixtures) {
-            int homeAvg = f.getHomeTeamName().equals(userTeamName) ? userAvgOvr : DEFAULT_OVR;
-            int awayAvg = f.getAwayTeamName().equals(userTeamName) ? userAvgOvr : DEFAULT_OVR;
+            int homeAvg = ratingOf(effectiveRatings, f.getHomeTeamName());
+            int awayAvg = ratingOf(effectiveRatings, f.getAwayTeamName());
             results.add(simulate(homeAvg, awayAvg,
                 f.getHomeTeamName(), f.getAwayTeamName(), rosters));
         }
         return results;
+    }
+
+    private static int ratingOf(Map<String, Integer> ratings, String teamName) {
+        if (ratings != null && teamName != null) {
+            Integer r = ratings.get(teamName);
+            if (r != null) return r;
+        }
+        return DEFAULT_OVR;
     }
 
     private static MatchSimulator.ParsedMatch simulate(
@@ -74,6 +88,7 @@ public class LocalSimulator {
             }
             s.team   = "home";
             s.minute = mins.get(idx++);
+            s.assist = pickAssist(homeRoster, s.name);
             list.add(s);
         }
         for (int i = 0; i < ag; i++) {
@@ -85,9 +100,21 @@ public class LocalSimulator {
             }
             s.team   = "away";
             s.minute = mins.get(idx++);
+            s.assist = pickAssist(awayRoster, s.name);
             list.add(s);
         }
         return list;
+    }
+
+    /** Picks a plausible assisting team-mate (different from the scorer), or null. */
+    private static String pickAssist(List<RealPlayer> roster, String scorerName) {
+        if (roster == null || roster.isEmpty()) return null;
+        if (RNG.nextFloat() > 0.55f) return null;
+        for (int tries = 0; tries < 5; tries++) {
+            String n = getRandomScorerName(roster, "");
+            if (n != null && !n.isEmpty() && !n.equals(scorerName)) return n;
+        }
+        return null;
     }
 
     private static String getRandomScorerName(List<RealPlayer> roster, String defaultName) {
