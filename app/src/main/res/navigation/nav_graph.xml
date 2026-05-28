@@ -205,7 +205,7 @@
             app:destination="@id/nav_transfer_offers" />
         <action
             android:id="@+id/action_careerHub_to_winterTransfer"
-            app:destination="@id/nav_transfer_offers" />
+            app:destination="@id/nav_winter_transfer" />
     </fragment>
 
     <fragment
@@ -222,6 +222,16 @@
         android:id="@+id/nav_transfer_offers"
         android:name="hr.fipu.footmash.ui.ailab.career.TransferOffersFragment"
         android:label="Prelazni rok"
+        tools:layout="@layout/fragment_transfer_offers">
+        <argument
+            android:name="playerId"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_winter_transfer"
+        android:name="hr.fipu.footmash.ui.ailab.career.WinterTransferFragment"
+        android:label="Zimski prelazni rok"
         tools:layout="@layout/fragment_transfer_offers">
         <argument
             android:name="playerId"
