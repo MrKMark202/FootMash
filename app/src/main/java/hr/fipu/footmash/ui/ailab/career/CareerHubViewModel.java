@@ -79,11 +79,26 @@ public class CareerHubViewModel extends AndroidViewModel {
         return n;
     }
 
+    /**
+     * True when the player has spent ≥2 seasons at the current club AND we
+     * haven't already shown offers at the current count. After a "stay" the
+     * user can simulate two more seasons before the window opens again.
+     */
+    public boolean isTransferEligible() {
+        CustomPlayer p = player.getValue();
+        if (p == null) return false;
+        int n = seasonsAtCurrentClub();
+        if (n < 2) return false;
+        int lastDismissed = p.getTransferDismissedAt();
+        if (lastDismissed < 0) return true;
+        return n - lastDismissed >= 2;
+    }
+
     private void recomputeCta() {
         CustomPlayer p = player.getValue();
         if (p == null) { cta.setValue(Cta.SIMULATE_SEASON); return; }
         if (p.getPointsToSpend() > 0) { cta.setValue(Cta.SPEND_POINTS); return; }
-        if (seasonsAtCurrentClub() >= 2) { cta.setValue(Cta.TRANSFER_WINDOW); return; }
+        if (isTransferEligible()) { cta.setValue(Cta.TRANSFER_WINDOW); return; }
         cta.setValue(Cta.SIMULATE_SEASON);
     }
 }

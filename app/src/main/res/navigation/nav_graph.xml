@@ -197,6 +197,9 @@
         <action
             android:id="@+id/action_careerHub_to_statGrowth"
             app:destination="@id/nav_stat_growth" />
+        <action
+            android:id="@+id/action_careerHub_to_transferOffers"
+            app:destination="@id/nav_transfer_offers" />
     </fragment>
 
     <fragment
@@ -204,6 +207,16 @@
         android:name="hr.fipu.footmash.ui.ailab.career.StatGrowthFragment"
         android:label="Potroši bodove"
         tools:layout="@layout/fragment_stat_growth">
+        <argument
+            android:name="playerId"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_transfer_offers"
+        android:name="hr.fipu.footmash.ui.ailab.career.TransferOffersFragment"
+        android:label="Prelazni rok"
+        tools:layout="@layout/fragment_transfer_offers">
         <argument
             android:name="playerId"
             app:argType="integer" />

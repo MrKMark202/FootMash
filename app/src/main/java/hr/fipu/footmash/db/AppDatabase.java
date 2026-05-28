@@ -27,7 +27,7 @@ import hr.fipu.footmash.model.UserSquad;
                 UserClub.class, UserSquad.class,
                 Fixture.class, MatchResult.class, GoalScorer.class, SeasonStanding.class,
                 PlayerCareerSeason.class},
-    version = 9,
+    version = 10,
     exportSchema = false
 )
 @TypeConverters(Converters.class)
@@ -187,6 +187,18 @@ public abstract class AppDatabase extends RoomDatabase {
         }
     };
 
+    static final Migration MIGRATION_9_10 = new Migration(9, 10) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            // Tracks the seasons-at-club count at which the user last
+            // declined a transfer window, so we don't pester them with
+            // offers every time they return to the hub.
+            database.execSQL(
+                "ALTER TABLE custom_players ADD COLUMN transferDismissedAt " +
+                "INTEGER NOT NULL DEFAULT -1");
+        }
+    };
+
     static final Migration MIGRATION_8_9 = new Migration(8, 9) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
@@ -227,7 +239,8 @@ public abstract class AppDatabase extends RoomDatabase {
                             "footmash_database"
                     )
                     .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5,
-                                   MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9)
+                                   MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9,
+                                   MIGRATION_9_10)
                     .build();
                 }
             }

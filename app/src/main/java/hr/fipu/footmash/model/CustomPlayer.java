@@ -55,6 +55,15 @@ public class CustomPlayer {
      */
     private int currentSeasonYear;
 
+    /**
+     * The {@code seasonsAtCurrentClub} count at which the user most recently
+     * dismissed a transfer window (chose to stay). {@code -1} means no
+     * dismissal yet. Used to wait 2 more seasons before offering again, so
+     * declining doesn't lock the player out of further sim turns. Reset to
+     * {@code -1} whenever the player transfers to a new club.
+     */
+    private int transferDismissedAt = -1;
+
     // Getteri i setteri
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
@@ -116,6 +125,11 @@ public class CustomPlayer {
     public int getCurrentSeasonYear() { return currentSeasonYear; }
     public void setCurrentSeasonYear(int currentSeasonYear) {
         this.currentSeasonYear = currentSeasonYear;
+    }
+
+    public int getTransferDismissedAt() { return transferDismissedAt; }
+    public void setTransferDismissedAt(int transferDismissedAt) {
+        this.transferDismissedAt = transferDismissedAt;
     }
 
     public int getOverall() {
