@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/background">
+    android:background="@color/background"
+    android:fillViewport="true">
 
-    <!-- Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,6 +13,44 @@
         android:paddingTop="32dp"
         android:paddingBottom="24dp">
 
+        <!-- Moji klubovi section (hidden until at least one club exists) -->
+        <TextView
+            android:id="@+id/textSavedClubsHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Moji klubovi"
+            android:textColor="@color/text_primary"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/textSavedClubsHint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tap za nastavak · dugi pritisak za brisanje"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            android:layout_marginTop="4dp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/containerSavedClubs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="12dp" />
+
+        <View
+            android:id="@+id/dividerSavedClubs"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:visibility="gone" />
+
+        <!-- New season header -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -42,7 +79,6 @@
                 android:textColor="@color/accent_blue"
                 android:textSize="28sp"
                 android:textStyle="bold" />
-
         </LinearLayout>
 
         <TextView
@@ -53,15 +89,12 @@
             android:textSize="14sp"
             android:layout_marginTop="8dp" />
 
+        <LinearLayout
+            android:id="@+id/containerLeagues"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp" />
+
     </LinearLayout>
-
-    <!-- League list -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerLeagues"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingTop="8dp"
-        android:clipToPadding="false" />
-
-</LinearLayout>
+</androidx.core.widget.NestedScrollView>
