@@ -194,6 +194,19 @@
         <action
             android:id="@+id/action_careerHub_to_simulateSeason"
             app:destination="@id/nav_simulate_season" />
+        <action
+            android:id="@+id/action_careerHub_to_statGrowth"
+            app:destination="@id/nav_stat_growth" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_stat_growth"
+        android:name="hr.fipu.footmash.ui.ailab.career.StatGrowthFragment"
+        android:label="Potroši bodove"
+        tools:layout="@layout/fragment_stat_growth">
+        <argument
+            android:name="playerId"
+            app:argType="integer" />
     </fragment>
 
     <fragment

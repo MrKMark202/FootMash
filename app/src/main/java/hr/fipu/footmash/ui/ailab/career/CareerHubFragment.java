@@ -80,7 +80,8 @@ public class CareerHubFragment extends Fragment {
                         .navigate(R.id.action_careerHub_to_simulateSeason, args);
                     break;
                 case SPEND_POINTS:
-                    // Stat-growth navigation ships in commit 5.
+                    Navigation.findNavController(v)
+                        .navigate(R.id.action_careerHub_to_statGrowth, args);
                     break;
                 case TRANSFER_WINDOW:
                     // Transfer-offers navigation ships in commit 6.
