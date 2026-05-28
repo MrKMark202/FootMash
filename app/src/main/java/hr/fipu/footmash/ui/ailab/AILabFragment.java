@@ -28,7 +28,7 @@ public class AILabFragment extends Fragment {
         
         binding.btnSimulatePlayer.setOnClickListener(v -> {
             androidx.navigation.Navigation.findNavController(v)
-                .navigate(hr.fipu.footmash.R.id.action_aiLab_to_playerSimulation);
+                .navigate(hr.fipu.footmash.R.id.action_aiLab_to_playerCreation);
         });
 
     }

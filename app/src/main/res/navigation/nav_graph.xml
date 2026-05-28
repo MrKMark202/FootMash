@@ -117,18 +117,12 @@
         android:label="@string/nav_ai_lab"
         tools:layout="@layout/fragment_ai_lab">
         <action
-            android:id="@+id/action_aiLab_to_playerSimulation"
-            app:destination="@id/playerSimulation" />
+            android:id="@+id/action_aiLab_to_playerCreation"
+            app:destination="@id/nav_player_identity" />
         <action
             android:id="@+id/action_aiLab_to_teamSimulation"
             app:destination="@id/teamSimulation" />
     </fragment>
-
-    <fragment
-        android:id="@+id/playerSimulation"
-        android:name="hr.fipu.footmash.ui.ailab.PlayerSimulationFragment"
-        android:label="Simulacija Igrača"
-        tools:layout="@layout/fragment_player_simulation" />
 
     <fragment
         android:id="@+id/teamSimulation"
