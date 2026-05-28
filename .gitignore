@@ -19,3 +19,7 @@ build_errors*.txt
 clean_output.txt
 cmd_output*.txt
 output.txt
+
+# Emulator screenshots and uiautomator dumps from manual run-throughs
+screen-*.png
+ui.xml

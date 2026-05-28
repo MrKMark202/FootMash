@@ -275,6 +275,7 @@ public class PlayerCreationViewModel extends ViewModel {
         p.setTargetTeamLogo(club.getBadgeUrl());
         p.setTargetLeagueId(leagueId != null ? leagueId : 0);
         p.setTargetSeason(DEFAULT_SEASON);
+        p.setCurrentSeasonYear(DEFAULT_SEASON);
         p.setTraits(traitsCsv());
         return p;
     }

@@ -15,6 +15,7 @@ import hr.fipu.footmash.model.CustomTeam;
 import hr.fipu.footmash.model.Fixture;
 import hr.fipu.footmash.model.GoalScorer;
 import hr.fipu.footmash.model.MatchResult;
+import hr.fipu.footmash.model.PlayerCareerSeason;
 import hr.fipu.footmash.model.RealPlayer;
 import hr.fipu.footmash.model.RealTeam;
 import hr.fipu.footmash.model.SeasonStanding;
@@ -24,8 +25,9 @@ import hr.fipu.footmash.model.UserSquad;
 @Database(
     entities = {CustomPlayer.class, CustomTeam.class, RealPlayer.class, RealTeam.class,
                 UserClub.class, UserSquad.class,
-                Fixture.class, MatchResult.class, GoalScorer.class, SeasonStanding.class},
-    version = 8,
+                Fixture.class, MatchResult.class, GoalScorer.class, SeasonStanding.class,
+                PlayerCareerSeason.class},
+    version = 9,
     exportSchema = false
 )
 @TypeConverters(Converters.class)
@@ -40,6 +42,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract UserClubDao userClubDao();
     public abstract FixtureDao fixtureDao();
     public abstract StandingDao standingDao();
+    public abstract PlayerCareerSeasonDao playerCareerSeasonDao();
 
     static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override
@@ -184,6 +187,36 @@ public abstract class AppDatabase extends RoomDatabase {
         }
     };
 
+    static final Migration MIGRATION_8_9 = new Migration(8, 9) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            // Career mode: per-season records for created players plus
+            // bookkeeping columns on the player row itself.
+            database.execSQL(
+                "CREATE TABLE IF NOT EXISTS `player_career_season` (" +
+                "`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                "`playerId` INTEGER NOT NULL, " +
+                "`seasonYear` INTEGER NOT NULL, " +
+                "`clubId` INTEGER NOT NULL, " +
+                "`clubName` TEXT, " +
+                "`leagueId` INTEGER NOT NULL, " +
+                "`appearances` INTEGER NOT NULL, " +
+                "`goals` INTEGER NOT NULL, " +
+                "`assists` INTEGER NOT NULL, " +
+                "`avgRating` REAL NOT NULL, " +
+                "`clubFinalPosition` INTEGER NOT NULL, " +
+                "`pointsEarned` INTEGER NOT NULL, " +
+                "`ovrAtSeasonEnd` INTEGER NOT NULL)"
+            );
+            database.execSQL(
+                "ALTER TABLE custom_players ADD COLUMN pointsToSpend " +
+                "INTEGER NOT NULL DEFAULT 0");
+            database.execSQL(
+                "ALTER TABLE custom_players ADD COLUMN currentSeasonYear " +
+                "INTEGER NOT NULL DEFAULT 2025");
+        }
+    };
+
     public static AppDatabase getInstance(Context context) {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
@@ -194,7 +227,7 @@ public abstract class AppDatabase extends RoomDatabase {
                             "footmash_database"
                     )
                     .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5,
-                                   MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8)
+                                   MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9)
                     .build();
                 }
             }

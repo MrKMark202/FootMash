@@ -42,6 +42,19 @@ public class CustomPlayer {
      */
     private String traits;
 
+    /**
+     * Unspent attribute points earned from the last simulated season. The
+     * career hub gates "Simuliraj sezonu" while this is &gt; 0 — the user must
+     * spend the points first via the stat-growth screen.
+     */
+    private int pointsToSpend;
+
+    /**
+     * Current season year. Initially equals {@link #targetSeason}; advances by
+     * one every time the career engine simulates a season for this player.
+     */
+    private int currentSeasonYear;
+
     // Getteri i setteri
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
@@ -96,6 +109,14 @@ public class CustomPlayer {
 
     public String getTraits() { return traits; }
     public void setTraits(String traits) { this.traits = traits; }
+
+    public int getPointsToSpend() { return pointsToSpend; }
+    public void setPointsToSpend(int pointsToSpend) { this.pointsToSpend = pointsToSpend; }
+
+    public int getCurrentSeasonYear() { return currentSeasonYear; }
+    public void setCurrentSeasonYear(int currentSeasonYear) {
+        this.currentSeasonYear = currentSeasonYear;
+    }
 
     public int getOverall() {
         return (pace + shooting + passing + dribbling + defending + physical) / 6;
