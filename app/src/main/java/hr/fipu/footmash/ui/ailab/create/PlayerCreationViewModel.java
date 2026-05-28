@@ -4,6 +4,13 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import hr.fipu.footmash.model.Trait;
+import hr.fipu.footmash.season.TraitEngine;
+
 /**
  * Shared state for the multi-step player creation wizard. Scoped to the
  * MainActivity so all wizard fragments observe the same instance. Callers
@@ -25,6 +32,7 @@ public class PlayerCreationViewModel extends ViewModel {
     public static final int STAT_CAP        = 99;
     public static final int POINTS_TO_SPEND = 100;
     public static final int STAT_COUNT      = 6;
+    public static final int MAX_TRAITS      = 3;
 
     /** Stat array indices. Matches the row order shown in the UI. */
     public static final int IDX_PACE      = 0;
@@ -45,6 +53,10 @@ public class PlayerCreationViewModel extends ViewModel {
     private final MutableLiveData<int[]> statAdditions =
             new MutableLiveData<>(new int[STAT_COUNT]);
 
+    // ─── Step 3: traits ──────────────────────────────────────────────────────
+    private final MutableLiveData<List<Trait>> selectedTraits =
+            new MutableLiveData<>(new ArrayList<>());
+
     /** Clears every wizard field. Call from step 1 onViewCreated. */
     public void reset() {
         firstName.setValue("");
@@ -52,6 +64,7 @@ public class PlayerCreationViewModel extends ViewModel {
         nationality.setValue("");
         position.setValue("");
         statAdditions.setValue(new int[STAT_COUNT]);
+        selectedTraits.setValue(new ArrayList<>());
     }
 
     public LiveData<String> getFirstName()   { return firstName; }
@@ -119,6 +132,63 @@ public class PlayerCreationViewModel extends ViewModel {
 
     public boolean isStep2Valid() {
         return notBlank(position.getValue()) && pointsSpent() == POINTS_TO_SPEND;
+    }
+
+    // ─── Step 3 accessors ────────────────────────────────────────────────────
+
+    public LiveData<List<Trait>> getSelectedTraits() { return selectedTraits; }
+
+    /** Position group derived from the selected position ("GK"/"DF"/"MF"/"FW"). */
+    public String positionGroup() {
+        return TraitEngine.groupOf(position.getValue());
+    }
+
+    /** Traits eligible for the current position group, in enum order. */
+    public List<Trait> eligibleTraits() {
+        String group = positionGroup();
+        List<Trait> result = new ArrayList<>();
+        for (Trait t : Trait.values()) {
+            if (t.group.equals(group)) result.add(t);
+        }
+        return Collections.unmodifiableList(result);
+    }
+
+    /**
+     * Toggles a trait in the selection. Adding fails when the cap is reached
+     * or the trait doesn't belong to the position group. Returns the resulting
+     * state ({@code true} = trait is now selected, {@code false} = not selected).
+     */
+    public boolean toggleTrait(Trait t) {
+        if (t == null || !t.group.equals(positionGroup())) return false;
+        List<Trait> cur = new ArrayList<>(currentTraits());
+        if (cur.contains(t)) {
+            cur.remove(t);
+            selectedTraits.setValue(cur);
+            return false;
+        }
+        if (cur.size() >= MAX_TRAITS) return cur.contains(t);
+        cur.add(t);
+        selectedTraits.setValue(cur);
+        return true;
+    }
+
+    public boolean isTraitSelected(Trait t) {
+        return currentTraits().contains(t);
+    }
+
+    public int traitsSelectedCount() {
+        return currentTraits().size();
+    }
+
+    private List<Trait> currentTraits() {
+        List<Trait> v = selectedTraits.getValue();
+        return v == null ? Collections.emptyList() : v;
+    }
+
+    public boolean isStep3Valid() {
+        // The user must pick at least one trait. Zero feels like an oversight,
+        // not a deliberate "no traits" choice.
+        return !currentTraits().isEmpty();
     }
 
     private int[] currentStatsCopy() {

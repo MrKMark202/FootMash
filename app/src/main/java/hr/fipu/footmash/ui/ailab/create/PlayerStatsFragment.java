@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
+
 import hr.fipu.footmash.R;
 import hr.fipu.footmash.databinding.FragmentPlayerStatsBinding;
 import hr.fipu.footmash.databinding.ItemStatRowBinding;
@@ -90,8 +92,11 @@ public class PlayerStatsFragment extends Fragment {
     }
 
     private void bindNextButton() {
-        // Navigation to step 3 is wired in the next commit when the destination exists.
-        binding.btnNext.setOnClickListener(v -> { /* wired in commit 3 */ });
+        binding.btnNext.setOnClickListener(v -> {
+            if (!viewModel.isStep2Valid()) return;
+            Navigation.findNavController(v)
+                .navigate(R.id.action_playerStats_to_playerPreview);
+        });
     }
 
     private void refreshUi() {
