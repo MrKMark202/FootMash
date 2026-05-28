@@ -5,6 +5,7 @@ import android.content.Context;
 import hr.fipu.footmash.ai.GeminiRepository;
 import hr.fipu.footmash.db.AppDatabase;
 import hr.fipu.footmash.repository.DraftRepository;
+import hr.fipu.footmash.repository.SavedGamesRepository;
 import hr.fipu.footmash.repository.SeasonRepository;
 
 /**
@@ -24,6 +25,7 @@ public class AppContainer {
     private volatile GeminiRepository gemini;
     private volatile DraftRepository draftRepo;
     private volatile SeasonRepository seasonRepo;
+    private volatile SavedGamesRepository savedGamesRepo;
 
     public AppContainer(Context appContext) {
         this.appContext = appContext.getApplicationContext();
@@ -68,6 +70,17 @@ public class AppContainer {
             synchronized (this) {
                 r = seasonRepo;
                 if (r == null) r = seasonRepo = new SeasonRepository(database(), geminiRepository());
+            }
+        }
+        return r;
+    }
+
+    public SavedGamesRepository savedGamesRepository() {
+        SavedGamesRepository r = savedGamesRepo;
+        if (r == null) {
+            synchronized (this) {
+                r = savedGamesRepo;
+                if (r == null) r = savedGamesRepo = new SavedGamesRepository(database());
             }
         }
         return r;

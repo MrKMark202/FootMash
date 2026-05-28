@@ -34,6 +34,21 @@ public interface UserClubDao {
     @Query("UPDATE user_club SET isActive = 0")
     void deactivateAll();
 
+    @Query("UPDATE user_club SET isActive = 1 WHERE id = :clubId")
+    void activate(int clubId);
+
+    @Query("SELECT * FROM user_club ORDER BY id DESC")
+    LiveData<List<UserClub>> getAllClubs();
+
+    @Query("SELECT * FROM user_club ORDER BY id DESC")
+    List<UserClub> getAllClubsSync();
+
+    @Delete
+    void deleteClub(UserClub club);
+
+    @Query("DELETE FROM user_squad WHERE clubId = :clubId")
+    void deleteSquadForClub(int clubId);
+
     // --- Squad ---
 
     @Insert
