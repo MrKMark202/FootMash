@@ -13,6 +13,39 @@ import hr.fipu.footmash.model.Fixture;
 
 public class MatchSimulator {
 
+    /**
+     * System-style preamble prepended to every Gemini prompt. Codifies the
+     * realism contract for match outcomes and goal scorers so the model
+     * weights team strength tiers correctly and never lets a wing-back lead
+     * the scoring charts. Kept as one constant so future tuning is a single
+     * edit; the per-call prompt then layers the specific fixtures on top.
+     */
+    public static final String REALISM_PREAMBLE =
+        "You are an expert football (soccer) analyst and data-driven "
+        + "simulation engine. Predict realistic match outcomes that respect "
+        + "the constraints below.\n\n"
+        + "### 1. Team Tiering & Win Probability\n"
+        + "- Elite Contenders (Manchester City, Arsenal, Liverpool, Real Madrid, "
+        + "Bayern Munich, PSG, etc.) form the core of the title race and should "
+        + "consistently finish top based on real-world sporting and financial "
+        + "dominance.\n"
+        + "- The \"Smart Play\" rule: historically strong but fluctuating teams "
+        + "(Manchester United, Chelsea, Juventus, AC Milan) can still finish "
+        + "top 3 or win the league under realistic conditions (tactical mastery, "
+        + "squad cohesion, fewer injuries).\n"
+        + "- No severe shocks: do not let newly-promoted or mid-table sides "
+        + "behave like Leicester City 2016. Keep the champion within the "
+        + "realistic top 15% of the league's strongest teams.\n\n"
+        + "### 2. Player Statistics Realism\n"
+        + "- Top scorers must be dedicated attacking players (Strikers, Wingers).\n"
+        + "- A top scorer in an elite league has a realistic tally between 22 "
+        + "and 35 goals depending on dominance (Haaland-style).\n"
+        + "- Defensively-minded players, wing-backs, and traditional defensive "
+        + "midfielders cannot lead the scoring charts. A wing-back like Frimpong "
+        + "cannot win the Golden Boot with only 9 goals. If a defender scores, "
+        + "keep it realistic: 3 to 7 goals max from set pieces and overlapping "
+        + "runs.\n\n";
+
     public static class ParsedMatch {
         @SerializedName("home_goals") public int homeGoals;
         @SerializedName("away_goals") public int awayGoals;
@@ -73,6 +106,7 @@ public class MatchSimulator {
     public static String buildPrompt(List<Fixture> fixtures, UserTeamInfo userTeam,
                                      Map<String, Integer> ratings) {
         StringBuilder sb = new StringBuilder();
+        sb.append(REALISM_PREAMBLE);
         sb.append("Simulate ").append(fixtures.size())
           .append(" football matches. Return ONLY a JSON array with exactly ")
           .append(fixtures.size()).append(" results in the same order.\n\n");
@@ -120,6 +154,7 @@ public class MatchSimulator {
 
     public static String buildSimplePrompt(List<Fixture> fixtures, Map<String, Integer> ratings) {
         StringBuilder sb = new StringBuilder();
+        sb.append(REALISM_PREAMBLE);
         sb.append("Simulate ").append(fixtures.size())
           .append(" football matches. Return ONLY a JSON array.\n");
         for (int i = 0; i < fixtures.size(); i++) {
