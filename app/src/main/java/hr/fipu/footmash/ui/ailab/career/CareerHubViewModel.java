@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import java.util.List;
 
 import hr.fipu.footmash.FootMashApp;
+import hr.fipu.footmash.career.TransferEligibility;
 import hr.fipu.footmash.db.AppDatabase;
 import hr.fipu.footmash.db.CustomPlayerDao;
 import hr.fipu.footmash.db.PlayerCareerSeasonDao;
@@ -81,17 +82,15 @@ public class CareerHubViewModel extends AndroidViewModel {
 
     /**
      * True when the player has spent ≥2 seasons at the current club AND we
-     * haven't already shown offers at the current count. After a "stay" the
-     * user can simulate two more seasons before the window opens again.
+     * haven't already shown offers at the current count. Decision logic
+     * lives in {@link TransferEligibility} so it can be unit-tested without
+     * Android dependencies.
      */
     public boolean isTransferEligible() {
         CustomPlayer p = player.getValue();
         if (p == null) return false;
-        int n = seasonsAtCurrentClub();
-        if (n < 2) return false;
-        int lastDismissed = p.getTransferDismissedAt();
-        if (lastDismissed < 0) return true;
-        return n - lastDismissed >= 2;
+        return TransferEligibility.isEligible(
+            seasonsAtCurrentClub(), p.getTransferDismissedAt());
     }
 
     private void recomputeCta() {
