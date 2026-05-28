@@ -169,4 +169,68 @@ public class PlayerCareerEngineTest {
         assertEquals(a.clubFinalPosition, b.clubFinalPosition);
         assertEquals(a.pointsEarned,      b.pointsEarned);
     }
+
+    // ─── Half-season simulation ──────────────────────────────────────────────
+
+    @Test
+    public void halfAppsCappedAt19() {
+        // Even a star player at a weak team can only play 19 matches per half.
+        for (int seed = 0; seed < 100; seed++) {
+            SeasonOutcome o = PlayerCareerEngine.simulateHalf(
+                player(95, 90, 90, 90, "ST"), 65,
+                PlayerCareerEngine.Half.AUTUMN, new Random(seed));
+            assertTrue("half apps cannot exceed " + PlayerCareerEngine.MATCHES_PER_HALF
+                    + ", got " + o.appearances,
+                o.appearances <= PlayerCareerEngine.MATCHES_PER_HALF);
+        }
+    }
+
+    @Test
+    public void halfAppsAreRoughlyHalfOfFullSeasonOnAverage() {
+        // Across many runs, half apps should average near half of full apps.
+        int fullTotal = 0, halfTotal = 0;
+        int n = 300;
+        for (int seed = 0; seed < n; seed++) {
+            fullTotal += PlayerCareerEngine.simulate(
+                player(78, 75, 75, 75, "CM"), 78, new Random(seed)).appearances;
+            halfTotal += PlayerCareerEngine.simulateHalf(
+                player(78, 75, 75, 75, "CM"), 78,
+                PlayerCareerEngine.Half.AUTUMN, new Random(seed)).appearances;
+        }
+        float fullAvg = fullTotal / (float) n;
+        float halfAvg = halfTotal / (float) n;
+        // Half should be ~50% of full, allow generous range to avoid flakes.
+        float ratio = halfAvg / fullAvg;
+        assertTrue("half apps should be ~50% of full apps, got ratio=" + ratio,
+            ratio > 0.4f && ratio < 0.6f);
+    }
+
+    @Test
+    public void halfOutcomeForwardScoresMoreThanDefender() {
+        int fwGoals = 0, dfGoals = 0;
+        for (int seed = 0; seed < 200; seed++) {
+            fwGoals += PlayerCareerEngine.simulateHalf(
+                player(80, 85, 70, 80, "ST"), 78,
+                PlayerCareerEngine.Half.AUTUMN, new Random(seed)).goals;
+            dfGoals += PlayerCareerEngine.simulateHalf(
+                player(80, 55, 70, 55, "CB"), 78,
+                PlayerCareerEngine.Half.AUTUMN, new Random(seed)).goals;
+        }
+        assertTrue("forwards out-score defenders in halves too: FW=" + fwGoals
+                + " vs DF=" + dfGoals,
+            fwGoals > dfGoals * 3);
+    }
+
+    @Test
+    public void simulateHalfSameSeedIsDeterministic() {
+        PlayerStats stats = player(78, 75, 75, 75, "RM");
+        SeasonOutcome a = PlayerCareerEngine.simulateHalf(stats, 78,
+            PlayerCareerEngine.Half.AUTUMN, new Random(7L));
+        SeasonOutcome b = PlayerCareerEngine.simulateHalf(stats, 78,
+            PlayerCareerEngine.Half.AUTUMN, new Random(7L));
+        assertEquals(a.appearances, b.appearances);
+        assertEquals(a.goals, b.goals);
+        assertEquals(a.assists, b.assists);
+        assertEquals(a.avgRating, b.avgRating, 0.0001f);
+    }
 }

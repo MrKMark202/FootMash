@@ -118,6 +118,29 @@ public class MatchSimulatorTest {
     }
 
     @Test
+    public void everyPromptIncludesRealismPreamble() {
+        List<Fixture> fixtures = Collections.singletonList(fixture("A", "B"));
+        String full   = MatchSimulator.buildPrompt(fixtures, null, Collections.emptyMap());
+        String simple = MatchSimulator.buildSimplePrompt(fixtures, Collections.emptyMap());
+        assertTrue("full prompt must lead with realism preamble",
+            full.startsWith(MatchSimulator.REALISM_PREAMBLE));
+        assertTrue("simple fallback prompt must also lead with realism preamble",
+            simple.startsWith(MatchSimulator.REALISM_PREAMBLE));
+    }
+
+    @Test
+    public void preambleMentionsTopScorersAndTeamTiering() {
+        // Sanity tests so the constant doesn't silently lose its key clauses
+        // if someone reformats it later.
+        String p = MatchSimulator.REALISM_PREAMBLE;
+        assertTrue("preamble names elite contender clubs", p.contains("Manchester City"));
+        assertTrue("preamble bans wing-backs from leading the scoring chart",
+            p.contains("wing-back") || p.contains("Frimpong"));
+        assertTrue("preamble bans severe shocks", p.contains("severe shocks")
+            || p.contains("Leicester"));
+    }
+
+    @Test
     public void simplePromptOmitsUserTeamDetails() {
         List<Fixture> fixtures = Collections.singletonList(fixture("A", "B"));
         String prompt = MatchSimulator.buildSimplePrompt(fixtures, Collections.emptyMap());
