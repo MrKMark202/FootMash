@@ -13,3 +13,9 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Build / command output dumps — never commit these
+build_errors*.txt
+clean_output.txt
+cmd_output*.txt
+output.txt
