@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Korak 4 od 4"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            android:paddingTop="16dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ponude "
+                android:textColor="@color/text_primary"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="klubova"
+                android:textColor="@color/accent_blue"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Odaberi ligu — predložit ćemo ti tri kluba ovisno o tvojoj ocjeni."
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <!-- League dropdown -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutLeague"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:hint="@string/select_league"
+            app:boxBackgroundColor="@color/surface"
+            app:boxStrokeColor="@color/accent_blue"
+            app:hintTextColor="@color/text_secondary"
+            app:endIconMode="dropdown_menu"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteLeague"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_primary"
+                android:textSize="16sp"
+                android:inputType="none"
+                android:popupBackground="@color/surface" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Progress while computing offers -->
+        <ProgressBar
+            android:id="@+id/progressOffers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp"
+            android:visibility="gone"
+            android:indeterminateTint="@color/accent_blue" />
+
+        <!-- Empty hint -->
+        <TextView
+            android:id="@+id/textOffersHint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Odaberi ligu da vidiš ponude."
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            android:gravity="center" />
+
+        <!-- Offers -->
+        <LinearLayout
+            android:id="@+id/containerOffers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnNext"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="24dp"
+            android:text="Potpiši za odabrani klub"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:enabled="false"
+            app:cornerRadius="12dp"
+            android:backgroundTint="@color/accent_blue" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

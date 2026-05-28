@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import hr.fipu.footmash.model.RealTeam;
 import hr.fipu.footmash.model.Trait;
 import hr.fipu.footmash.season.TraitEngine;
 
@@ -57,6 +58,13 @@ public class PlayerCreationViewModel extends ViewModel {
     private final MutableLiveData<List<Trait>> selectedTraits =
             new MutableLiveData<>(new ArrayList<>());
 
+    // ─── Step 4: club offers ─────────────────────────────────────────────────
+    private final MutableLiveData<Integer> selectedLeagueId = new MutableLiveData<>(null);
+    private final MutableLiveData<String>  selectedLeagueName = new MutableLiveData<>("");
+    private final MutableLiveData<List<ClubOfferEngine.RankedTeam>> currentOffers =
+            new MutableLiveData<>(new ArrayList<>());
+    private final MutableLiveData<RealTeam> selectedClub = new MutableLiveData<>(null);
+
     /** Clears every wizard field. Call from step 1 onViewCreated. */
     public void reset() {
         firstName.setValue("");
@@ -65,6 +73,10 @@ public class PlayerCreationViewModel extends ViewModel {
         position.setValue("");
         statAdditions.setValue(new int[STAT_COUNT]);
         selectedTraits.setValue(new ArrayList<>());
+        selectedLeagueId.setValue(null);
+        selectedLeagueName.setValue("");
+        currentOffers.setValue(new ArrayList<>());
+        selectedClub.setValue(null);
     }
 
     public LiveData<String> getFirstName()   { return firstName; }
@@ -189,6 +201,35 @@ public class PlayerCreationViewModel extends ViewModel {
         // The user must pick at least one trait. Zero feels like an oversight,
         // not a deliberate "no traits" choice.
         return !currentTraits().isEmpty();
+    }
+
+    // ─── Step 4 accessors ────────────────────────────────────────────────────
+
+    public LiveData<Integer> getSelectedLeagueId()   { return selectedLeagueId; }
+    public LiveData<String>  getSelectedLeagueName() { return selectedLeagueName; }
+    public LiveData<List<ClubOfferEngine.RankedTeam>> getCurrentOffers() { return currentOffers; }
+    public LiveData<RealTeam> getSelectedClub() { return selectedClub; }
+
+    public void setSelectedLeague(int leagueId, String leagueName) {
+        selectedLeagueId.setValue(leagueId);
+        selectedLeagueName.setValue(leagueName == null ? "" : leagueName);
+        // Picking a new league invalidates any prior offers + selection.
+        currentOffers.setValue(new ArrayList<>());
+        selectedClub.setValue(null);
+    }
+
+    public void setCurrentOffers(List<ClubOfferEngine.RankedTeam> offers) {
+        currentOffers.setValue(offers == null ? new ArrayList<>() : offers);
+        // Re-generating offers also clears any prior selection.
+        selectedClub.setValue(null);
+    }
+
+    public void selectClub(RealTeam team) {
+        selectedClub.setValue(team);
+    }
+
+    public boolean isStep4Valid() {
+        return selectedClub.getValue() != null;
     }
 
     private int[] currentStatsCopy() {

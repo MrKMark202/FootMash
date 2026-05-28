@@ -161,7 +161,17 @@
         android:id="@+id/nav_player_preview"
         android:name="hr.fipu.footmash.ui.ailab.create.PlayerPreviewFragment"
         android:label="Pregled igrača"
-        tools:layout="@layout/fragment_player_preview" />
+        tools:layout="@layout/fragment_player_preview">
+        <action
+            android:id="@+id/action_playerPreview_to_playerClubOffers"
+            app:destination="@id/nav_player_club_offers" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_player_club_offers"
+        android:name="hr.fipu.footmash.ui.ailab.create.PlayerClubOffersFragment"
+        android:label="Ponude klubova"
+        tools:layout="@layout/fragment_player_club_offers" />
 
     <!-- Season Mode -->
     <fragment

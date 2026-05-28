@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.google.android.material.chip.Chip;
 
@@ -55,7 +56,8 @@ public class PlayerPreviewFragment extends Fragment {
 
         binding.btnNext.setOnClickListener(v -> {
             if (!viewModel.isStep3Valid()) return;
-            // Step 4 navigation is wired in the next commit.
+            Navigation.findNavController(v)
+                .navigate(R.id.action_playerPreview_to_playerClubOffers);
         });
     }
 
