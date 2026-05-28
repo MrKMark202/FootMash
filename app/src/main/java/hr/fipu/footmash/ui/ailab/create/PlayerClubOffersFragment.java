@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.card.MaterialCardView;
@@ -102,7 +103,8 @@ public class PlayerClubOffersFragment extends Fragment {
     private void bindNextButton() {
         binding.btnNext.setOnClickListener(v -> {
             if (!viewModel.isStep4Valid()) return;
-            // Step 5 (signed) navigation is wired in the next commit.
+            Navigation.findNavController(v)
+                .navigate(R.id.action_playerClubOffers_to_playerSigned);
         });
     }
 

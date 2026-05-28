@@ -171,7 +171,19 @@
         android:id="@+id/nav_player_club_offers"
         android:name="hr.fipu.footmash.ui.ailab.create.PlayerClubOffersFragment"
         android:label="Ponude klubova"
-        tools:layout="@layout/fragment_player_club_offers" />
+        tools:layout="@layout/fragment_player_club_offers">
+        <action
+            android:id="@+id/action_playerClubOffers_to_playerSigned"
+            app:destination="@id/nav_player_signed"
+            app:popUpTo="@id/nav_ai_lab"
+            app:popUpToInclusive="false" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_player_signed"
+        android:name="hr.fipu.footmash.ui.ailab.create.PlayerSignedFragment"
+        android:label="Igrač potpisan"
+        tools:layout="@layout/fragment_player_signed" />
 
     <!-- Season Mode -->
     <fragment

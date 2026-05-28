@@ -36,6 +36,12 @@ public class CustomPlayer {
     private int targetLeagueId;
     private int targetSeason;
 
+    /**
+     * Comma-separated Trait enum names (e.g. "GOAL_POACHER,CLINICAL_FINISHER").
+     * Populated by the create-player wizard; not used by simulation yet.
+     */
+    private String traits;
+
     // Getteri i setteri
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
@@ -87,6 +93,9 @@ public class CustomPlayer {
 
     public int getTargetSeason() { return targetSeason; }
     public void setTargetSeason(int targetSeason) { this.targetSeason = targetSeason; }
+
+    public String getTraits() { return traits; }
+    public void setTraits(String traits) { this.traits = traits; }
 
     public int getOverall() {
         return (pace + shooting + passing + dribbling + defending + physical) / 6;

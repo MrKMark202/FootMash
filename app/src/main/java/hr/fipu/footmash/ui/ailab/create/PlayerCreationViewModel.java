@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import hr.fipu.footmash.model.CustomPlayer;
 import hr.fipu.footmash.model.RealTeam;
 import hr.fipu.footmash.model.Trait;
 import hr.fipu.footmash.season.TraitEngine;
@@ -230,6 +231,62 @@ public class PlayerCreationViewModel extends ViewModel {
 
     public boolean isStep4Valid() {
         return selectedClub.getValue() != null;
+    }
+
+    // ─── Persistence ─────────────────────────────────────────────────────────
+
+    /** Default starting age for created players — adjustable per design later. */
+    public static final int DEFAULT_AGE = 22;
+    /** Season year the player joins — matches the project's hardcoded current season. */
+    public static final int DEFAULT_SEASON = 2025;
+
+    /**
+     * Builds a fully-populated {@link CustomPlayer} from the current wizard state.
+     * Caller is responsible for inserting it via {@code CustomPlayerDao} on a
+     * background thread.
+     *
+     * @throws IllegalStateException if any prior step is invalid — callers
+     *     should never reach the final screen with broken state, so this is
+     *     a programmer error rather than a user error.
+     */
+    public CustomPlayer buildCustomPlayer() {
+        if (!isStep1Valid() || !isStep2Valid() || !isStep3Valid() || !isStep4Valid()) {
+            throw new IllegalStateException("Wizard not fully populated");
+        }
+        RealTeam club = selectedClub.getValue();
+        Integer leagueId = selectedLeagueId.getValue();
+
+        CustomPlayer p = new CustomPlayer();
+        p.setFirstName(firstName.getValue().trim());
+        p.setLastName(lastName.getValue().trim());
+        p.setNationality(nationality.getValue());
+        p.setAge(DEFAULT_AGE);
+        p.setPosition(position.getValue());
+
+        p.setPace      (statValueAt(IDX_PACE));
+        p.setShooting  (statValueAt(IDX_SHOOTING));
+        p.setPassing   (statValueAt(IDX_PASSING));
+        p.setDribbling (statValueAt(IDX_DRIBBLING));
+        p.setDefending (statValueAt(IDX_DEFENDING));
+        p.setPhysical  (statValueAt(IDX_PHYSICAL));
+
+        p.setTargetTeamId(club.getId());
+        p.setTargetTeamName(club.getName());
+        p.setTargetTeamLogo(club.getBadgeUrl());
+        p.setTargetLeagueId(leagueId != null ? leagueId : 0);
+        p.setTargetSeason(DEFAULT_SEASON);
+        p.setTraits(traitsCsv());
+        return p;
+    }
+
+    /** Selected traits as a comma-separated list of enum names. */
+    private String traitsCsv() {
+        StringBuilder sb = new StringBuilder();
+        for (Trait t : currentTraits()) {
+            if (sb.length() > 0) sb.append(',');
+            sb.append(t.name());
+        }
+        return sb.toString();
     }
 
     private int[] currentStatsCopy() {
