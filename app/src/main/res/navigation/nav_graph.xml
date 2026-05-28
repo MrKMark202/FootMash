@@ -122,6 +122,9 @@
         <action
             android:id="@+id/action_aiLab_to_teamSimulation"
             app:destination="@id/teamSimulation" />
+        <action
+            android:id="@+id/action_aiLab_to_careerHub"
+            app:destination="@id/nav_career_hub" />
     </fragment>
 
     <fragment

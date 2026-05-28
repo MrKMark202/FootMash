@@ -68,7 +68,42 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Moji igrači section -->
+        <TextView
+            android:id="@+id/textSavedPlayersHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Moji igrači"
+            android:textColor="@color/text_primary"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:layout_marginTop="28dp" />
 
+        <TextView
+            android:id="@+id/textSavedPlayersHint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tap za nastavak karijere · dugi pritisak za brisanje"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            android:layout_marginTop="4dp" />
+
+        <LinearLayout
+            android:id="@+id/containerSavedPlayers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="12dp" />
+
+        <TextView
+            android:id="@+id/textNoSavedPlayers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Još nema kreiranih igrača."
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            android:layout_marginTop="12dp"
+            android:visibility="gone" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
