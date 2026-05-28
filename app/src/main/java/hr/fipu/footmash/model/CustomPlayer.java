@@ -64,6 +64,26 @@ public class CustomPlayer {
      */
     private int transferDismissedAt = -1;
 
+    /**
+     * Position inside the current season cycle:
+     * <ul>
+     *   <li>0 — pre-autumn: CTA simulates the first half (~19 matches)</li>
+     *   <li>1 — post-autumn: CTA opens the winter transfer window</li>
+     *   <li>2 — post-winter: CTA simulates the second half and finalises the season</li>
+     * </ul>
+     * Returns to 0 after the spring sim writes the consolidated season record.
+     */
+    private int seasonHalfState;
+
+    // Running tally of the first-half outcome. Held in scratch fields on the
+    // player row (rather than a separate table) because they reset every year
+    // and never coexist with another in-flight half.
+    private int halfSeasonApps;
+    private int halfSeasonGoals;
+    private int halfSeasonAssists;
+    /** Sum of {@code avgRating * apps} so the combined avg can be recomputed at season end. */
+    private float halfSeasonRatingTotal;
+
     // Getteri i setteri
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
@@ -130,6 +150,31 @@ public class CustomPlayer {
     public int getTransferDismissedAt() { return transferDismissedAt; }
     public void setTransferDismissedAt(int transferDismissedAt) {
         this.transferDismissedAt = transferDismissedAt;
+    }
+
+    public int getSeasonHalfState() { return seasonHalfState; }
+    public void setSeasonHalfState(int seasonHalfState) {
+        this.seasonHalfState = seasonHalfState;
+    }
+
+    public int getHalfSeasonApps() { return halfSeasonApps; }
+    public void setHalfSeasonApps(int v) { this.halfSeasonApps = v; }
+
+    public int getHalfSeasonGoals() { return halfSeasonGoals; }
+    public void setHalfSeasonGoals(int v) { this.halfSeasonGoals = v; }
+
+    public int getHalfSeasonAssists() { return halfSeasonAssists; }
+    public void setHalfSeasonAssists(int v) { this.halfSeasonAssists = v; }
+
+    public float getHalfSeasonRatingTotal() { return halfSeasonRatingTotal; }
+    public void setHalfSeasonRatingTotal(float v) { this.halfSeasonRatingTotal = v; }
+
+    /** Clears the half-season scratch fields. Called after the spring sim consolidates. */
+    public void clearHalfSeasonScratch() {
+        halfSeasonApps = 0;
+        halfSeasonGoals = 0;
+        halfSeasonAssists = 0;
+        halfSeasonRatingTotal = 0f;
     }
 
     public int getOverall() {
