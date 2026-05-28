@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import hr.fipu.footmash.FootMashApp;
 import hr.fipu.footmash.R;
 import hr.fipu.footmash.databinding.FragmentExistingClubPickerBinding;
 import hr.fipu.footmash.db.AppDatabase;
@@ -87,7 +88,7 @@ public class ExistingClubPickerFragment extends Fragment {
 
             long newId = db.userClubDao().insertClub(club);
 
-            DraftRepository repo = new DraftRepository(db);
+            DraftRepository repo = FootMashApp.container(requireContext()).draftRepository();
             repo.seedExistingClub((int) newId, team.getId(), formation);
 
             requireActivity().runOnUiThread(() -> {

@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
+import hr.fipu.footmash.FootMashApp;
 import hr.fipu.footmash.R;
 import hr.fipu.footmash.databinding.FragmentSeasonSummaryBinding;
 import hr.fipu.footmash.db.AppDatabase;
@@ -79,7 +80,7 @@ public class SeasonSummaryFragment extends Fragment {
         binding.btnNextSeason.setOnClickListener(v -> {
             binding.btnNextSeason.setEnabled(false);
             binding.btnNextSeason.setText("Pripremam sezonu...");
-            SeasonRepository repo = new SeasonRepository(requireContext());
+            SeasonRepository repo = FootMashApp.container(requireContext()).seasonRepository();
             new Thread(() -> {
                 repo.startNextSeason(clubId);
                 if (!isAdded()) return;

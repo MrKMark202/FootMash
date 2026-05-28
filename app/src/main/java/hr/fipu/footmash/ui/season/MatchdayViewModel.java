@@ -10,7 +10,9 @@ import androidx.lifecycle.MutableLiveData;
 import java.util.ArrayList;
 import java.util.List;
 
+import hr.fipu.footmash.FootMashApp;
 import hr.fipu.footmash.db.AppDatabase;
+import hr.fipu.footmash.di.AppContainer;
 import hr.fipu.footmash.model.Fixture;
 import hr.fipu.footmash.model.GoalScorer;
 import hr.fipu.footmash.model.MatchResult;
@@ -43,8 +45,9 @@ public class MatchdayViewModel extends AndroidViewModel {
 
     public MatchdayViewModel(@NonNull Application application) {
         super(application);
-        db = AppDatabase.getInstance(application);
-        seasonRepo = new SeasonRepository(application);
+        AppContainer container = FootMashApp.container(application);
+        db = container.database();
+        seasonRepo = container.seasonRepository();
     }
 
     public void init(int clubId, int matchday) {

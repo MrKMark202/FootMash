@@ -34,14 +34,24 @@ public class SeasonRepository {
     private final RealPlayerDao realPlayerDao;
     private final FixtureDao   fixtureDao;
     private final StandingDao  standingDao;
+    private final GeminiRepository gemini;
 
-    public SeasonRepository(Context context) {
-        AppDatabase db = AppDatabase.getInstance(context.getApplicationContext());
+    /**
+     * Primary constructor: takes its collaborators explicitly so tests
+     * can pass an in-memory database and a fake Gemini.
+     */
+    public SeasonRepository(AppDatabase db, GeminiRepository gemini) {
         this.userClubDao   = db.userClubDao();
         this.realTeamDao   = db.realTeamDao();
         this.realPlayerDao = db.realPlayerDao();
         this.fixtureDao    = db.fixtureDao();
         this.standingDao   = db.standingDao();
+        this.gemini        = gemini;
+    }
+
+    /** Convenience for legacy callers that still pass a Context. */
+    public SeasonRepository(Context context) {
+        this(AppDatabase.getInstance(context.getApplicationContext()), new GeminiRepository());
     }
 
     // ─── Season initialisation ────────────────────────────────────────────────
@@ -136,8 +146,7 @@ public class SeasonRepository {
         // Effective rating (avg overall + trait synergy) for every team this matchday.
         Map<String, Integer> ratings = buildRatingsMap(fixtures, club, userInfo);
 
-        // Try Gemini with full prompt
-        GeminiRepository gemini = new GeminiRepository();
+        // Try Gemini with full prompt (injected — fakeable in tests).
         String raw = gemini.callSync(MatchSimulator.buildPrompt(fixtures, userInfo, ratings), apiKey);
         List<MatchSimulator.ParsedMatch> results = MatchSimulator.parseResponse(raw, fixtures.size());
 
