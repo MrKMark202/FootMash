@@ -28,6 +28,9 @@ public interface CustomPlayerDao {
     @Query("SELECT * FROM custom_players WHERE id = :playerId")
     LiveData<CustomPlayer> getPlayerById(int playerId);
 
+    @Query("SELECT * FROM custom_players WHERE id = :playerId")
+    CustomPlayer getPlayerByIdSync(int playerId);
+
     @Query("SELECT * FROM custom_players WHERE targetTeamId = :teamId")
     LiveData<List<CustomPlayer>> getPlayersByTeam(int teamId);
 

@@ -10,6 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
+
+import hr.fipu.footmash.R;
 
 import java.util.List;
 import java.util.Locale;
@@ -38,6 +41,7 @@ public class CareerHubFragment extends Fragment {
 
     private FragmentCareerHubBinding binding;
     private CareerHubViewModel viewModel;
+    private int playerId;
 
     @Nullable
     @Override
@@ -53,7 +57,7 @@ public class CareerHubFragment extends Fragment {
 
         viewModel = new ViewModelProvider(this).get(CareerHubViewModel.class);
 
-        int playerId = getArguments() != null
+        playerId = getArguments() != null
             ? getArguments().getInt(ARG_PLAYER_ID, 0) : 0;
         if (playerId <= 0) {
             Toast.makeText(requireContext(), "Nedostaje ID igrača", Toast.LENGTH_SHORT).show();
@@ -66,7 +70,22 @@ public class CareerHubFragment extends Fragment {
         viewModel.getCta().observe(getViewLifecycleOwner(), this::renderCta);
 
         binding.btnPrimaryCta.setOnClickListener(v -> {
-            // Navigation per CTA state ships in commits 4-6.
+            CareerHubViewModel.Cta cta = viewModel.getCta().getValue();
+            if (cta == null) return;
+            Bundle args = new Bundle();
+            args.putInt(SimulateSeasonFragment.ARG_PLAYER_ID, playerId);
+            switch (cta) {
+                case SIMULATE_SEASON:
+                    Navigation.findNavController(v)
+                        .navigate(R.id.action_careerHub_to_simulateSeason, args);
+                    break;
+                case SPEND_POINTS:
+                    // Stat-growth navigation ships in commit 5.
+                    break;
+                case TRANSFER_WINDOW:
+                    // Transfer-offers navigation ships in commit 6.
+                    break;
+            }
         });
     }
 

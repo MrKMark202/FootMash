@@ -191,6 +191,19 @@
         <argument
             android:name="playerId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_careerHub_to_simulateSeason"
+            app:destination="@id/nav_simulate_season" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_simulate_season"
+        android:name="hr.fipu.footmash.ui.ailab.career.SimulateSeasonFragment"
+        android:label="Simulacija sezone"
+        tools:layout="@layout/fragment_simulate_season">
+        <argument
+            android:name="playerId"
+            app:argType="integer" />
     </fragment>
 
     <!-- Season Mode -->
