@@ -75,9 +75,19 @@ public class CareerHubFragment extends Fragment {
             Bundle args = new Bundle();
             args.putInt(SimulateSeasonFragment.ARG_PLAYER_ID, playerId);
             switch (cta) {
-                case SIMULATE_SEASON:
+                case SIMULATE_AUTUMN:
+                    args.putString(SimulateSeasonFragment.ARG_HALF, "AUTUMN");
                     Navigation.findNavController(v)
                         .navigate(R.id.action_careerHub_to_simulateSeason, args);
+                    break;
+                case SIMULATE_SPRING:
+                    args.putString(SimulateSeasonFragment.ARG_HALF, "SPRING");
+                    Navigation.findNavController(v)
+                        .navigate(R.id.action_careerHub_to_simulateSeason, args);
+                    break;
+                case WINTER_TRANSFER:
+                    Navigation.findNavController(v)
+                        .navigate(R.id.action_careerHub_to_winterTransfer, args);
                     break;
                 case SPEND_POINTS:
                     Navigation.findNavController(v)
@@ -143,24 +153,36 @@ public class CareerHubFragment extends Fragment {
 
     private void renderCta(@Nullable CareerHubViewModel.Cta cta) {
         if (cta == null) return;
+        int tintRes;
+        String label;
         switch (cta) {
+            case SIMULATE_AUTUMN:
+                label = "Simuliraj jesenski dio";
+                tintRes = hr.fipu.footmash.R.color.accent_blue;
+                break;
+            case SIMULATE_SPRING:
+                label = "Simuliraj proljetni dio";
+                tintRes = hr.fipu.footmash.R.color.accent_blue;
+                break;
+            case WINTER_TRANSFER:
+                label = "Zimski prelazni rok";
+                tintRes = hr.fipu.footmash.R.color.info;
+                break;
             case SPEND_POINTS:
-                binding.btnPrimaryCta.setText("Potroši bodove");
-                binding.btnPrimaryCta.setBackgroundTintList(
-                    getResources().getColorStateList(hr.fipu.footmash.R.color.warning, null));
+                label = "Potroši bodove";
+                tintRes = hr.fipu.footmash.R.color.warning;
                 break;
             case TRANSFER_WINDOW:
-                binding.btnPrimaryCta.setText("Prelazni rok");
-                binding.btnPrimaryCta.setBackgroundTintList(
-                    getResources().getColorStateList(hr.fipu.footmash.R.color.accent_red, null));
+                label = "Ljetni prelazni rok";
+                tintRes = hr.fipu.footmash.R.color.accent_red;
                 break;
-            case SIMULATE_SEASON:
             default:
-                binding.btnPrimaryCta.setText("Simuliraj sezonu");
-                binding.btnPrimaryCta.setBackgroundTintList(
-                    getResources().getColorStateList(hr.fipu.footmash.R.color.accent_blue, null));
-                break;
+                label = "Simuliraj sezonu";
+                tintRes = hr.fipu.footmash.R.color.accent_blue;
         }
+        binding.btnPrimaryCta.setText(label);
+        binding.btnPrimaryCta.setBackgroundTintList(
+            getResources().getColorStateList(tintRes, null));
     }
 
     /** Lightweight ordinal helper for "1.", "2.", ... in Croatian text. */

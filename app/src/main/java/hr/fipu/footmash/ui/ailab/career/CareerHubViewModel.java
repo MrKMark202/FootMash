@@ -32,7 +32,13 @@ import hr.fipu.footmash.model.PlayerCareerSeason;
  */
 public class CareerHubViewModel extends AndroidViewModel {
 
-    public enum Cta { SIMULATE_SEASON, SPEND_POINTS, TRANSFER_WINDOW }
+    public enum Cta {
+        SIMULATE_AUTUMN,
+        WINTER_TRANSFER,
+        SIMULATE_SPRING,
+        SPEND_POINTS,
+        TRANSFER_WINDOW   // end-of-season transfer (existing summer behaviour)
+    }
 
     private final CustomPlayerDao playerDao;
     private final PlayerCareerSeasonDao seasonDao;
@@ -95,9 +101,15 @@ public class CareerHubViewModel extends AndroidViewModel {
 
     private void recomputeCta() {
         CustomPlayer p = player.getValue();
-        if (p == null) { cta.setValue(Cta.SIMULATE_SEASON); return; }
+        if (p == null) { cta.setValue(Cta.SIMULATE_AUTUMN); return; }
+        // Mid-season states take precedence over end-of-season decisions.
+        switch (p.getSeasonHalfState()) {
+            case 1: cta.setValue(Cta.WINTER_TRANSFER); return;
+            case 2: cta.setValue(Cta.SIMULATE_SPRING); return;
+            default: /* state 0 -- fall through to end-of-season logic */
+        }
         if (p.getPointsToSpend() > 0) { cta.setValue(Cta.SPEND_POINTS); return; }
-        if (isTransferEligible()) { cta.setValue(Cta.TRANSFER_WINDOW); return; }
-        cta.setValue(Cta.SIMULATE_SEASON);
+        if (isTransferEligible())     { cta.setValue(Cta.TRANSFER_WINDOW); return; }
+        cta.setValue(Cta.SIMULATE_AUTUMN);
     }
 }

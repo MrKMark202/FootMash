@@ -26,17 +26,27 @@ import hr.fipu.footmash.model.RealPlayer;
 import hr.fipu.footmash.season.TraitEngine;
 
 /**
- * Runs the {@link PlayerCareerEngine} for one season on a background thread,
- * persists the resulting {@link PlayerCareerSeason} row, updates the
- * player's pointsToSpend and currentSeasonYear, then surfaces a focused
- * result card with a "Nastavi" button that pops back to the career hub.
+ * Runs the {@link PlayerCareerEngine} for one half-season (autumn or spring)
+ * on a background thread.
+ *
+ * <ul>
+ *     <li><b>AUTUMN</b>: simulates the first half, banks the stats into the
+ *         player's {@code halfSeason*} scratch columns, flips
+ *         {@code seasonHalfState} to 1 (winter window armed).</li>
+ *     <li><b>SPRING</b>: simulates the second half, combines with the banked
+ *         autumn tally, inserts the consolidated {@link PlayerCareerSeason},
+ *         awards the reward, resets {@code seasonHalfState} to 0, and
+ *         increments {@code currentSeasonYear}.</li>
+ * </ul>
  */
 public class SimulateSeasonFragment extends Fragment {
 
     public static final String ARG_PLAYER_ID = "playerId";
+    public static final String ARG_HALF      = "half";
 
     private FragmentSimulateSeasonBinding binding;
     private int playerId;
+    private PlayerCareerEngine.Half half = PlayerCareerEngine.Half.AUTUMN;
     /** Once-only guard so a rotation doesn't double-run the simulation. */
     private volatile boolean simulationFired = false;
 
@@ -53,6 +63,11 @@ public class SimulateSeasonFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         playerId = getArguments() != null ? getArguments().getInt(ARG_PLAYER_ID, 0) : 0;
+        String halfArg = getArguments() != null ? getArguments().getString(ARG_HALF) : null;
+        half = "SPRING".equals(halfArg)
+            ? PlayerCareerEngine.Half.SPRING
+            : PlayerCareerEngine.Half.AUTUMN;
+
         if (playerId <= 0) {
             Toast.makeText(requireContext(), "Nedostaje ID igrača", Toast.LENGTH_SHORT).show();
             Navigation.findNavController(view).popBackStack();
@@ -78,8 +93,6 @@ public class SimulateSeasonFragment extends Fragment {
                 return;
             }
 
-            // Compute host team OVR from real_players roster. If the team
-            // has no seeded roster, fall back to 75 (mid-table baseline).
             List<RealPlayer> roster = db.realPlayerDao()
                 .getPlayersByTeamSync(player.getTargetTeamId());
             int teamOvr = (roster == null || roster.isEmpty())
@@ -94,60 +107,121 @@ public class SimulateSeasonFragment extends Fragment {
                 player.getPosition());
 
             PlayerCareerEngine.SeasonOutcome outcome =
-                PlayerCareerEngine.simulate(stats, teamOvr, new Random());
+                PlayerCareerEngine.simulateHalf(stats, teamOvr, half, new Random());
 
-            PlayerCareerSeason record = buildRecord(player, outcome);
-            db.playerCareerSeasonDao().insert(record);
-
-            player.setCurrentSeasonYear(player.getCurrentSeasonYear() + 1);
-            player.setPointsToSpend(player.getPointsToSpend() + outcome.pointsEarned);
-            db.customPlayerDao().update(player);
+            if (half == PlayerCareerEngine.Half.AUTUMN) {
+                bankAutumn(db, player, outcome);
+            } else {
+                consolidateSeason(db, player, outcome, teamOvr);
+            }
 
             postResult(player, outcome);
         }).start();
     }
 
-    private static PlayerCareerSeason buildRecord(CustomPlayer p,
-                                                  PlayerCareerEngine.SeasonOutcome o) {
-        PlayerCareerSeason r = new PlayerCareerSeason();
-        r.setPlayerId(p.getId());
-        r.setSeasonYear(p.getCurrentSeasonYear());
-        r.setClubId(p.getTargetTeamId());
-        r.setClubName(p.getTargetTeamName());
-        r.setLeagueId(p.getTargetLeagueId());
-        r.setAppearances(o.appearances);
-        r.setGoals(o.goals);
-        r.setAssists(o.assists);
-        r.setAvgRating(o.avgRating);
-        r.setClubFinalPosition(o.clubFinalPosition);
-        r.setPointsEarned(o.pointsEarned);
-        r.setOvrAtSeasonEnd(p.getOverall()); // OVR before spending the new points
-        return r;
+    /** AUTUMN: bank stats on the player row; arm the winter window. */
+    private static void bankAutumn(AppDatabase db, CustomPlayer p,
+                                   PlayerCareerEngine.SeasonOutcome o) {
+        p.setHalfSeasonApps(o.appearances);
+        p.setHalfSeasonGoals(o.goals);
+        p.setHalfSeasonAssists(o.assists);
+        // We average the season at end. Stash rating-weighted-by-apps so
+        // the spring combine can compute (sumA * appsA + sumB * appsB) / total.
+        p.setHalfSeasonRatingTotal(o.avgRating * o.appearances);
+        p.setSeasonHalfState(1);
+        db.customPlayerDao().update(p);
+    }
+
+    /** SPRING: combine with banked autumn, insert season row, award points. */
+    private static void consolidateSeason(AppDatabase db, CustomPlayer p,
+                                          PlayerCareerEngine.SeasonOutcome spring,
+                                          int teamOvr) {
+        int totalApps    = p.getHalfSeasonApps()    + spring.appearances;
+        int totalGoals   = p.getHalfSeasonGoals()   + spring.goals;
+        int totalAssists = p.getHalfSeasonAssists() + spring.assists;
+        float combinedRating = totalApps == 0
+            ? spring.avgRating
+            : (p.getHalfSeasonRatingTotal() + spring.avgRating * spring.appearances) / totalApps;
+
+        int finishPos    = generateClubPosition(teamOvr);
+        int pointsEarned = PlayerCareerEngine.pointsForRating(combinedRating);
+
+        PlayerCareerSeason record = new PlayerCareerSeason();
+        record.setPlayerId(p.getId());
+        record.setSeasonYear(p.getCurrentSeasonYear());
+        record.setClubId(p.getTargetTeamId());
+        record.setClubName(p.getTargetTeamName());
+        record.setLeagueId(p.getTargetLeagueId());
+        record.setAppearances(totalApps);
+        record.setGoals(totalGoals);
+        record.setAssists(totalAssists);
+        record.setAvgRating(combinedRating);
+        record.setClubFinalPosition(finishPos);
+        record.setPointsEarned(pointsEarned);
+        record.setOvrAtSeasonEnd(p.getOverall());
+        db.playerCareerSeasonDao().insert(record);
+
+        p.clearHalfSeasonScratch();
+        p.setSeasonHalfState(0);
+        p.setCurrentSeasonYear(p.getCurrentSeasonYear() + 1);
+        p.setPointsToSpend(p.getPointsToSpend() + pointsEarned);
+        db.customPlayerDao().update(p);
+    }
+
+    /** Mirrors the engine's hidden formula since spring callers re-derive it once. */
+    private static int generateClubPosition(int teamOvr) {
+        float base = 20f - (teamOvr - 65) / 1.5f;
+        int rounded = Math.round(base);
+        return Math.max(1, Math.min(20, rounded));
     }
 
     private void postResult(CustomPlayer player, PlayerCareerEngine.SeasonOutcome o) {
         if (!isAdded()) return;
         requireActivity().runOnUiThread(() -> {
             if (binding == null) return;
-            binding.textSeasonLabel.setText(player.getCurrentSeasonYear() - 1
+
+            boolean spring = half == PlayerCareerEngine.Half.SPRING;
+            int displayYear = spring
+                ? player.getCurrentSeasonYear() - 1   // post-consolidation: year already advanced
+                : player.getCurrentSeasonYear();
+            String halfLabel = spring ? "proljeće" : "jesen";
+
+            binding.textSeasonLabel.setText(displayYear
                 + "/" + String.format(Locale.getDefault(),
-                                      "%02d", player.getCurrentSeasonYear() % 100));
+                                      "%02d", (displayYear + 1) % 100)
+                + " • " + halfLabel);
             binding.textClubLine.setText(player.getTargetTeamName());
 
+            int matchesAvailable = PlayerCareerEngine.MATCHES_PER_HALF;
             stat(binding.rowApps,    "Nastupi",
-                o.appearances + " / " + PlayerCareerEngine.MATCHES_PER_SEASON);
+                o.appearances + " / " + matchesAvailable);
             stat(binding.rowGoals,   "Golovi",          String.valueOf(o.goals));
             stat(binding.rowAssists, "Asistencije",     String.valueOf(o.assists));
             stat(binding.rowRating,  "Prosječna ocjena",
                 String.format(Locale.getDefault(), "%.1f", o.avgRating));
-            stat(binding.rowFinish,  "Klub završio",    o.clubFinalPosition + ".");
+            stat(binding.rowFinish,
+                spring ? "Klub završio" : "Polusezonska forma",
+                spring ? String.valueOf(o.clubFinalPosition) + "."
+                       : describeForm(o.avgRating));
 
-            binding.textReward.setText("+" + o.pointsEarned + " bodova");
+            int rewardForReadout = spring
+                ? player.getPointsToSpend()  // post-consolidation it's the new total
+                : 0;
+            binding.textReward.setText(spring
+                ? "+" + (player.getPointsToSpend() - 0) + " bodova ukupno za sezonu"
+                : "Bodovi se dodjeljuju nakon proljeća");
 
             binding.layoutLoading.setVisibility(View.GONE);
             binding.layoutResult.setVisibility(View.VISIBLE);
             binding.btnContinue.setVisibility(View.VISIBLE);
         });
+    }
+
+    private static String describeForm(float rating) {
+        if (rating >= 7.5f) return "Izvanredna";
+        if (rating >= 7.0f) return "Dobra";
+        if (rating >= 6.5f) return "Solidna";
+        return "Slaba";
     }
 
     private void stat(ItemStatReadoutBinding row, String label, String value) {

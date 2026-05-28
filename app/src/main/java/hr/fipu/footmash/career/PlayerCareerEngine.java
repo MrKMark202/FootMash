@@ -16,6 +16,9 @@ import hr.fipu.footmash.season.TraitEngine;
 public final class PlayerCareerEngine {
 
     public static final int MATCHES_PER_SEASON = 38;
+    public static final int MATCHES_PER_HALF   = 19;
+
+    public enum Half { AUTUMN, SPRING }
 
     private PlayerCareerEngine() {}
 
@@ -58,10 +61,11 @@ public final class PlayerCareerEngine {
         }
     }
 
-    // ─── Public entry point ──────────────────────────────────────────────────
+    // ─── Public entry points ─────────────────────────────────────────────────
 
     public static SeasonOutcome simulate(PlayerStats player, int teamOvr, Random rng) {
-        int apps              = generateAppearances(player.overall, teamOvr, rng);
+        int apps              = generateAppearances(player.overall, teamOvr, rng,
+            MATCHES_PER_SEASON);
         String group          = TraitEngine.groupOf(player.position);
         int goals             = generateGoals(group, player, apps, rng);
         int assists           = generateAssists(group, player, apps, rng);
@@ -72,18 +76,45 @@ public final class PlayerCareerEngine {
         return new SeasonOutcome(apps, goals, assists, rating, clubFinalPosition, pointsEarned);
     }
 
+    /**
+     * Simulates a single half-season (~19 matches). The career hub calls
+     * this twice per cycle: once for autumn, once for spring — with a
+     * winter transfer window in between. Final position and points are
+     * not computed per half; callers consolidate both halves and call
+     * {@link #pointsForRating(float)} at season end on the combined
+     * average.
+     */
+    public static SeasonOutcome simulateHalf(PlayerStats player, int teamOvr, Half half,
+                                             Random rng) {
+        int apps    = generateAppearances(player.overall, teamOvr, rng, MATCHES_PER_HALF);
+        String grp  = TraitEngine.groupOf(player.position);
+        int goals   = generateGoals(grp, player, apps, rng);
+        int assists = generateAssists(grp, player, apps, rng);
+        float rating = generateRating(player.overall, teamOvr, apps, goals, assists, rng);
+        // Per-half consumers ignore clubFinalPosition and pointsEarned.
+        return new SeasonOutcome(apps, goals, assists, rating, 0, 0);
+    }
+
     // ─── Appearances ─────────────────────────────────────────────────────────
 
     /**
-     * Base 28 apps, shifted by the gap between the player and their team-mates.
-     * A player who outclasses the squad locks in close to 38; a weaker player
-     * rotates and lands nearer 18.
+     * Base apps centred at 75% of available matches, shifted by the gap between
+     * the player and their team-mates. A player who outclasses the squad locks
+     * in near the cap; a weaker player rotates and lands well below.
+     *
+     * <p>Same shape for full-season and half-season callers — the math scales
+     * with {@code matchesAvailable} so the half engine produces ~half-sized
+     * appearance totals naturally.
      */
-    private static int generateAppearances(int playerOvr, int teamOvr, Random rng) {
-        float relative = clampF((playerOvr - teamOvr) * 1.5f, -10f, 10f);
-        float noise    = rng.nextFloat() * 6f - 3f; // ±3
-        int apps       = Math.round(28f + relative + noise);
-        return clampI(apps, 0, MATCHES_PER_SEASON);
+    private static int generateAppearances(int playerOvr, int teamOvr, Random rng,
+                                           int matchesAvailable) {
+        float base     = matchesAvailable * 0.74f;            // ~28 of 38, ~14 of 19
+        float ovrSpan  = matchesAvailable * 0.26f;            // ±10 of 38, ±5 of 19
+        float relative = clampF((playerOvr - teamOvr) * 1.5f, -ovrSpan, ovrSpan);
+        float noise    = rng.nextFloat() * (matchesAvailable * 0.16f)
+                       - (matchesAvailable * 0.08f);          // ±~3 of 38, ±~1.5 of 19
+        int apps       = Math.round(base + relative + noise);
+        return clampI(apps, 0, matchesAvailable);
     }
 
     // ─── Goals ───────────────────────────────────────────────────────────────

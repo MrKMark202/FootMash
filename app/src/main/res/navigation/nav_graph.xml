@@ -203,6 +203,9 @@
         <action
             android:id="@+id/action_careerHub_to_transferOffers"
             app:destination="@id/nav_transfer_offers" />
+        <action
+            android:id="@+id/action_careerHub_to_winterTransfer"
+            app:destination="@id/nav_transfer_offers" />
     </fragment>
 
     <fragment
