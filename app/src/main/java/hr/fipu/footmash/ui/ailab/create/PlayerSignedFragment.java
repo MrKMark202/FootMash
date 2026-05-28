@@ -21,6 +21,7 @@ import hr.fipu.footmash.databinding.FragmentPlayerSignedBinding;
 import hr.fipu.footmash.db.CustomPlayerDao;
 import hr.fipu.footmash.model.CustomPlayer;
 import hr.fipu.footmash.model.RealTeam;
+import hr.fipu.footmash.ui.ailab.career.CareerHubFragment;
 import hr.fipu.footmash.ui.util.InitialsBadgeDrawable;
 
 /**
@@ -40,6 +41,9 @@ public class PlayerSignedFragment extends Fragment {
 
     private FragmentPlayerSignedBinding binding;
     private PlayerCreationViewModel viewModel;
+
+    /** Set once the insert returns; gates the "Pokreni karijeru" CTA. */
+    private volatile int insertedPlayerId = 0;
 
     @Nullable
     @Override
@@ -81,6 +85,17 @@ public class PlayerSignedFragment extends Fragment {
     }
 
     private void bindButtons() {
+        // Disable until insert returns — otherwise the career hub gets playerId=0.
+        binding.btnStartCareer.setEnabled(false);
+
+        binding.btnStartCareer.setOnClickListener(v -> {
+            if (insertedPlayerId <= 0) return;
+            Bundle args = new Bundle();
+            args.putInt(CareerHubFragment.ARG_PLAYER_ID, insertedPlayerId);
+            Navigation.findNavController(v)
+                .navigate(R.id.action_playerSigned_to_careerHub, args);
+        });
+
         binding.btnCreateAnother.setOnClickListener(v -> {
             // Pop the wizard back stack to AI Lab, then start a fresh wizard.
             // reset() will fire from PlayerIdentityFragment when it re-enters.
@@ -105,10 +120,13 @@ public class PlayerSignedFragment extends Fragment {
 
         CustomPlayerDao dao = FootMashApp.container(requireContext()).database().customPlayerDao();
         new Thread(() -> {
-            dao.insert(player);
+            long newId = dao.insert(player);
             if (!isAdded()) return;
-            requireActivity().runOnUiThread(() ->
-                Toast.makeText(requireContext(), "Igrač spremljen", Toast.LENGTH_SHORT).show());
+            requireActivity().runOnUiThread(() -> {
+                insertedPlayerId = (int) newId;
+                if (binding != null) binding.btnStartCareer.setEnabled(true);
+                Toast.makeText(requireContext(), "Igrač spremljen", Toast.LENGTH_SHORT).show();
+            });
         }).start();
     }
 

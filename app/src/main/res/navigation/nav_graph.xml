@@ -177,7 +177,21 @@
         android:id="@+id/nav_player_signed"
         android:name="hr.fipu.footmash.ui.ailab.create.PlayerSignedFragment"
         android:label="Igrač potpisan"
-        tools:layout="@layout/fragment_player_signed" />
+        tools:layout="@layout/fragment_player_signed">
+        <action
+            android:id="@+id/action_playerSigned_to_careerHub"
+            app:destination="@id/nav_career_hub" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_career_hub"
+        android:name="hr.fipu.footmash.ui.ailab.career.CareerHubFragment"
+        android:label="Karijera"
+        tools:layout="@layout/fragment_career_hub">
+        <argument
+            android:name="playerId"
+            app:argType="integer" />
+    </fragment>
 
     <!-- Season Mode -->
     <fragment

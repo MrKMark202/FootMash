@@ -111,15 +111,28 @@
         android:layout_weight="1" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnCreateAnother"
+        android:id="@+id/btnStartCareer"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:text="Kreiraj još jednog"
+        android:text="Pokreni karijeru →"
         android:textSize="16sp"
         android:textStyle="bold"
         android:textAllCaps="false"
         app:cornerRadius="12dp"
         android:backgroundTint="@color/accent_blue" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnCreateAnother"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="8dp"
+        android:text="Kreiraj još jednog"
+        android:textSize="16sp"
+        android:textAllCaps="false"
+        android:textColor="@color/text_primary"
+        app:cornerRadius="12dp"
+        app:strokeColor="@color/divider" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnDone"
