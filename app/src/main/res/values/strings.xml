@@ -137,4 +137,22 @@
         <item>MF</item>
         <item>FW</item>
     </string-array>
+
+    <!-- Specific positions used by the seed-data and the create-player wizard. -->
+    <string-array name="seed_positions">
+        <item>GK</item>
+        <item>CB</item>
+        <item>LB</item>
+        <item>RB</item>
+        <item>CDM</item>
+        <item>CM</item>
+        <item>CAM</item>
+        <item>LM</item>
+        <item>RM</item>
+        <item>LAM</item>
+        <item>RAM</item>
+        <item>LW</item>
+        <item>RW</item>
+        <item>ST</item>
+    </string-array>
 </resources>

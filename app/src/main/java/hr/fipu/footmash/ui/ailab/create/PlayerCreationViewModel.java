@@ -21,16 +21,37 @@ import androidx.lifecycle.ViewModel;
  */
 public class PlayerCreationViewModel extends ViewModel {
 
+    public static final int STAT_BASELINE   = 50;
+    public static final int STAT_CAP        = 99;
+    public static final int POINTS_TO_SPEND = 100;
+    public static final int STAT_COUNT      = 6;
+
+    /** Stat array indices. Matches the row order shown in the UI. */
+    public static final int IDX_PACE      = 0;
+    public static final int IDX_SHOOTING  = 1;
+    public static final int IDX_PASSING   = 2;
+    public static final int IDX_DRIBBLING = 3;
+    public static final int IDX_DEFENDING = 4;
+    public static final int IDX_PHYSICAL  = 5;
+
     // ─── Step 1: identity ────────────────────────────────────────────────────
     private final MutableLiveData<String> firstName   = new MutableLiveData<>("");
     private final MutableLiveData<String> lastName    = new MutableLiveData<>("");
     private final MutableLiveData<String> nationality = new MutableLiveData<>("");
+
+    // ─── Step 2: stats + position ────────────────────────────────────────────
+    private final MutableLiveData<String> position = new MutableLiveData<>("");
+    /** Additions on top of {@link #STAT_BASELINE} — sum must reach POINTS_TO_SPEND. */
+    private final MutableLiveData<int[]> statAdditions =
+            new MutableLiveData<>(new int[STAT_COUNT]);
 
     /** Clears every wizard field. Call from step 1 onViewCreated. */
     public void reset() {
         firstName.setValue("");
         lastName.setValue("");
         nationality.setValue("");
+        position.setValue("");
+        statAdditions.setValue(new int[STAT_COUNT]);
     }
 
     public LiveData<String> getFirstName()   { return firstName; }
@@ -45,6 +66,72 @@ public class PlayerCreationViewModel extends ViewModel {
         return notBlank(firstName.getValue())
             && notBlank(lastName.getValue())
             && notBlank(nationality.getValue());
+    }
+
+    // ─── Step 2 accessors ────────────────────────────────────────────────────
+
+    public LiveData<String>  getPosition()       { return position; }
+    public LiveData<int[]>   getStatAdditions()  { return statAdditions; }
+
+    public void setPosition(String v) { position.setValue(v == null ? "" : v); }
+
+    /**
+     * Sets the addition for one stat, clamped to the remaining-budget envelope.
+     * Returns the actual value applied — never above POINTS_TO_SPEND total and
+     * never above STAT_CAP - STAT_BASELINE for an individual stat.
+     */
+    public int trySetStatAddition(int index, int requested) {
+        if (index < 0 || index >= STAT_COUNT) return 0;
+        int perStatMax = STAT_CAP - STAT_BASELINE;
+        int clamped = Math.max(0, Math.min(perStatMax, requested));
+        int[] cur = currentStatsCopy();
+        int budgetForThisStat = POINTS_TO_SPEND - pointsSpent(cur) + cur[index];
+        clamped = Math.min(clamped, budgetForThisStat);
+        cur[index] = clamped;
+        statAdditions.setValue(cur);
+        return clamped;
+    }
+
+    /** Convenience: bump a stat by {@code delta} (positive or negative). */
+    public int bumpStat(int index, int delta) {
+        if (index < 0 || index >= STAT_COUNT) return 0;
+        int[] cur = currentStatsCopy();
+        return trySetStatAddition(index, cur[index] + delta);
+    }
+
+    public int pointsSpent() {
+        return pointsSpent(statAdditions.getValue());
+    }
+
+    public int pointsRemaining() {
+        return POINTS_TO_SPEND - pointsSpent();
+    }
+
+    public int statValueAt(int index) {
+        int[] adds = statAdditions.getValue();
+        if (adds == null || index < 0 || index >= STAT_COUNT) return STAT_BASELINE;
+        return STAT_BASELINE + adds[index];
+    }
+
+    public int currentOverall() {
+        return (STAT_COUNT * STAT_BASELINE + pointsSpent()) / STAT_COUNT;
+    }
+
+    public boolean isStep2Valid() {
+        return notBlank(position.getValue()) && pointsSpent() == POINTS_TO_SPEND;
+    }
+
+    private int[] currentStatsCopy() {
+        int[] v = statAdditions.getValue();
+        if (v == null) return new int[STAT_COUNT];
+        return v.clone();
+    }
+
+    private static int pointsSpent(int[] adds) {
+        if (adds == null) return 0;
+        int total = 0;
+        for (int v : adds) total += v;
+        return total;
     }
 
     public String fullName() {

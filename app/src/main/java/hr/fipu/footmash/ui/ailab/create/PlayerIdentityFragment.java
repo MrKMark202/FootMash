@@ -12,6 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
+
+import hr.fipu.footmash.R;
 import hr.fipu.footmash.databinding.FragmentPlayerIdentityBinding;
 
 /**
@@ -48,9 +51,11 @@ public class PlayerIdentityFragment extends Fragment {
         prefillFromViewModel();
         refreshNextButton();
 
-        // Navigation to step 2 is wired in the next commit; the button itself
-        // already gates on isStep1Valid so once enabled it means the form is good.
-        binding.btnNext.setOnClickListener(v -> { /* wired in commit 2 */ });
+        binding.btnNext.setOnClickListener(v -> {
+            if (!viewModel.isStep1Valid()) return;
+            Navigation.findNavController(v)
+                .navigate(R.id.action_playerIdentity_to_playerStats);
+        });
     }
 
     private void bindNationalityDropdown() {

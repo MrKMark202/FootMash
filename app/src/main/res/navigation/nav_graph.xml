@@ -141,7 +141,17 @@
         android:id="@+id/nav_player_identity"
         android:name="hr.fipu.footmash.ui.ailab.create.PlayerIdentityFragment"
         android:label="Kreiraj igrača"
-        tools:layout="@layout/fragment_player_identity" />
+        tools:layout="@layout/fragment_player_identity">
+        <action
+            android:id="@+id/action_playerIdentity_to_playerStats"
+            app:destination="@id/nav_player_stats" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_player_stats"
+        android:name="hr.fipu.footmash.ui.ailab.create.PlayerStatsFragment"
+        android:label="Atributi i pozicija"
+        tools:layout="@layout/fragment_player_stats" />
 
     <!-- Season Mode -->
     <fragment
