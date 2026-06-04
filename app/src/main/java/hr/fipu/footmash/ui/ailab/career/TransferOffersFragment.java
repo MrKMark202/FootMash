@@ -81,10 +81,10 @@ public class TransferOffersFragment extends Fragment {
             CustomPlayer p = db.customPlayerDao().getPlayerByIdSync(playerId);
             if (p == null) return;
 
-            List<RealTeam> leagueTeams =
-                db.realTeamDao().getTeamsByLeagueSync(p.getTargetLeagueId());
+            // Suitors can come from any league, not just the player's own.
+            List<RealTeam> candidateTeams = db.realTeamDao().getAllTeamsSync();
             List<ClubOfferEngine.RankedTeam> ranked = new ArrayList<>();
-            for (RealTeam t : leagueTeams) {
+            for (RealTeam t : candidateTeams) {
                 // Exclude the current club from the offer pool — these are
                 // suitors trying to poach, not the same place.
                 if (t.getId() == p.getTargetTeamId()) continue;

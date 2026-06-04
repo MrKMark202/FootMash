@@ -53,6 +53,12 @@ public class DraftCanvasFragment extends Fragment {
     private boolean pitchReady = false;
     private int clubId = -1;
     private boolean editMode = false;
+    /**
+     * Transfer-window mode: reached from a Season Hub transfer window (summer or
+     * winter). Like edit mode it pops back on confirm, but it also re-enables
+     * buying and selling so the user can do mid-season/pre-season transfers.
+     */
+    private boolean transferMode = false;
     private SynergyResult lastSynergy;
     private ClubColors.Theme theme = ClubColors.DEFAULT;
 
@@ -70,6 +76,7 @@ public class DraftCanvasFragment extends Fragment {
 
         clubId = getArguments() != null ? getArguments().getInt("clubId", -1) : -1;
         editMode = getArguments() != null && getArguments().getBoolean("editMode", false);
+        transferMode = getArguments() != null && getArguments().getBoolean("transferMode", false);
         if (clubId == -1) {
             Toast.makeText(requireContext(), "Greška: klub nije pronađen", Toast.LENGTH_SHORT).show();
             return;
@@ -99,12 +106,17 @@ public class DraftCanvasFragment extends Fragment {
                        : mode == DraftViewModel.DraftMode.EXISTING_CLUB
                          ? "naslijeđeni klub" : "novi klub"));
 
-                binding.textHelp.setText(editMode
-                    ? "Tapni slot ili igrača da mijenjaš sastav. Formaciju biraš gore."
-                    : "Tapni prazan slot za kupovinu. Tapni igrača za izmjene.");
+                boolean canTransfer = !editMode || transferMode;
+                binding.textHelp.setText(transferMode
+                    ? "Prelazni rok: kupuj, prodaji i preslaguj igrače."
+                    : editMode
+                        ? "Tapni slot ili igrača da mijenjaš sastav. Formaciju biraš gore."
+                        : "Tapni prazan slot za kupovinu. Tapni igrača za izmjene.");
 
-                binding.btnStartSeason.setText(editMode ? "Spremi sastav" : "Pokreni sezonu");
-                binding.btnAddBench.setVisibility(editMode ? View.GONE : View.VISIBLE);
+                binding.btnStartSeason.setText(transferMode
+                    ? "Spremi transfere"
+                    : editMode ? "Spremi sastav" : "Pokreni sezonu");
+                binding.btnAddBench.setVisibility(canTransfer ? View.VISIBLE : View.GONE);
                 ClubColors.styleButton(binding.btnStartSeason, theme);
                 binding.textSynergyMore.setTextColor(theme.primary);
 
@@ -380,7 +392,7 @@ public class DraftCanvasFragment extends Fragment {
                 b.setItems(labels, (d, w) ->
                     viewModel.assignFromBench(options.get(w), slot.key));
             }
-            if (!editMode) {
+            if (!editMode || transferMode) {
                 b.setPositiveButton("Kupi s tržišta", (d, w) -> {
                     viewModel.selectSlot(slot.key);
                     new PlayerMarketBottomSheet().show(getParentFragmentManager(), "market");
@@ -457,13 +469,13 @@ public class DraftCanvasFragment extends Fragment {
             requireContext(), R.style.FootMashDialog).setView(root);
         if (fromBench) {
             b.setPositiveButton("U prvi sastav", (d, w) -> promoteFromBench(p));
-            if (!editMode) {
+            if (!editMode || transferMode) {
                 b.setNeutralButton("Prodaj +€" + formatMillions(p.getMarketValue()),
                     (d, w) -> viewModel.sellFromBench(p));
             }
         } else {
             b.setPositiveButton("Na klupu", (d, w) -> viewModel.moveToBench(slotKey));
-            if (!editMode) {
+            if (!editMode || transferMode) {
                 b.setNeutralButton("Prodaj +€" + formatMillions(p.getMarketValue()),
                     (d, w) -> viewModel.sellFromSlot(slotKey));
             }

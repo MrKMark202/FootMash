@@ -46,9 +46,6 @@ public class HomeFragment extends Fragment {
     }
 
     private void setupClickListeners() {
-        binding.btnSearch.setOnClickListener(v ->
-                Navigation.findNavController(v).navigate(R.id.nav_leagues));
-
         binding.featuredMatchCard.setOnClickListener(v ->
                 navigateToTeams(177, "Premier League"));
 
@@ -59,6 +56,16 @@ public class HomeFragment extends Fragment {
                 navigateToTeams(302, "La Liga"));
 
         binding.textAllMatches.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.nav_leagues));
+
+        // Quick-action shortcuts to the main sections.
+        binding.cardActionCareer.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.nav_ai_lab));
+        binding.cardActionSeason.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.nav_season));
+        binding.cardActionWorldCup.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.nav_world_cup));
+        binding.cardActionLeagues.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.nav_leagues));
     }
 

@@ -12,6 +12,85 @@
         android:label="@string/nav_home"
         tools:layout="@layout/fragment_home" />
 
+    <!-- World Cup tab -->
+    <fragment
+        android:id="@+id/nav_world_cup"
+        android:name="hr.fipu.footmash.ui.worldcup.WorldCupFragment"
+        android:label="@string/nav_world_cup"
+        tools:layout="@layout/fragment_world_cup">
+        <action
+            android:id="@+id/action_worldCup_to_nationPicker"
+            app:destination="@id/nav_wc_nation_picker" />
+        <action
+            android:id="@+id/action_worldCup_to_hub"
+            app:destination="@id/nav_wc_hub" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_wc_nation_picker"
+        android:name="hr.fipu.footmash.ui.worldcup.WorldCupNationPickerFragment"
+        android:label="@string/wc_pick_nation"
+        tools:layout="@layout/fragment_wc_nation_picker">
+        <action
+            android:id="@+id/action_nationPicker_to_squad"
+            app:destination="@id/nav_wc_squad" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_wc_squad"
+        android:name="hr.fipu.footmash.ui.worldcup.WorldCupSquadFragment"
+        android:label="@string/wc_build_squad"
+        tools:layout="@layout/fragment_wc_squad">
+        <argument
+            android:name="nationKey"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_squad_to_hub"
+            app:destination="@id/nav_wc_hub"
+            app:popUpTo="@id/nav_world_cup"
+            app:popUpToInclusive="false" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_wc_hub"
+        android:name="hr.fipu.footmash.ui.worldcup.WorldCupHubFragment"
+        android:label="@string/nav_world_cup"
+        tools:layout="@layout/fragment_wc_hub">
+        <action
+            android:id="@+id/action_hub_to_groups"
+            app:destination="@id/nav_wc_groups" />
+        <action
+            android:id="@+id/action_hub_to_bracket"
+            app:destination="@id/nav_wc_bracket" />
+        <action
+            android:id="@+id/action_hub_to_champion"
+            app:destination="@id/nav_wc_champion" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_wc_groups"
+        android:name="hr.fipu.footmash.ui.worldcup.WorldCupGroupsFragment"
+        android:label="@string/wc_groups"
+        tools:layout="@layout/fragment_wc_groups" />
+
+    <fragment
+        android:id="@+id/nav_wc_bracket"
+        android:name="hr.fipu.footmash.ui.worldcup.WorldCupBracketFragment"
+        android:label="@string/wc_bracket"
+        tools:layout="@layout/fragment_wc_bracket" />
+
+    <fragment
+        android:id="@+id/nav_wc_champion"
+        android:name="hr.fipu.footmash.ui.worldcup.WorldCupChampionFragment"
+        android:label="@string/wc_champion"
+        tools:layout="@layout/fragment_wc_champion">
+        <action
+            android:id="@+id/action_champion_to_worldCup"
+            app:destination="@id/nav_world_cup"
+            app:popUpTo="@id/nav_world_cup"
+            app:popUpToInclusive="true" />
+    </fragment>
+
     <!-- Lige tab (bottom-nav target) — direct list of seeded leagues -->
     <fragment
         android:id="@+id/nav_leagues"

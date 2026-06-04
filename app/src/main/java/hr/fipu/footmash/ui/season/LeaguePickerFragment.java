@@ -143,6 +143,7 @@ public class LeaguePickerFragment extends Fragment {
         b.textSavedClubActive.setVisibility(c.isActive() ? View.VISIBLE : View.GONE);
 
         row.setOnClickListener(v -> resumeClub(c));
+        b.btnDeleteClub.setOnClickListener(v -> confirmDelete(c));
         row.setOnLongClickListener(v -> {
             confirmDelete(c);
             return true;

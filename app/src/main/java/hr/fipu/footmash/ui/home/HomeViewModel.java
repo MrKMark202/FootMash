@@ -59,6 +59,7 @@ public class HomeViewModel extends AndroidViewModel {
                     LeagueResponse r = new LeagueResponse();
                     r.setLeagueKey(info.getId());
                     r.setLeagueName(info.getName());
+                    r.setLeagueLogo(hr.fipu.footmash.db.LogoAssets.leagueCrestUri(info.getId()));
                     mapped.add(r);
                 }
                 return mapped;

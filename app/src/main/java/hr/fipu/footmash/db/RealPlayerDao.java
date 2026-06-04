@@ -19,6 +19,10 @@ public interface RealPlayerDao {
     @Query("SELECT * FROM real_players WHERE leagueId = :leagueId ORDER BY overall DESC")
     LiveData<List<RealPlayer>> getPlayersByLeague(int leagueId);
 
+    /** Every seeded player across all leagues — used for the cross-league market. */
+    @Query("SELECT * FROM real_players ORDER BY overall DESC")
+    LiveData<List<RealPlayer>> getAllPlayers();
+
     @Query("SELECT * FROM real_players WHERE teamId = :teamId ORDER BY overall DESC")
     LiveData<List<RealPlayer>> getPlayersByTeam(int teamId);
 
@@ -30,6 +34,11 @@ public interface RealPlayerDao {
 
     @Query("SELECT * FROM real_players WHERE id = :playerId")
     RealPlayer getPlayerById(int playerId);
+
+    /** Every real player matching any of the given nationality strings — used to
+     *  assemble a nation's World Cup pool. */
+    @Query("SELECT * FROM real_players WHERE nationality IN (:nationalities) ORDER BY overall DESC")
+    List<RealPlayer> getPlayersByNationalityInSync(List<String> nationalities);
 
     @Query("SELECT COUNT(*) FROM real_players")
     int getCount();

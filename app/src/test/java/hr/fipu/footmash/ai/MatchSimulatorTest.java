@@ -136,8 +136,8 @@ public class MatchSimulatorTest {
         assertTrue("preamble names elite contender clubs", p.contains("Manchester City"));
         assertTrue("preamble bans wing-backs from leading the scoring chart",
             p.contains("wing-back") || p.contains("Frimpong"));
-        assertTrue("preamble bans severe shocks", p.contains("severe shocks")
-            || p.contains("Leicester"));
+        assertTrue("preamble bans out-of-nowhere shocks",
+            p.contains("No Absolute Shocks") || p.contains("shocks"));
     }
 
     @Test

@@ -146,9 +146,17 @@
     <style name="FootMashDialog.Button" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:textColor">@color/accent_blue</item>
         <item name="android:textStyle">bold</item>
+        <item name="strokeColor">@color/accent_blue</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="cornerRadius">10dp</item>
+        <item name="android:layout_marginStart">8dp</item>
     </style>
 
     <style name="FootMashDialog.Button.Muted" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:textColor">@color/text_secondary</item>
+        <item name="strokeColor">@color/divider</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="cornerRadius">10dp</item>
+        <item name="android:layout_marginStart">8dp</item>
     </style>
 </resources>

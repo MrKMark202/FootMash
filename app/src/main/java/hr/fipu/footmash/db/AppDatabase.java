@@ -21,13 +21,14 @@ import hr.fipu.footmash.model.RealTeam;
 import hr.fipu.footmash.model.SeasonStanding;
 import hr.fipu.footmash.model.UserClub;
 import hr.fipu.footmash.model.UserSquad;
+import hr.fipu.footmash.model.WorldCupState;
 
 @Database(
     entities = {CustomPlayer.class, CustomTeam.class, RealPlayer.class, RealTeam.class,
                 UserClub.class, UserSquad.class,
                 Fixture.class, MatchResult.class, GoalScorer.class, SeasonStanding.class,
-                PlayerCareerSeason.class},
-    version = 11,
+                PlayerCareerSeason.class, WorldCupState.class},
+    version = 14,
     exportSchema = false
 )
 @TypeConverters(Converters.class)
@@ -43,6 +44,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract FixtureDao fixtureDao();
     public abstract StandingDao standingDao();
     public abstract PlayerCareerSeasonDao playerCareerSeasonDao();
+    public abstract WorldCupDao worldCupDao();
 
     static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override
@@ -249,6 +251,41 @@ public abstract class AppDatabase extends RoomDatabase {
         }
     };
 
+    static final Migration MIGRATION_11_12 = new Migration(11, 12) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            // Goals now record the assisting player (when the simulator supplies
+            // one) so the season hub can show an assist leaderboard alongside
+            // the top scorers.
+            database.execSQL("ALTER TABLE goal_scorer ADD COLUMN assistName TEXT");
+        }
+    };
+
+    static final Migration MIGRATION_12_13 = new Migration(12, 13) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            // Season Mode now runs summer + winter transfer windows. This flag
+            // tracks whether the current season's winter window has been passed
+            // so the half-season simulation can pause at the break exactly once.
+            database.execSQL("ALTER TABLE user_club ADD COLUMN winterWindowDone "
+                + "INTEGER NOT NULL DEFAULT 0");
+        }
+    };
+
+    static final Migration MIGRATION_13_14 = new Migration(13, 14) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            // World Cup mode stores the whole playthrough (squad, groups, bracket)
+            // as a single JSON blob in a one-row table.
+            database.execSQL(
+                "CREATE TABLE IF NOT EXISTS `world_cup` (" +
+                "`id` INTEGER NOT NULL, " +
+                "`json` TEXT, " +
+                "PRIMARY KEY(`id`))"
+            );
+        }
+    };
+
     public static AppDatabase getInstance(Context context) {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
@@ -260,7 +297,8 @@ public abstract class AppDatabase extends RoomDatabase {
                     )
                     .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5,
                                    MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9,
-                                   MIGRATION_9_10, MIGRATION_10_11)
+                                   MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12,
+                                   MIGRATION_12_13, MIGRATION_13_14)
                     .build();
                 }
             }

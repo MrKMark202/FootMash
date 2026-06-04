@@ -73,6 +73,18 @@
                 android:textSize="22sp"
                 android:textStyle="bold" />
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/btnDeletePlayer"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_delete"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="Obriši igrača" />
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

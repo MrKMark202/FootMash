@@ -29,6 +29,14 @@ public interface RealTeamDao {
     @Query("SELECT * FROM real_teams WHERE leagueId = :leagueId ORDER BY name ASC")
     List<RealTeam> getTeamsByLeagueSync(int leagueId);
 
+    /** Every seeded team across all leagues — used for cross-league transfer offers. */
+    @Query("SELECT * FROM real_teams ORDER BY name ASC")
+    List<RealTeam> getAllTeamsSync();
+
+    /** Observable view of every seeded team — used to group clubs under their league. */
+    @Query("SELECT * FROM real_teams ORDER BY name ASC")
+    LiveData<List<RealTeam>> getAllTeamsLive();
+
     @Query("SELECT DISTINCT leagueId, leagueName FROM real_teams ORDER BY leagueName ASC")
     LiveData<List<LeagueInfo>> getDistinctLeagues();
 

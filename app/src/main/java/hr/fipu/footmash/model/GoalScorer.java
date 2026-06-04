@@ -12,6 +12,7 @@ public class GoalScorer {
     private int seasonId;
     private int fixtureId;
     private String playerName;
+    private String assistName;
     private String teamName;
     private int minute;
     private boolean isUserTeamPlayer;
@@ -27,6 +28,9 @@ public class GoalScorer {
 
     public String getPlayerName() { return playerName; }
     public void setPlayerName(String playerName) { this.playerName = playerName; }
+
+    public String getAssistName() { return assistName; }
+    public void setAssistName(String assistName) { this.assistName = assistName; }
 
     public String getTeamName() { return teamName; }
     public void setTeamName(String teamName) { this.teamName = teamName; }

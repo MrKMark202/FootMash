@@ -81,10 +81,10 @@ public class WinterTransferFragment extends Fragment {
             CustomPlayer p = db.customPlayerDao().getPlayerByIdSync(playerId);
             if (p == null) return;
 
-            List<RealTeam> leagueTeams =
-                db.realTeamDao().getTeamsByLeagueSync(p.getTargetLeagueId());
+            // Suitors can come from any league, not just the player's own.
+            List<RealTeam> candidateTeams = db.realTeamDao().getAllTeamsSync();
             List<ClubOfferEngine.RankedTeam> ranked = new ArrayList<>();
-            for (RealTeam t : leagueTeams) {
+            for (RealTeam t : candidateTeams) {
                 if (t.getId() == p.getTargetTeamId()) continue;   // current club excluded
                 List<RealPlayer> roster = db.realPlayerDao().getPlayersByTeamSync(t.getId());
                 int eff = TraitEngine.effectiveRating(TraitEngine.bestXi(roster));

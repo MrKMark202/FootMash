@@ -7,6 +7,7 @@ import hr.fipu.footmash.db.AppDatabase;
 import hr.fipu.footmash.repository.DraftRepository;
 import hr.fipu.footmash.repository.SavedGamesRepository;
 import hr.fipu.footmash.repository.SeasonRepository;
+import hr.fipu.footmash.repository.WorldCupRepository;
 
 /**
  * Production wiring for the app's singletons and repositories.
@@ -26,6 +27,7 @@ public class AppContainer {
     private volatile DraftRepository draftRepo;
     private volatile SeasonRepository seasonRepo;
     private volatile SavedGamesRepository savedGamesRepo;
+    private volatile WorldCupRepository worldCupRepo;
 
     public AppContainer(Context appContext) {
         this.appContext = appContext.getApplicationContext();
@@ -70,6 +72,17 @@ public class AppContainer {
             synchronized (this) {
                 r = seasonRepo;
                 if (r == null) r = seasonRepo = new SeasonRepository(database(), geminiRepository());
+            }
+        }
+        return r;
+    }
+
+    public WorldCupRepository worldCupRepository() {
+        WorldCupRepository r = worldCupRepo;
+        if (r == null) {
+            synchronized (this) {
+                r = worldCupRepo;
+                if (r == null) r = worldCupRepo = new WorldCupRepository(database(), geminiRepository());
             }
         }
         return r;

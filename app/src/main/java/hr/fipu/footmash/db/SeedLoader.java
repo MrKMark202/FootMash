@@ -27,7 +27,7 @@ public class SeedLoader {
      * pick up the new data on next launch. Old rows are wiped before reload so
      * stale players from a previous season don't linger.
      */
-    private static final String KEY_SEED_LOADED = "seed_loaded_v5_2025_26";
+    private static final String KEY_SEED_LOADED = "seed_loaded_v6_2627_icons";
 
     private static final String[] SEED_FILES = {
         "data/premierleague.json",
@@ -36,6 +36,22 @@ public class SeedLoader {
         "data/seriea.json",
         "data/ligue1.json"
     };
+
+    /**
+     * Clubs dropped from the bundled JSON so the seeded set matches the 26/27
+     * logo pack (Bundesliga & Ligue 1 also shrink to their real 18-team size).
+     * The replacement promoted sides are injected from {@link ExtraClubs}.
+     */
+    private static final java.util.Set<String> REMOVED_CLUBS = new java.util.HashSet<>(
+        java.util.Arrays.asList(
+            "West Ham United", "Wolverhampton Wanderers", "Burnley",   // Premier League
+            "UD Las Palmas", "CD Leganes", "Real Valladolid",          // La Liga
+            "Schalke 04", "Hertha BSC",                                // Bundesliga (→18)
+            "Saint-Etienne", "Montpellier"));                          // Ligue 1 (→18)
+
+    /** ID cursors for injected clubs/players — well above the bundled ranges. */
+    private static int nextExtraTeamId = 9001;
+    private static int nextExtraPlayerId = 90001;
 
     public static void loadIfNeeded(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
@@ -51,6 +67,9 @@ public class SeedLoader {
                 // Wipe any rows from a prior seed version before reloading.
                 db.realPlayerDao().deleteAll();
                 db.realTeamDao().deleteAll();
+
+                nextExtraTeamId = 9001;
+                nextExtraPlayerId = 90001;
 
                 for (String fileName : SEED_FILES) {
                     loadFile(context, db, gson, fileName);
@@ -78,17 +97,25 @@ public class SeedLoader {
         int leagueId = data.league.id;
         String leagueName = data.league.name;
         String country = data.league.country;
+        String iconFolder = LogoAssets.folderForLeague(leagueId);
 
         List<RealTeam> teams = new ArrayList<>();
         List<RealPlayer> players = new ArrayList<>();
 
         for (SeedTeamData teamData : data.teams) {
+            // Drop clubs that aren't part of the 26/27 set.
+            if (REMOVED_CLUBS.contains(teamData.name)) continue;
+
             RealTeam team = new RealTeam();
             team.setId(teamData.teamId);
             team.setName(teamData.name);
-            
+
+            // Prefer a bundled local logo; fall back to the JSON/remote badge.
             String bUrl = teamData.badgeUrl;
-            if (bUrl == null || bUrl.isEmpty()) {
+            String localRel = LogoAssets.resolveClub(context, iconFolder, teamData.name);
+            if (localRel != null) {
+                bUrl = LogoAssets.assetUri(localRel);
+            } else if (bUrl == null || bUrl.isEmpty()) {
                 String kebabName = teamData.name.toLowerCase()
                     .replace(" & ", "-")
                     .replace("&", "")
@@ -119,6 +146,41 @@ public class SeedLoader {
                 player.setOverall(p.overall);
                 player.setTeamId(teamData.teamId);
                 player.setTeamName(teamData.name);
+                player.setLeagueId(leagueId);
+                player.setLeagueName(leagueName);
+                players.add(player);
+            }
+        }
+
+        // Inject the promoted clubs that replace the removed ones for this league.
+        for (ExtraClubs.XClub xc : ExtraClubs.forLeague(leagueId)) {
+            int tid = nextExtraTeamId++;
+            RealTeam team = new RealTeam();
+            team.setId(tid);
+            team.setName(xc.name);
+            String rel = LogoAssets.resolveClub(context, iconFolder, xc.name);
+            team.setBadgeUrl(rel != null ? LogoAssets.assetUri(rel) : "");
+            team.setLeagueId(leagueId);
+            team.setLeagueName(leagueName);
+            team.setCountry(country);
+            teams.add(team);
+
+            for (ExtraClubs.XPlayer xp : xc.players) {
+                RealPlayer player = new RealPlayer();
+                player.setId(nextExtraPlayerId++);
+                player.setName(xp.name);
+                player.setPosition(xp.position);
+                player.setNationality(xp.nationality);
+                player.setAge(xp.age);
+                player.setPace(xp.pace);
+                player.setShooting(xp.shooting);
+                player.setPassing(xp.passing);
+                player.setDribbling(xp.dribbling);
+                player.setDefending(xp.defending);
+                player.setPhysical(xp.physical);
+                player.setOverall(xp.overall);
+                player.setTeamId(tid);
+                player.setTeamName(xc.name);
                 player.setLeagueId(leagueId);
                 player.setLeagueName(leagueName);
                 players.add(player);

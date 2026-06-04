@@ -17,6 +17,12 @@ public class UserClub {
     private long budget;
     private int seasonYear;
     private boolean isActive;
+    /**
+     * True once the user has passed through this season's winter transfer
+     * window (mid-season break after the first half). Reset every new season
+     * so the summer → winter → summer cycle repeats.
+     */
+    private boolean winterWindowDone;
 
     @Nullable
     private Integer realTeamSourceId;
@@ -52,6 +58,11 @@ public class UserClub {
 
     public boolean isActive() { return isActive; }
     public void setActive(boolean active) { isActive = active; }
+
+    public boolean isWinterWindowDone() { return winterWindowDone; }
+    public void setWinterWindowDone(boolean winterWindowDone) {
+        this.winterWindowDone = winterWindowDone;
+    }
 
     @Nullable
     public Integer getRealTeamSourceId() { return realTeamSourceId; }

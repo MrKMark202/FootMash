@@ -92,6 +92,7 @@ public class AILabFragment extends Fragment {
         b.textSavedPlayerOvr.setText(String.valueOf(p.getOverall()));
 
         row.setOnClickListener(v -> openCareerHub(p.getId()));
+        b.btnDeletePlayer.setOnClickListener(v -> confirmDelete(p));
         row.setOnLongClickListener(v -> {
             confirmDelete(p);
             return true;

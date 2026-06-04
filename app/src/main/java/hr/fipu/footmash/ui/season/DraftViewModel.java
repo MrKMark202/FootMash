@@ -64,7 +64,7 @@ public class DraftViewModel extends AndroidViewModel {
 
     private final MediatorLiveData<List<RealPlayer>> marketCandidates = new MediatorLiveData<>();
     private final MediatorLiveData<SynergyResult> synergy = new MediatorLiveData<>();
-    private LiveData<List<RealPlayer>> leaguePlayers;
+    private LiveData<List<RealPlayer>> marketPool;
 
     public DraftViewModel(@NonNull Application application) {
         super(application);
@@ -86,15 +86,17 @@ public class DraftViewModel extends AndroidViewModel {
         this.mode = mode;
         this.editMode = editMode;
 
-        if (leaguePlayers != null) marketCandidates.removeSource(leaguePlayers);
+        if (marketPool != null) marketCandidates.removeSource(marketPool);
         marketCandidates.removeSource(assignments);
         marketCandidates.removeSource(bench);
         marketCandidates.removeSource(selectedSlotKey);
         marketCandidates.removeSource(remainingBudget);
 
-        leaguePlayers = db.realPlayerDao().getPlayersByLeague(leagueId);
+        // Market spans every league so the user can sign players from abroad,
+        // not just their own division.
+        marketPool = db.realPlayerDao().getAllPlayers();
 
-        marketCandidates.addSource(leaguePlayers, p -> recomputeMarket());
+        marketCandidates.addSource(marketPool, p -> recomputeMarket());
         marketCandidates.addSource(assignments, p -> recomputeMarket());
         marketCandidates.addSource(bench, p -> recomputeMarket());
         marketCandidates.addSource(selectedSlotKey, p -> recomputeMarket());
@@ -443,7 +445,7 @@ public class DraftViewModel extends AndroidViewModel {
             marketCandidates.setValue(new ArrayList<>());
             return;
         }
-        List<RealPlayer> all = leaguePlayers != null ? leaguePlayers.getValue() : null;
+        List<RealPlayer> all = marketPool != null ? marketPool.getValue() : null;
         if (all == null) {
             marketCandidates.setValue(new ArrayList<>());
             return;

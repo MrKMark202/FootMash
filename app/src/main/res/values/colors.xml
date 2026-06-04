@@ -43,9 +43,18 @@
     <color name="stat_home">#FFFFFF</color>
     <color name="stat_away">#FFCC00</color>
 
+    <!-- Champions League palette -->
+    <color name="ucl_surface">#0A1A3F</color>
+    <color name="ucl_surface_dark">#06122B</color>
+    <color name="ucl_accent">#4D8CFF</color>
+    <color name="ucl_zone">#1B49B8</color>
+
     <!-- Pozicije igrača -->
     <color name="position_fw">#FF3B30</color>
     <color name="position_mf">#34C759</color>
     <color name="position_df">#32ADE6</color>
     <color name="position_gk">#FFCC00</color>
+
+    <!-- Launcher icon adaptive background (matches the FOOT MASH logo tile) -->
+    <color name="ic_launcher_bg">#FFFFFF</color>
 </resources>

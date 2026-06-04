@@ -16,4 +16,8 @@
         android:id="@+id/nav_season"
         android:icon="@android:drawable/ic_menu_agenda"
         android:title="@string/nav_season" />
+    <item
+        android:id="@+id/nav_world_cup"
+        android:icon="@drawable/ic_trophy"
+        android:title="@string/nav_world_cup" />
 </menu>

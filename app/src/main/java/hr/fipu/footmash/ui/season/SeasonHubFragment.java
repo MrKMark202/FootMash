@@ -25,6 +25,8 @@ import androidx.core.graphics.ColorUtils;
 
 import hr.fipu.footmash.R;
 import hr.fipu.footmash.databinding.FragmentSeasonHubBinding;
+import hr.fipu.footmash.db.LogoAssets;
+import hr.fipu.footmash.db.TopScorerRow;
 import hr.fipu.footmash.model.Fixture;
 import hr.fipu.footmash.model.SeasonStanding;
 import hr.fipu.footmash.model.UserClub;
@@ -38,6 +40,12 @@ public class SeasonHubFragment extends Fragment {
     /** Colour identity of the inherited club; DEFAULT for self-founded clubs. */
     private ClubColors.Theme theme = ClubColors.DEFAULT;
     private List<SeasonStanding> lastStandings;
+    private List<SeasonStanding> lastUclStandings;
+    private boolean showingUcl = false;
+    private String userClubName;
+    private UserClub lastClub;
+    private Integer lastNextMatchday;
+    private int clubId = -1;
     private final String GEMINI_API_KEY = hr.fipu.footmash.BuildConfig.GEMINI_API_KEY;
     private boolean seasonSimNavigated = false;
 
@@ -53,13 +61,22 @@ public class SeasonHubFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        int clubId = getArguments() != null ? getArguments().getInt("clubId", -1) : -1;
+        clubId = getArguments() != null ? getArguments().getInt("clubId", -1) : -1;
         if (clubId == -1) return;
 
         viewModel = new ViewModelProvider(this).get(SeasonHubViewModel.class);
         viewModel.init(clubId);
 
         observeViewModel();
+
+        binding.btnOpenTransfers.setOnClickListener(v -> openTransferWindow());
+        binding.btnCloseWindow.setOnClickListener(v -> viewModel.markWinterWindowDone());
+
+        // Competition toggle: league table ↔ Champions League table.
+        Glide.with(this).load(LogoAssets.assetUri(LogoAssets.UCL_CREST)).into(binding.btnCompUcl);
+        binding.btnCompLeague.setOnClickListener(v -> showCompetition(false));
+        binding.btnCompUcl.setOnClickListener(v -> showCompetition(true));
+        applyCompetitionTheme(false);
 
         binding.btnSimulate.setOnClickListener(v -> {
             Integer matchday = viewModel.getNextMatchday().getValue();
@@ -80,15 +97,87 @@ public class SeasonHubFragment extends Fragment {
             Navigation.findNavController(v).navigate(R.id.action_seasonHub_to_draft, args);
         });
 
-        binding.btnSimulateSeason.setOnClickListener(v -> confirmSimulateSeason());
-        viewModel.getSeasonSimState().observe(getViewLifecycleOwner(), this::bindSeasonSimState);
-        viewModel.getSeasonSimProgress().observe(getViewLifecycleOwner(), txt -> {
-            if (binding != null
-                    && viewModel.getSeasonSimState().getValue()
-                       == SeasonHubViewModel.SeasonSimState.RUNNING) {
-                binding.btnSimulateSeason.setText(txt);
+        binding.btnSimulateSeason.setOnClickListener(v -> {
+            if (viewModel.getSeasonSimState().getValue()
+                    == SeasonHubViewModel.SeasonSimState.RUNNING) {
+                viewModel.stopSeasonSimulation();   // tap again = stop
+            } else {
+                confirmSimulateSeason();
             }
         });
+        viewModel.getSeasonSimState().observe(getViewLifecycleOwner(), this::bindSeasonSimState);
+        viewModel.getSeasonSimProgress().observe(getViewLifecycleOwner(), txt -> {
+            // Progress goes on the matchday label so the season button can stay a
+            // tappable "stop" control while the simulation runs.
+            if (binding != null && txt != null && !txt.isEmpty()
+                    && viewModel.getSeasonSimState().getValue()
+                       == SeasonHubViewModel.SeasonSimState.RUNNING) {
+                binding.textMatchdayLabel.setText(txt);
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Budget / winter-window state may have changed in the transfer editor.
+        if (viewModel != null && clubId != -1) viewModel.refreshClub();
+    }
+
+    private void openTransferWindow() {
+        Bundle args = new Bundle();
+        args.putInt("clubId", clubId);
+        args.putBoolean("editMode", true);
+        args.putBoolean("transferMode", true);
+        Navigation.findNavController(requireView())
+            .navigate(R.id.action_seasonHub_to_draft, args);
+    }
+
+    /**
+     * Shows the summer/winter transfer-window card when the corresponding window
+     * is open, and locks the simulate buttons during the winter break until the
+     * window is closed.
+     */
+    private void updateTransferWindow() {
+        if (binding == null) return;
+        Integer next = lastNextMatchday;
+        boolean summerOpen = next != null && next == 1;
+        boolean winterOpen = next != null
+            && next == SeasonHubViewModel.WINTER_BREAK_NEXT_MATCHDAY
+            && lastClub != null && !lastClub.isWinterWindowDone();
+
+        if (!summerOpen && !winterOpen) {
+            binding.cardTransferWindow.setVisibility(View.GONE);
+            setSimulateLocked(false);
+            return;
+        }
+
+        binding.cardTransferWindow.setVisibility(View.VISIBLE);
+        double budgetM = lastClub != null ? lastClub.getBudget() / 1_000_000.0 : 0;
+        binding.textTransferWindowSubtitle.setText(
+            String.format("Budžet za transfere: €%.1fM", budgetM));
+
+        if (winterOpen) {
+            binding.textTransferWindowTitle.setText("❄️ Zimski prelazni rok");
+            binding.btnCloseWindow.setVisibility(View.VISIBLE);
+            // Lock simulation until the user passes through the winter window.
+            setSimulateLocked(true);
+        } else {
+            binding.textTransferWindowTitle.setText("☀️ Ljetni prelazni rok");
+            binding.btnCloseWindow.setVisibility(View.GONE);
+            setSimulateLocked(false);
+        }
+    }
+
+    private void setSimulateLocked(boolean locked) {
+        if (binding == null) return;
+        // Don't fight the running-season state, which manages its own enabled-ness.
+        if (viewModel != null && viewModel.getSeasonSimState().getValue()
+                == SeasonHubViewModel.SeasonSimState.RUNNING) return;
+        binding.btnSimulate.setEnabled(!locked);
+        binding.btnSimulate.setAlpha(locked ? 0.4f : 1f);
+        binding.btnSimulateSeason.setEnabled(!locked);
+        binding.btnSimulateSeason.setAlpha(locked ? 0.4f : 1f);
     }
 
     private void confirmSimulateSeason() {
@@ -107,17 +196,39 @@ public class SeasonHubFragment extends Fragment {
         binding.progressSeason.setVisibility(running ? View.VISIBLE : View.GONE);
         binding.btnSimulate.setEnabled(!running);
         binding.btnSimulate.setAlpha(running ? 0.5f : 1f);
-        binding.btnSimulateSeason.setEnabled(!running);
-        binding.btnSimulateSeason.setAlpha(running ? 0.7f : 1f);
         binding.btnEditSquad.setEnabled(!running);
-        if (!running) binding.btnSimulateSeason.setText("Simuliraj sezonu");
+
+        // While running, the season button stays enabled and becomes a red STOP
+        // control so the user can halt the simulation whenever they want.
+        binding.btnSimulateSeason.setEnabled(true);
+        binding.btnSimulateSeason.setAlpha(1f);
+        if (running) {
+            binding.btnSimulateSeason.setText("⏹ Zaustavi simulaciju");
+            binding.btnSimulateSeason.setBackgroundTintList(android.content.res.ColorStateList
+                .valueOf(ContextCompat.getColor(requireContext(), R.color.error)));
+            binding.btnSimulateSeason.setTextColor(
+                ContextCompat.getColor(requireContext(), R.color.text_on_primary));
+        } else {
+            binding.btnSimulateSeason.setText("Simuliraj sezonu");
+            binding.btnSimulateSeason.setBackgroundTintList(android.content.res.ColorStateList
+                .valueOf(ContextCompat.getColor(requireContext(), R.color.divider)));
+            binding.btnSimulateSeason.setTextColor(
+                ContextCompat.getColor(requireContext(), R.color.text_primary));
+        }
 
         if (state == SeasonHubViewModel.SeasonSimState.DONE && !seasonSimNavigated) {
-            seasonSimNavigated = true;
-            Bundle args = new Bundle();
-            args.putInt("clubId", viewModel.getClubId());
-            Navigation.findNavController(requireView())
-                .navigate(R.id.action_seasonHub_to_summary, args);
+            Boolean finished = viewModel.getSeasonFinished().getValue();
+            if (finished != null && finished) {
+                seasonSimNavigated = true;
+                Bundle args = new Bundle();
+                args.putInt("clubId", viewModel.getClubId());
+                Navigation.findNavController(requireView())
+                    .navigate(R.id.action_seasonHub_to_summary, args);
+            } else {
+                // Paused at the winter break — surface the window, stay on the hub.
+                viewModel.refreshClub();
+                updateTransferWindow();
+            }
         }
     }
 
@@ -125,11 +236,16 @@ public class SeasonHubFragment extends Fragment {
         viewModel.getClub().observe(getViewLifecycleOwner(), this::bindClub);
         viewModel.getNextUserFixture().observe(getViewLifecycleOwner(), this::bindNextMatch);
         viewModel.getNextMatchday().observe(getViewLifecycleOwner(), this::bindMatchday);
-        viewModel.getStandings().observe(getViewLifecycleOwner(), this::bindStandings);
+        viewModel.getStandings().observe(getViewLifecycleOwner(), this::onLeagueStandings);
+        viewModel.getUclStandings().observe(getViewLifecycleOwner(), this::onUclStandings);
+        viewModel.getLeaders().observe(getViewLifecycleOwner(), this::bindLeaders);
     }
 
     private void bindClub(UserClub club) {
         if (club == null) return;
+        lastClub = club;
+        userClubName = club.getClubName();
+        updateTransferWindow();
         binding.textClubName.setText(club.getClubName());
         binding.textLeague.setText(club.getLeagueName() + " · " + club.getSeasonLabel());
         double budgetM = club.getBudget() / 1_000_000.0;
@@ -140,7 +256,12 @@ public class SeasonHubFragment extends Fragment {
         ClubColors.styleButton(binding.btnSimulate, theme);
         binding.textMatchdayLabel.setTextColor(theme.primary);
         binding.textClubName.setTextColor(theme.primary);
-        if (lastStandings != null) bindStandings(lastStandings);
+
+        // The league crest drives the left toggle button.
+        String crest = LogoAssets.leagueCrestUri(club.getLeagueId());
+        if (crest != null) Glide.with(this).load(crest).into(binding.btnCompLeague);
+
+        renderActive();
     }
 
     private void bindNextMatch(Fixture f) {
@@ -154,6 +275,7 @@ public class SeasonHubFragment extends Fragment {
     }
 
     private void bindMatchday(Integer matchday) {
+        lastNextMatchday = matchday;
         if (matchday == null || matchday == 0) {
             binding.textMatchdayLabel.setText("Sezona završena!");
             binding.btnSimulate.setText("Pogledaj završnicu");
@@ -161,35 +283,159 @@ public class SeasonHubFragment extends Fragment {
             binding.textMatchdayLabel.setText("Kolo " + matchday);
             binding.btnSimulate.setText("Simuliraj kolo " + matchday);
         }
+        updateTransferWindow();
     }
 
-    private void bindStandings(List<SeasonStanding> list) {
+    // ─── Competition toggle (league table ↔ Champions League) ───────────────────
+
+    private void onLeagueStandings(List<SeasonStanding> list) {
         lastStandings = list;
+        if (!showingUcl) {
+            renderStandings(list, false);
+            viewModel.refreshLeaders(clubId);
+        }
+    }
+
+    private void onUclStandings(List<SeasonStanding> list) {
+        lastUclStandings = list;
+        if (showingUcl) {
+            renderStandings(list, true);
+            viewModel.refreshLeaders(viewModel.getUclId());
+        }
+    }
+
+    private void renderActive() {
+        renderStandings(showingUcl ? lastUclStandings : lastStandings, showingUcl);
+    }
+
+    private void showCompetition(boolean ucl) {
+        showingUcl = ucl;
+        applyCompetitionTheme(ucl);
+        renderActive();
+        viewModel.refreshLeaders(ucl ? viewModel.getUclId() : clubId);
+    }
+
+    /** Recolours the table + leaders cards and the toggle to the active competition. */
+    private void applyCompetitionTheme(boolean ucl) {
+        if (binding == null) return;
+        int surface = ContextCompat.getColor(requireContext(), R.color.surface);
+        int uclSurface = ContextCompat.getColor(requireContext(), R.color.ucl_surface);
+        int uclAccent = ContextCompat.getColor(requireContext(), R.color.ucl_accent);
+        int secondary = ContextCompat.getColor(requireContext(), R.color.text_secondary);
+        int primary = ContextCompat.getColor(requireContext(), R.color.text_primary);
+
+        binding.cardStandings.setCardBackgroundColor(ucl ? uclSurface : surface);
+        binding.cardLeaders.setCardBackgroundColor(ucl ? uclSurface : surface);
+        binding.textCompTitle.setText(ucl ? "LIGA PRVAKA" : "TABLICA");
+        binding.textCompTitle.setTextColor(ucl ? uclAccent : secondary);
+
+        int labelColor = ucl ? uclAccent : primary;
+        binding.labelScorers.setTextColor(labelColor);
+        binding.labelAssisters.setTextColor(labelColor);
+        binding.labelClean.setTextColor(labelColor);
+
+        binding.btnCompLeague.setBackgroundResource(
+            ucl ? R.drawable.bg_pill_unselected : R.drawable.bg_pill_selected);
+        binding.btnCompUcl.setBackgroundResource(
+            ucl ? R.drawable.bg_pill_selected : R.drawable.bg_pill_unselected);
+    }
+
+    private void renderStandings(List<SeasonStanding> list, boolean ucl) {
+        if (binding == null) return;
         LinearLayout container = binding.standingsContainer;
         container.removeAllViews();
         if (list == null || list.isEmpty()) return;
+
+        int uclAccent = ContextCompat.getColor(requireContext(), R.color.ucl_accent);
+        int primary = ContextCompat.getColor(requireContext(), R.color.text_primary);
+        int zoneTint = ColorUtils.setAlphaComponent(
+            ContextCompat.getColor(requireContext(), R.color.ucl_zone), 70);
+        int uclUserRow = ColorUtils.setAlphaComponent(uclAccent, 50);
+        int uclRow = ColorUtils.setAlphaComponent(uclAccent, 22);
 
         for (int i = 0; i < list.size(); i++) {
             SeasonStanding s = list.get(i);
             View row = LayoutInflater.from(requireContext())
                 .inflate(R.layout.item_standing_row, container, false);
 
-            ((TextView) row.findViewById(R.id.text_rank)).setText(String.valueOf(i + 1));
-            ((TextView) row.findViewById(R.id.text_team_name)).setText(s.getTeamName());
+            TextView rankView = row.findViewById(R.id.text_rank);
+            TextView nameView = row.findViewById(R.id.text_team_name);
+            rankView.setText(String.valueOf(i + 1));
+            nameView.setText(s.getTeamName());
             ((TextView) row.findViewById(R.id.text_played)).setText(String.valueOf(s.getPlayed()));
             ((TextView) row.findViewById(R.id.text_won)).setText(String.valueOf(s.getWon()));
             ((TextView) row.findViewById(R.id.text_drawn)).setText(String.valueOf(s.getDrawn()));
             ((TextView) row.findViewById(R.id.text_lost)).setText(String.valueOf(s.getLost()));
             ((TextView) row.findViewById(R.id.text_pts)).setText(String.valueOf(s.getPoints()));
 
-            TextView nameView = row.findViewById(R.id.text_team_name);
             if (s.isUserTeam()) {
-                // The user's row is highlighted in their club's colours.
-                nameView.setTextColor(theme.primary);
+                nameView.setTextColor(ucl ? uclAccent : theme.primary);
                 nameView.setTypeface(null, android.graphics.Typeface.BOLD);
-                row.setBackgroundColor(theme.rowTint());
+                row.setBackgroundColor(ucl ? uclUserRow : theme.rowTint());
+            } else if (ucl) {
+                nameView.setTextColor(primary);
+                row.setBackgroundColor(uclRow);
+            } else if (i < 5) {
+                // Top 5 = Champions League qualification zone.
+                nameView.setTextColor(primary);
+                rankView.setTextColor(uclAccent);
+                rankView.setTypeface(null, android.graphics.Typeface.BOLD);
+                row.setBackgroundColor(zoneTint);
             } else {
                 loadRowTint(row, s);
+            }
+
+            container.addView(row);
+        }
+    }
+
+    // ─── Season leaderboards ────────────────────────────────────────────────────
+
+    private void bindLeaders(SeasonHubViewModel.Leaders l) {
+        if (binding == null || l == null) return;
+        if (l.isEmpty()) {
+            binding.cardLeaders.setVisibility(View.GONE);
+            return;
+        }
+        binding.cardLeaders.setVisibility(View.VISIBLE);
+        fillLeaderSection(binding.labelScorers, binding.leadersScorersContainer,
+            l.scorers, true);
+        fillLeaderSection(binding.labelAssisters, binding.leadersAssistersContainer,
+            l.assisters, true);
+        // Clean sheets are kept by the whole team, so the team name is the holder.
+        fillLeaderSection(binding.labelClean, binding.leadersCleanContainer,
+            l.cleanSheets, false);
+    }
+
+    private void fillLeaderSection(TextView label, LinearLayout container,
+                                   List<TopScorerRow> rows, boolean showTeam) {
+        container.removeAllViews();
+        boolean empty = rows == null || rows.isEmpty();
+        label.setVisibility(empty ? View.GONE : View.VISIBLE);
+        container.setVisibility(empty ? View.GONE : View.VISIBLE);
+        if (empty) return;
+
+        for (int i = 0; i < rows.size(); i++) {
+            TopScorerRow r = rows.get(i);
+            View row = LayoutInflater.from(requireContext())
+                .inflate(R.layout.item_leader_row, container, false);
+
+            ((TextView) row.findViewById(R.id.text_leader_rank)).setText(String.valueOf(i + 1));
+            TextView nameView = row.findViewById(R.id.text_leader_name);
+            nameView.setText(r.playerName);
+            TextView teamView = row.findViewById(R.id.text_leader_team);
+            if (showTeam && r.teamName != null && !r.teamName.isEmpty()) {
+                teamView.setText(r.teamName);
+                teamView.setVisibility(View.VISIBLE);
+            } else {
+                teamView.setVisibility(View.GONE);
+            }
+            ((TextView) row.findViewById(R.id.text_leader_value)).setText(String.valueOf(r.goals));
+
+            // Highlight the user's club in their colour.
+            if (userClubName != null && userClubName.equals(r.teamName)) {
+                nameView.setTextColor(theme.primary);
+                nameView.setTypeface(null, android.graphics.Typeface.BOLD);
             }
 
             container.addView(row);

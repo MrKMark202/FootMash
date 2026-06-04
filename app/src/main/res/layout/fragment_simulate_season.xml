@@ -105,12 +105,20 @@
                     android:layout_marginTop="14dp"
                     android:layout_marginBottom="14dp" />
 
-                <!-- Stat rows -->
-                <include android:id="@+id/rowApps"     layout="@layout/item_stat_readout" />
-                <include android:id="@+id/rowGoals"   layout="@layout/item_stat_readout" />
-                <include android:id="@+id/rowAssists" layout="@layout/item_stat_readout" />
-                <include android:id="@+id/rowRating"  layout="@layout/item_stat_readout" />
-                <include android:id="@+id/rowFinish"  layout="@layout/item_stat_readout" />
+                <!-- Stat rows. Width/height are overridden here because the
+                     included root declares layout_width="0dp" (GridLayout
+                     leftover) which would otherwise collapse the row to zero
+                     width inside this vertical LinearLayout. -->
+                <include android:id="@+id/rowApps"    layout="@layout/item_stat_readout"
+                    android:layout_width="match_parent" android:layout_height="wrap_content" />
+                <include android:id="@+id/rowGoals"   layout="@layout/item_stat_readout"
+                    android:layout_width="match_parent" android:layout_height="wrap_content" />
+                <include android:id="@+id/rowAssists" layout="@layout/item_stat_readout"
+                    android:layout_width="match_parent" android:layout_height="wrap_content" />
+                <include android:id="@+id/rowRating"  layout="@layout/item_stat_readout"
+                    android:layout_width="match_parent" android:layout_height="wrap_content" />
+                <include android:id="@+id/rowFinish"  layout="@layout/item_stat_readout"
+                    android:layout_width="match_parent" android:layout_height="wrap_content" />
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

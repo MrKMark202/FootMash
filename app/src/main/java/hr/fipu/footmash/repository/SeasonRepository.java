@@ -121,10 +121,130 @@ public class SeasonRepository {
         fixtureDao.deleteFixturesForSeason(clubId);
         standingDao.deleteStandingsForSeason(clubId);
 
+        // Also wipe this season's Champions League so a fresh field is drawn.
+        int uclId = uclSeasonId(clubId);
+        fixtureDao.deleteMatchResultsForSeason(uclId);
+        fixtureDao.deleteGoalScorersForSeason(uclId);
+        fixtureDao.deleteFixturesForSeason(uclId);
+        standingDao.deleteStandingsForSeason(uclId);
+
         club.setSeasonYear(club.getSeasonYear() + 1);
+        // New season → summer window reopens; the winter window re-arms for the
+        // upcoming mid-season break.
+        club.setWinterWindowDone(false);
         userClubDao.updateClub(club);
 
         startSeasonIfNeeded(clubId);
+    }
+
+    // ─── Champions League ──────────────────────────────────────────────────────
+
+    /** Season ids for the parallel UCL competition are offset from the league's. */
+    public static final int UCL_OFFSET = 5_000_000;
+    /** Total clubs in the UCL mini-league phase (user + elite foreign sides). */
+    public static final int UCL_TEAMS = 8;
+
+    public static int uclSeasonId(int clubId) {
+        return clubId + UCL_OFFSET;
+    }
+
+    private static final class RankedTeam {
+        final RealTeam team; final int eff;
+        RankedTeam(RealTeam team, int eff) { this.team = team; this.eff = eff; }
+    }
+
+    /**
+     * Draws this season's Champions League field — the user's club plus the
+     * strongest foreign sides across all leagues — and generates its fixtures
+     * and standings under {@link #uclSeasonId}. No-op if already set up.
+     * Must run on a background thread.
+     */
+    public void setupUclIfNeeded(int clubId) {
+        int uclId = uclSeasonId(clubId);
+        if (fixtureDao.countFixtures(uclId) > 0) return;
+        UserClub club = userClubDao.getClubByIdSync(clubId);
+        if (club == null) return;
+
+        Integer src = club.getRealTeamSourceId();
+        List<RankedTeam> ranked = new ArrayList<>();
+        for (RealTeam t : realTeamDao.getAllTeamsSync()) {
+            if (src != null && t.getId() == src) continue; // user already represented
+            List<RealPlayer> roster = realPlayerDao.getPlayersByTeamSync(t.getId());
+            int eff = clampRating(TraitEngine.effectiveRating(TraitEngine.bestXi(roster)));
+            ranked.add(new RankedTeam(t, eff));
+        }
+        ranked.sort((a, b) -> Integer.compare(b.eff, a.eff));
+
+        int foreign = Math.min(UCL_TEAMS - 1, ranked.size());
+        List<RealTeam> field = new ArrayList<>();
+        for (int i = 0; i < foreign; i++) field.add(ranked.get(i).team);
+
+        fixtureDao.insertAll(generateFixtures(uclId, club.getClubName(), field));
+
+        List<SeasonStanding> rows = new ArrayList<>();
+        SeasonStanding userRow = new SeasonStanding();
+        userRow.setSeasonId(uclId);
+        userRow.setTeamId(club.getId());
+        userRow.setTeamName(club.getClubName());
+        userRow.setUserTeam(true);
+        if (src != null) {
+            RealTeam st = realTeamDao.getTeamById(src);
+            if (st != null) userRow.setBadgeUrl(st.getBadgeUrl());
+        }
+        rows.add(userRow);
+        for (RealTeam rt : field) {
+            SeasonStanding r = new SeasonStanding();
+            r.setSeasonId(uclId);
+            r.setTeamId(rt.getId());
+            r.setTeamName(rt.getName());
+            r.setUserTeam(false);
+            r.setBadgeUrl(rt.getBadgeUrl());
+            rows.add(r);
+        }
+        standingDao.insertAll(rows);
+    }
+
+    /**
+     * Simulates the next UCL matchday locally (no Gemini needed) and updates the
+     * UCL standings + scorers. Returns false when the UCL phase is complete.
+     * Must run on a background thread.
+     */
+    public boolean simulateUclMatchday(int clubId) {
+        int uclId = uclSeasonId(clubId);
+        int matchday = fixtureDao.getNextMatchdaySync(uclId);
+        if (matchday <= 0) return false;
+        UserClub club = userClubDao.getClubByIdSync(clubId);
+        if (club == null) return false;
+        List<Fixture> fixtures = fixtureDao.getFixturesByMatchdaySync(uclId, matchday);
+        if (fixtures.isEmpty()) return false;
+
+        Map<String, Integer> ratings = new HashMap<>();
+        Map<String, List<RealPlayer>> rosters = new HashMap<>();
+
+        List<RealPlayer> userXi = userStartingXi(clubId);
+        int userEff = userXi.isEmpty() ? 78 : clampRating(TraitEngine.effectiveRating(userXi));
+        ratings.put(club.getClubName(), userEff);
+        rosters.put(club.getClubName(), userXi);
+
+        for (Fixture f : fixtures) {
+            addUclTeam(f.getHomeTeamId(), f.getHomeTeamName(), ratings, rosters);
+            addUclTeam(f.getAwayTeamId(), f.getAwayTeamName(), ratings, rosters);
+        }
+
+        List<MatchSimulator.ParsedMatch> results =
+            LocalSimulator.simulateAll(fixtures, ratings, rosters);
+        saveResults(uclId, fixtures, results);
+        recalculateStandings(uclId);
+        return true;
+    }
+
+    private void addUclTeam(int teamId, String name, Map<String, Integer> ratings,
+                            Map<String, List<RealPlayer>> rosters) {
+        if (teamId == 0 || ratings.containsKey(name)) return; // user (id 0) already added
+        List<RealPlayer> roster = realPlayerDao.getPlayersByTeamSync(teamId);
+        int eff = clampRating(TraitEngine.effectiveRating(TraitEngine.bestXi(roster)));
+        ratings.put(name, eff);
+        rosters.put(name, roster != null ? roster : new ArrayList<>());
     }
 
     // ─── Simulation ───────────────────────────────────────────────────────────
@@ -395,6 +515,7 @@ public class SeasonRepository {
                 gs.setSeasonId(seasonId);
                 gs.setFixtureId(f.getId());
                 gs.setPlayerName(sc.name);
+                gs.setAssistName(sc.assist != null ? sc.assist.trim() : null);
                 gs.setTeamName("home".equals(sc.team)
                     ? f.getHomeTeamName() : f.getAwayTeamName());
                 gs.setMinute(Math.max(1, Math.min(90, sc.minute)));

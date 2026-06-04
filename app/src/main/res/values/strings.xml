@@ -7,6 +7,36 @@
     <string name="nav_teams">Timovi</string>
     <string name="nav_ai_lab">Kreiranje igrača</string>
     <string name="nav_season">Sezona</string>
+    <string name="nav_world_cup">Mundijal</string>
+
+    <!-- World Cup mode -->
+    <string name="wc_start">Pokreni Svjetsko prvenstvo</string>
+    <string name="wc_continue">Nastavi prvenstvo</string>
+    <string name="wc_pick_nation">Odaberi reprezentaciju</string>
+    <string name="wc_pick_nation_sub">Izaberi naciju koju ćeš voditi do naslova</string>
+    <string name="wc_build_squad">Sastavi reprezentaciju</string>
+    <string name="wc_build_squad_sub">Odaberi 23 igrača iz svoje nacije</string>
+    <string name="wc_formation">Formacija</string>
+    <string name="wc_selected">Odabrano</string>
+    <string name="wc_confirm_squad">Potvrdi reprezentaciju</string>
+    <string name="wc_simulate">Simuliraj</string>
+    <string name="wc_simulating">Simuliram…</string>
+    <string name="wc_results_title">Rezultati</string>
+    <string name="wc_groups">Skupine</string>
+    <string name="wc_bracket">Ždrijeb</string>
+    <string name="wc_next_match">Sljedeći susret</string>
+    <string name="wc_champion">Prvak</string>
+    <string name="wc_new_tournament">Novo prvenstvo</string>
+    <string name="wc_view_champion">Pogledaj prvaka</string>
+    <string name="wc_players_available">stvarnih igrača</string>
+    <string name="wc_round_r32">Šesnaestina finala</string>
+    <string name="wc_round_r16">Osmina finala</string>
+    <string name="wc_round_qf">Četvrtfinale</string>
+    <string name="wc_round_sf">Polufinale</string>
+    <string name="wc_round_final">Finale</string>
+    <string name="wc_round_third">Za 3. mjesto</string>
+    <string name="wc_group_stage">Skupine · kolo %1$d/3</string>
+    <string name="wc_eliminated">Tvoja reprezentacija je ispala</string>
 
     <!-- Home -->
     <string name="welcome_title">Dobrodošli u FootMash</string>
@@ -22,6 +52,9 @@
     <!-- Leagues -->
     <string name="leagues_title">Lige</string>
     <string name="no_leagues">Nema dostupnih liga</string>
+    <string name="league_legends_label">LEGENDE</string>
+    <string name="league_clubs_label">KLUBOVI</string>
+    <string name="league_open_action">Svi klubovi i tablica →</string>
     <string name="league_type">Liga</string>
     <string name="cup_type">Kup</string>
     <string name="select_season">Odaberi sezonu</string>
