@@ -27,6 +27,8 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private HomeViewModel viewModel;
     private LeaguesAdapter featuredLeaguesAdapter;
+    private UserClub activeClub;
+    private Fixture currentFixture;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -46,14 +48,10 @@ public class HomeFragment extends Fragment {
     }
 
     private void setupClickListeners() {
+        // Tapping the "last match" card jumps back to the season the user is
+        // managing, so they can pick up where they left off.
         binding.featuredMatchCard.setOnClickListener(v ->
-                navigateToTeams(177, "Premier League"));
-
-        binding.chipPremierLeague.setOnClickListener(v ->
-                navigateToTeams(177, "Premier League"));
-
-        binding.chipCup.setOnClickListener(v ->
-                navigateToTeams(302, "La Liga"));
+                Navigation.findNavController(v).navigate(R.id.nav_season));
 
         binding.textAllMatches.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.nav_leagues));
@@ -67,15 +65,6 @@ public class HomeFragment extends Fragment {
                 Navigation.findNavController(v).navigate(R.id.nav_world_cup));
         binding.cardActionLeagues.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.nav_leagues));
-    }
-
-    private void navigateToTeams(int leagueId, String leagueName) {
-        Bundle args = new Bundle();
-        args.putInt("leagueId", leagueId);
-        args.putInt("season", 2024);
-        args.putString("leagueName", leagueName);
-        Navigation.findNavController(binding.getRoot())
-                .navigate(R.id.nav_teams_list, args);
     }
 
     private void setupRecyclerView() {
@@ -101,39 +90,27 @@ public class HomeFragment extends Fragment {
             featuredLeaguesAdapter.setLeagues(leagues);
         });
 
-        viewModel.getActiveClub().observe(getViewLifecycleOwner(), club -> {
-            if (club == null) {
-                binding.featuredMatchCard.setVisibility(View.GONE);
-                binding.lastMatchHeader.setVisibility(View.GONE);
-            } else {
-                viewModel.getLastPlayedUserFixture(club.getId()).observe(getViewLifecycleOwner(), fixture -> {
-                    if (fixture == null) {
-                        binding.featuredMatchCard.setVisibility(View.GONE);
-                        binding.lastMatchHeader.setVisibility(View.GONE);
-                    } else {
-                        binding.featuredMatchCard.setVisibility(View.VISIBLE);
-                        binding.lastMatchHeader.setVisibility(View.VISIBLE);
-                        bindFixture(fixture, club);
-                    }
-                });
-            }
+        // Each source is observed exactly once; switchMap in the ViewModel swaps
+        // the underlying query when the active club / fixture changes.
+        viewModel.getActiveClub().observe(getViewLifecycleOwner(), club -> activeClub = club);
+
+        viewModel.getLastFixture().observe(getViewLifecycleOwner(), fixture -> {
+            currentFixture = fixture;
+            boolean show = fixture != null;
+            binding.featuredMatchCard.setVisibility(show ? View.VISIBLE : View.GONE);
+            binding.lastMatchHeader.setVisibility(show ? View.VISIBLE : View.GONE);
+            if (show) bindFixture(fixture);
         });
-    }
 
-    private void bindFixture(Fixture fixture, UserClub club) {
-        binding.textHomeLeague.setText(club.getLeagueName());
-        binding.textHomeMatchday.setText("Kolo " + fixture.getMatchday());
-
-        binding.textHomeTeamName.setText(fixture.getHomeTeamName());
-        binding.textAwayTeamName.setText(fixture.getAwayTeamName());
-
-        viewModel.getMatchResult(fixture.getId()).observe(getViewLifecycleOwner(), result -> {
+        viewModel.getLastResult().observe(getViewLifecycleOwner(), result -> {
             if (result != null) {
                 binding.textMatchScore.setText(result.getHomeGoals() + " : " + result.getAwayGoals());
+            } else {
+                binding.textMatchScore.setText("-");
             }
         });
 
-        viewModel.getGoalScorers(fixture.getId()).observe(getViewLifecycleOwner(), scorers -> {
+        viewModel.getLastScorers().observe(getViewLifecycleOwner(), scorers -> {
             if (scorers != null && !scorers.isEmpty()) {
                 StringBuilder sb = new StringBuilder();
                 for (GoalScorer s : scorers) {
@@ -146,32 +123,35 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        // Fetch badges
-        viewModel.getTeamBadgeUrl(fixture.getHomeTeamId()).observe(getViewLifecycleOwner(), url -> {
-            String badgeUrl = url;
-            if (badgeUrl == null || badgeUrl.isEmpty()) {
-                String kebabName = fixture.getHomeTeamName().toLowerCase()
-                    .replace(" & ", "-")
-                    .replace("&", "")
-                    .replace(" ", "-")
-                    .replace(".", "");
-                badgeUrl = "https://apiv2.allsportsapi.com/logo/" + fixture.getHomeTeamId() + "_" + kebabName + ".jpg";
-            }
-            Glide.with(this).load(badgeUrl).placeholder(new InitialsBadgeDrawable(fixture.getHomeTeamName())).into(binding.imgHomeTeamBadge);
+        viewModel.getHomeBadgeUrl().observe(getViewLifecycleOwner(), url -> {
+            if (currentFixture != null) loadBadge(url, currentFixture.getHomeTeamId(),
+                currentFixture.getHomeTeamName(), binding.imgHomeTeamBadge);
         });
+        viewModel.getAwayBadgeUrl().observe(getViewLifecycleOwner(), url -> {
+            if (currentFixture != null) loadBadge(url, currentFixture.getAwayTeamId(),
+                currentFixture.getAwayTeamName(), binding.imgAwayTeamBadge);
+        });
+    }
 
-        viewModel.getTeamBadgeUrl(fixture.getAwayTeamId()).observe(getViewLifecycleOwner(), url -> {
-            String badgeUrl = url;
-            if (badgeUrl == null || badgeUrl.isEmpty()) {
-                String kebabName = fixture.getAwayTeamName().toLowerCase()
-                    .replace(" & ", "-")
-                    .replace("&", "")
-                    .replace(" ", "-")
-                    .replace(".", "");
-                badgeUrl = "https://apiv2.allsportsapi.com/logo/" + fixture.getAwayTeamId() + "_" + kebabName + ".jpg";
-            }
-            Glide.with(this).load(badgeUrl).placeholder(new InitialsBadgeDrawable(fixture.getAwayTeamName())).into(binding.imgAwayTeamBadge);
-        });
+    private void bindFixture(Fixture fixture) {
+        binding.textHomeLeague.setText(activeClub != null ? activeClub.getLeagueName() : "");
+        binding.textHomeMatchday.setText("Kolo " + fixture.getMatchday());
+        binding.textHomeTeamName.setText(fixture.getHomeTeamName());
+        binding.textAwayTeamName.setText(fixture.getAwayTeamName());
+    }
+
+    private void loadBadge(String url, int teamId, String teamName, android.widget.ImageView target) {
+        String badgeUrl = url;
+        if (badgeUrl == null || badgeUrl.isEmpty()) {
+            String kebabName = teamName.toLowerCase()
+                .replace(" & ", "-")
+                .replace("&", "")
+                .replace(" ", "-")
+                .replace(".", "");
+            badgeUrl = "https://apiv2.allsportsapi.com/logo/" + teamId + "_" + kebabName + ".jpg";
+        }
+        Glide.with(this).load(badgeUrl)
+            .placeholder(new InitialsBadgeDrawable(teamName)).into(target);
     }
 
     @Override

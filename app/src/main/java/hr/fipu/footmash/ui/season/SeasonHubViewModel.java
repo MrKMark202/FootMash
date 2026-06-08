@@ -144,7 +144,9 @@ public class SeasonHubViewModel extends AndroidViewModel {
                 if (!winterDone && matchday >= WINTER_BREAK_NEXT_MATCHDAY) break;
                 guard++;
                 seasonSimProgress.postValue("Simuliram kolo " + matchday + " / 38");
-                if (!seasonRepo.simulateMatchday(clubId, matchday, apiKey)) break;
+                // Whole-season runs use the local engine: realistic strength-driven
+                // results and a proper Golden Boot race, with no ~38 network calls.
+                if (!seasonRepo.simulateMatchday(clubId, matchday, apiKey, false)) break;
                 // Advance the Champions League alongside the league (it finishes
                 // earlier, then this is a cheap no-op).
                 seasonRepo.simulateUclMatchday(clubId);

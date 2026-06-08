@@ -70,6 +70,8 @@ public class SeasonSummaryFragment extends Fragment {
             binding.textUserPositionNote.setText(positionSuffix);
         });
 
+        viewModel.getFullTable().observe(getViewLifecycleOwner(), this::renderTable);
+
         binding.btnNewSeason.setOnClickListener(v -> {
             NavOptions opts = new NavOptions.Builder()
                 .setPopUpTo(R.id.nav_season, true)
@@ -96,6 +98,40 @@ public class SeasonSummaryFragment extends Fragment {
         });
 
         applyClubTheme(clubId);
+    }
+
+    /** Inflates the full final standings into the summary's table card. */
+    private void renderTable(java.util.List<hr.fipu.footmash.model.SeasonStanding> list) {
+        if (binding == null || list == null) return;
+        android.widget.LinearLayout container = binding.standingsContainer;
+        container.removeAllViews();
+        int gold = android.graphics.Color.parseColor("#FFD700");
+        int accent = android.graphics.Color.parseColor("#2962FF");
+        for (int i = 0; i < list.size(); i++) {
+            hr.fipu.footmash.model.SeasonStanding s = list.get(i);
+            View row = LayoutInflater.from(requireContext())
+                .inflate(R.layout.item_standing_row, container, false);
+
+            android.widget.TextView rank = row.findViewById(R.id.text_rank);
+            android.widget.TextView name = row.findViewById(R.id.text_team_name);
+            rank.setText(String.valueOf(i + 1));
+            name.setText(s.getTeamName());
+            ((android.widget.TextView) row.findViewById(R.id.text_played)).setText(String.valueOf(s.getPlayed()));
+            ((android.widget.TextView) row.findViewById(R.id.text_won)).setText(String.valueOf(s.getWon()));
+            ((android.widget.TextView) row.findViewById(R.id.text_drawn)).setText(String.valueOf(s.getDrawn()));
+            ((android.widget.TextView) row.findViewById(R.id.text_lost)).setText(String.valueOf(s.getLost()));
+            ((android.widget.TextView) row.findViewById(R.id.text_pts)).setText(String.valueOf(s.getPoints()));
+
+            if (i == 0) {
+                rank.setTextColor(gold);
+                rank.setTypeface(null, android.graphics.Typeface.BOLD);
+            }
+            if (s.isUserTeam()) {
+                name.setTextColor(accent);
+                name.setTypeface(null, android.graphics.Typeface.BOLD);
+            }
+            container.addView(row);
+        }
     }
 
     /** Loads the club off-thread and re-skins the user-result card with its colours. */

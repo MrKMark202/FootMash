@@ -27,7 +27,7 @@ public class SeedLoader {
      * pick up the new data on next launch. Old rows are wiped before reload so
      * stale players from a previous season don't linger.
      */
-    private static final String KEY_SEED_LOADED = "seed_loaded_v6_2627_icons";
+    private static final String KEY_SEED_LOADED = "seed_loaded_v7_spurs_id_fix";
 
     private static final String[] SEED_FILES = {
         "data/premierleague.json",

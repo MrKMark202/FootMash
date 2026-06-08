@@ -137,8 +137,7 @@
         {"player_id":9096,"name":"Matias Soule","position":"RW","nationality":"Argentina","age":22,"pace":84,"shooting":78,"passing":78,"dribbling":86,"defending":46,"physical":68,"overall":81},
         {"player_id":9097,"name":"Paulo Dybala","position":"CAM","nationality":"Argentina","age":31,"pace":76,"shooting":84,"passing":85,"dribbling":88,"defending":48,"physical":66,"overall":84},
         {"player_id":9098,"name":"Stephan El Shaarawy","position":"LW","nationality":"Italy","age":33,"pace":78,"shooting":76,"passing":76,"dribbling":82,"defending":48,"physical":70,"overall":78},
-        {"player_id":9099,"name":"Artem Dovbyk","position":"ST","nationality":"Ukraine","age":28,"pace":80,"shooting":82,"passing":68,"dribbling":74,"defending":42,"physical":84,"overall":81},
-        {"player_id":9100,"name":"Evan Ferguson","position":"ST","nationality":"Ireland","age":21,"pace":80,"shooting":78,"passing":68,"dribbling":76,"defending":40,"physical":80,"overall":77}
+        {"player_id":9099,"name":"Artem Dovbyk","position":"ST","nationality":"Ukraine","age":28,"pace":80,"shooting":82,"passing":68,"dribbling":74,"defending":42,"physical":84,"overall":81}
       ]
     },
     {
@@ -154,7 +153,6 @@
         {"player_id":9106,"name":"Marin Pongracic","position":"CB","nationality":"Croatia","age":28,"pace":74,"shooting":44,"passing":72,"dribbling":66,"defending":82,"physical":85,"overall":80},
         {"player_id":9107,"name":"Luca Ranieri","position":"CB","nationality":"Italy","age":26,"pace":72,"shooting":42,"passing":70,"dribbling":66,"defending":80,"physical":80,"overall":78},
         {"player_id":9108,"name":"Pablo Mari","position":"CB","nationality":"Spain","age":32,"pace":66,"shooting":40,"passing":70,"dribbling":62,"defending":80,"physical":80,"overall":77},
-        {"player_id":9109,"name":"Robin Gosens","position":"LB","nationality":"Germany","age":31,"pace":80,"shooting":68,"passing":76,"dribbling":76,"defending":74,"physical":80,"overall":80},
         {"player_id":9110,"name":"Niccolo Fortini","position":"LB","nationality":"Italy","age":19,"pace":80,"shooting":52,"passing":70,"dribbling":74,"defending":70,"physical":70,"overall":72},
         {"player_id":9111,"name":"Rolando Mandragora","position":"CM","nationality":"Italy","age":28,"pace":68,"shooting":72,"passing":78,"dribbling":76,"defending":72,"physical":76,"overall":79},
         {"player_id":9112,"name":"Hans Nicolussi Caviglia","position":"CDM","nationality":"Italy","age":25,"pace":66,"shooting":66,"passing":78,"dribbling":74,"defending":74,"physical":74,"overall":76},
@@ -243,7 +241,6 @@
         {"player_id":9174,"name":"Tommaso Pobega","position":"CM","nationality":"Italy","age":26,"pace":72,"shooting":70,"passing":74,"dribbling":74,"defending":72,"physical":80,"overall":76},
         {"player_id":9175,"name":"Riccardo Orsolini","position":"RW","nationality":"Italy","age":28,"pace":82,"shooting":82,"passing":78,"dribbling":85,"defending":46,"physical":70,"overall":83},
         {"player_id":9176,"name":"Jens Odgaard","position":"RW","nationality":"Denmark","age":26,"pace":80,"shooting":74,"passing":74,"dribbling":78,"defending":50,"physical":78,"overall":77},
-        {"player_id":9177,"name":"Dan Ndoye","position":"LW","nationality":"Switzerland","age":24,"pace":89,"shooting":74,"passing":74,"dribbling":83,"defending":46,"physical":72,"overall":80},
         {"player_id":9178,"name":"Benjamin Dominguez","position":"LW","nationality":"Argentina","age":22,"pace":86,"shooting":72,"passing":72,"dribbling":83,"defending":42,"physical":66,"overall":75},
         {"player_id":9179,"name":"Santiago Castro","position":"ST","nationality":"Argentina","age":21,"pace":82,"shooting":80,"passing":72,"dribbling":80,"defending":44,"physical":78,"overall":80},
         {"player_id":9180,"name":"Thijs Dallinga","position":"ST","nationality":"Netherlands","age":25,"pace":80,"shooting":78,"passing":68,"dribbling":76,"defending":42,"physical":76,"overall":77}
@@ -323,7 +320,6 @@
         {"player_id":9233,"name":"Jesper Karlstrom","position":"CDM","nationality":"Sweden","age":30,"pace":66,"shooting":62,"passing":78,"dribbling":74,"defending":74,"physical":76,"overall":75},
         {"player_id":9234,"name":"Arthur Atta","position":"CM","nationality":"France","age":22,"pace":78,"shooting":68,"passing":76,"dribbling":80,"defending":68,"physical":80,"overall":76},
         {"player_id":9235,"name":"Oier Zarraga","position":"CM","nationality":"Spain","age":26,"pace":74,"shooting":68,"passing":76,"dribbling":78,"defending":68,"physical":74,"overall":75},
-        {"player_id":9236,"name":"Florian Thauvin","position":"RW","nationality":"France","age":32,"pace":80,"shooting":80,"passing":80,"dribbling":83,"defending":48,"physical":70,"overall":80},
         {"player_id":9237,"name":"Hassane Bahamboula","position":"LW","nationality":"France","age":21,"pace":86,"shooting":70,"passing":70,"dribbling":80,"defending":42,"physical":68,"overall":73},
         {"player_id":9238,"name":"Lorenzo Lucca Udinese","position":"ST","nationality":"Italy","age":24,"pace":70,"shooting":76,"passing":62,"dribbling":68,"defending":36,"physical":84,"overall":76},
         {"player_id":9239,"name":"Keinan Davis","position":"ST","nationality":"England","age":27,"pace":80,"shooting":78,"passing":68,"dribbling":76,"defending":44,"physical":82,"overall":77},
@@ -376,7 +372,6 @@
         {"player_id":9272,"name":"Reda Belahyane","position":"CM","nationality":"Morocco","age":21,"pace":76,"shooting":64,"passing":74,"dribbling":78,"defending":66,"physical":72,"overall":72},
         {"player_id":9273,"name":"Antoine Bernede","position":"CDM","nationality":"France","age":26,"pace":68,"shooting":62,"passing":74,"dribbling":74,"defending":70,"physical":74,"overall":72},
         {"player_id":9274,"name":"Ondrej Duda","position":"CAM","nationality":"Slovakia","age":31,"pace":70,"shooting":74,"passing":76,"dribbling":78,"defending":60,"physical":72,"overall":75},
-        {"player_id":9275,"name":"Gift Orban","position":"ST","nationality":"Nigeria","age":23,"pace":86,"shooting":78,"passing":66,"dribbling":78,"defending":40,"physical":76,"overall":75},
         {"player_id":9276,"name":"Rafik Belghali","position":"RM","nationality":"Algeria","age":22,"pace":84,"shooting":62,"passing":70,"dribbling":78,"defending":62,"physical":70,"overall":71},
         {"player_id":9277,"name":"Daniel Mosquera Two","position":"LW","nationality":"Colombia","age":22,"pace":84,"shooting":70,"passing":68,"dribbling":78,"defending":42,"physical":72,"overall":71},
         {"player_id":9278,"name":"Casper Tengstedt","position":"ST","nationality":"Denmark","age":25,"pace":78,"shooting":76,"passing":66,"dribbling":74,"defending":42,"physical":80,"overall":74},
@@ -533,7 +528,6 @@
         {"player_id":9387,"name":"Yeferson Paz","position":"CB","nationality":"Colombia","age":22,"pace":76,"shooting":40,"passing":66,"dribbling":64,"defending":77,"physical":80,"overall":71},
         {"player_id":9388,"name":"Jay Idzes","position":"CB","nationality":"Indonesia","age":25,"pace":76,"shooting":42,"passing":68,"dribbling":66,"defending":80,"physical":82,"overall":76},
         {"player_id":9389,"name":"Marcus Pedersen Sass","position":"RB","nationality":"Norway","age":25,"pace":84,"shooting":50,"passing":70,"dribbling":74,"defending":74,"physical":76,"overall":74},
-        {"player_id":9390,"name":"Fali Cande","position":"CB","nationality":"Guinea-Bissau","age":26,"pace":76,"shooting":40,"passing":66,"dribbling":64,"defending":77,"physical":80,"overall":71},
         {"player_id":9391,"name":"Kristian Thorstvedt","position":"CM","nationality":"Norway","age":26,"pace":76,"shooting":72,"passing":76,"dribbling":78,"defending":70,"physical":82,"overall":77},
         {"player_id":9392,"name":"Daniel Boloca","position":"CM","nationality":"Romania","age":27,"pace":76,"shooting":66,"passing":76,"dribbling":78,"defending":72,"physical":78,"overall":75},
         {"player_id":9393,"name":"Pedro Obiang","position":"CDM","nationality":"Equatorial Guinea","age":33,"pace":66,"shooting":62,"passing":74,"dribbling":74,"defending":74,"physical":78,"overall":73},

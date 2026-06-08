@@ -25,7 +25,6 @@
         {"player_id":7012,"name":"Sacha Boey","position":"LB","nationality":"France","age":24,"pace":88,"shooting":52,"passing":70,"dribbling":76,"defending":76,"physical":74,"overall":78},
         {"player_id":7013,"name":"Leon Goretzka","position":"CM","nationality":"Germany","age":30,"pace":72,"shooting":78,"passing":82,"dribbling":80,"defending":76,"physical":86,"overall":83},
         {"player_id":7014,"name":"Aleksandar Pavlovic","position":"CM","nationality":"Germany","age":21,"pace":68,"shooting":66,"passing":84,"dribbling":80,"defending":78,"physical":76,"overall":81},
-        {"player_id":7015,"name":"Joao Palhinha","position":"CDM","nationality":"Portugal","age":30,"pace":68,"shooting":66,"passing":74,"dribbling":70,"defending":86,"physical":86,"overall":83},
         {"player_id":7016,"name":"Jamal Musiala","position":"CAM","nationality":"Germany","age":22,"pace":84,"shooting":82,"passing":86,"dribbling":92,"defending":48,"physical":70,"overall":88},
         {"player_id":7017,"name":"Michael Olise","position":"RW","nationality":"France","age":23,"pace":86,"shooting":82,"passing":86,"dribbling":89,"defending":42,"physical":68,"overall":86},
         {"player_id":7018,"name":"Serge Gnabry","position":"RW","nationality":"Germany","age":30,"pace":86,"shooting":82,"passing":78,"dribbling":84,"defending":42,"physical":74,"overall":83},
@@ -48,13 +47,9 @@
         {"player_id":7028,"name":"Alejandro Grimaldo","position":"LB","nationality":"Spain","age":30,"pace":80,"shooting":76,"passing":86,"dribbling":84,"defending":78,"physical":72,"overall":85},
         {"player_id":7029,"name":"Nordi Mukiele","position":"RB","nationality":"France","age":27,"pace":86,"shooting":52,"passing":72,"dribbling":74,"defending":80,"physical":84,"overall":80},
         {"player_id":7030,"name":"Ezequiel Fernandez","position":"CDM","nationality":"Argentina","age":23,"pace":66,"shooting":68,"passing":82,"dribbling":80,"defending":80,"physical":78,"overall":80},
-        {"player_id":7031,"name":"Granit Xhaka","position":"CM","nationality":"Switzerland","age":33,"pace":62,"shooting":74,"passing":86,"dribbling":78,"defending":80,"physical":80,"overall":83},
         {"player_id":7032,"name":"Aleix Garcia","position":"CM","nationality":"Spain","age":28,"pace":66,"shooting":70,"passing":84,"dribbling":82,"defending":74,"physical":72,"overall":81},
         {"player_id":7033,"name":"Equi Fernandez","position":"CM","nationality":"Argentina","age":22,"pace":72,"shooting":68,"passing":80,"dribbling":80,"defending":76,"physical":76,"overall":79},
-        {"player_id":7034,"name":"Florian Wirtz","position":"CAM","nationality":"Germany","age":22,"pace":82,"shooting":82,"passing":89,"dribbling":90,"defending":48,"physical":68,"overall":87},
         {"player_id":7035,"name":"Malik Tillman","position":"CAM","nationality":"USA","age":23,"pace":78,"shooting":78,"passing":82,"dribbling":84,"defending":50,"physical":74,"overall":81},
-        {"player_id":7036,"name":"Jeremie Frimpong","position":"RW","nationality":"Netherlands","age":24,"pace":94,"shooting":74,"passing":76,"dribbling":86,"defending":68,"physical":72,"overall":83},
-        {"player_id":7037,"name":"Alejandro Garnacho","position":"LW","nationality":"Argentina","age":21,"pace":92,"shooting":78,"passing":74,"dribbling":86,"defending":38,"physical":68,"overall":82},
         {"player_id":7038,"name":"Patrik Schick","position":"ST","nationality":"Czech Republic","age":29,"pace":78,"shooting":85,"passing":74,"dribbling":78,"defending":42,"physical":84,"overall":84},
         {"player_id":7039,"name":"Christian Kofane","position":"ST","nationality":"Cameroon","age":19,"pace":86,"shooting":74,"passing":66,"dribbling":76,"defending":36,"physical":78,"overall":74},
         {"player_id":7040,"name":"Ernest Poku","position":"RW","nationality":"Netherlands","age":21,"pace":92,"shooting":72,"passing":70,"dribbling":82,"defending":34,"physical":68,"overall":76}
@@ -83,8 +78,7 @@
         {"player_id":7056,"name":"Jobe Bellingham","position":"CM","nationality":"England","age":20,"pace":80,"shooting":74,"passing":78,"dribbling":82,"defending":70,"physical":80,"overall":79},
         {"player_id":7057,"name":"Maximilian Beier","position":"ST","nationality":"Germany","age":22,"pace":88,"shooting":80,"passing":72,"dribbling":80,"defending":40,"physical":76,"overall":80},
         {"player_id":7058,"name":"Serhou Guirassy","position":"ST","nationality":"Guinea","age":29,"pace":82,"shooting":87,"passing":72,"dribbling":78,"defending":42,"physical":84,"overall":85},
-        {"player_id":7059,"name":"Fabio Silva","position":"ST","nationality":"Portugal","age":23,"pace":84,"shooting":78,"passing":72,"dribbling":80,"defending":38,"physical":76,"overall":78},
-        {"player_id":7060,"name":"Jamie Gittens","position":"RW","nationality":"England","age":21,"pace":92,"shooting":74,"passing":72,"dribbling":85,"defending":34,"physical":66,"overall":79}
+        {"player_id":7059,"name":"Fabio Silva","position":"ST","nationality":"Portugal","age":23,"pace":84,"shooting":78,"passing":72,"dribbling":80,"defending":38,"physical":76,"overall":78}
       ]
     },
     {
@@ -163,8 +157,6 @@
         {"player_id":7115,"name":"Lazar Jovanovic","position":"CM","nationality":"Serbia","age":21,"pace":80,"shooting":68,"passing":76,"dribbling":80,"defending":58,"physical":72,"overall":75},
         {"player_id":7116,"name":"Ermedin Demirovic","position":"ST","nationality":"Bosnia and Herzegovina","age":27,"pace":80,"shooting":82,"passing":76,"dribbling":80,"defending":46,"physical":82,"overall":81},
         {"player_id":7117,"name":"Deniz Undav","position":"ST","nationality":"Germany","age":29,"pace":80,"shooting":84,"passing":78,"dribbling":82,"defending":44,"physical":78,"overall":83},
-        {"player_id":7118,"name":"Nick Woltemade","position":"ST","nationality":"Germany","age":23,"pace":78,"shooting":80,"passing":78,"dribbling":82,"defending":48,"physical":84,"overall":81},
-        {"player_id":7119,"name":"Tiago Tomas","position":"ST","nationality":"Portugal","age":23,"pace":86,"shooting":76,"passing":72,"dribbling":80,"defending":40,"physical":74,"overall":77},
         {"player_id":7120,"name":"Lorenz Assignon","position":"RB","nationality":"France","age":25,"pace":88,"shooting":52,"passing":72,"dribbling":76,"defending":77,"physical":76,"overall":78}
       ]
     },
@@ -202,11 +194,7 @@
       "players": [
         {"player_id":7141,"name":"Kamil Grabara","position":"GK","nationality":"Poland","age":26,"pace":52,"shooting":20,"passing":72,"dribbling":44,"defending":15,"physical":78,"overall":81},
         {"player_id":7142,"name":"Marius Muller","position":"GK","nationality":"Germany","age":31,"pace":50,"shooting":18,"passing":68,"dribbling":42,"defending":14,"physical":76,"overall":76},
-        {"player_id":7143,"name":"Maxence Lacroix","position":"CB","nationality":"France","age":25,"pace":82,"shooting":42,"passing":72,"dribbling":70,"defending":82,"physical":84,"overall":80},
-        {"player_id":7144,"name":"Sebastiaan Bornauw","position":"CB","nationality":"Belgium","age":26,"pace":76,"shooting":44,"passing":70,"dribbling":66,"defending":80,"physical":84,"overall":78},
-        {"player_id":7145,"name":"Cedric Zesiger","position":"CB","nationality":"Switzerland","age":27,"pace":76,"shooting":40,"passing":70,"dribbling":66,"defending":79,"physical":82,"overall":77},
         {"player_id":7146,"name":"Joakim Maehle","position":"RB","nationality":"Denmark","age":28,"pace":86,"shooting":56,"passing":76,"dribbling":78,"defending":76,"physical":78,"overall":79},
-        {"player_id":7147,"name":"Ridle Baku","position":"LB","nationality":"Germany","age":27,"pace":86,"shooting":54,"passing":74,"dribbling":76,"defending":74,"physical":76,"overall":77},
         {"player_id":7148,"name":"Konstantinos Koulierakis","position":"CB","nationality":"Greece","age":21,"pace":80,"shooting":40,"passing":72,"dribbling":68,"defending":80,"physical":80,"overall":78},
         {"player_id":7149,"name":"Aster Vranckx","position":"CDM","nationality":"Belgium","age":23,"pace":78,"shooting":66,"passing":78,"dribbling":80,"defending":78,"physical":78,"overall":78},
         {"player_id":7150,"name":"Maximilian Arnold","position":"CM","nationality":"Germany","age":31,"pace":68,"shooting":74,"passing":84,"dribbling":80,"defending":74,"physical":76,"overall":81},
@@ -237,10 +225,8 @@
         {"player_id":7168,"name":"Max Rosenfelder","position":"CB","nationality":"Germany","age":21,"pace":78,"shooting":38,"passing":70,"dribbling":66,"defending":77,"physical":78,"overall":73},
         {"player_id":7169,"name":"Patrick Osterhage","position":"CM","nationality":"Germany","age":25,"pace":74,"shooting":68,"passing":80,"dribbling":78,"defending":72,"physical":76,"overall":77},
         {"player_id":7170,"name":"Maximilian Eggestein","position":"CM","nationality":"Germany","age":28,"pace":72,"shooting":68,"passing":80,"dribbling":78,"defending":76,"physical":76,"overall":78},
-        {"player_id":7171,"name":"Yannik Keitel","position":"CDM","nationality":"Germany","age":25,"pace":72,"shooting":62,"passing":76,"dribbling":74,"defending":78,"physical":78,"overall":76},
         {"player_id":7172,"name":"Eren Dinkci","position":"RW","nationality":"Germany","age":23,"pace":86,"shooting":74,"passing":74,"dribbling":80,"defending":44,"physical":72,"overall":76},
         {"player_id":7173,"name":"Vincenzo Grifo","position":"LW","nationality":"Italy","age":32,"pace":76,"shooting":80,"passing":84,"dribbling":83,"defending":48,"physical":68,"overall":81},
-        {"player_id":7174,"name":"Ritsu Doan","position":"CAM","nationality":"Japan","age":27,"pace":82,"shooting":76,"passing":80,"dribbling":82,"defending":50,"physical":72,"overall":80},
         {"player_id":7175,"name":"Merlin Rohl","position":"CM","nationality":"Germany","age":23,"pace":78,"shooting":68,"passing":78,"dribbling":80,"defending":72,"physical":78,"overall":78},
         {"player_id":7176,"name":"Johan Manzambi","position":"CM","nationality":"Switzerland","age":20,"pace":80,"shooting":68,"passing":76,"dribbling":80,"defending":64,"physical":72,"overall":74},
         {"player_id":7177,"name":"Lucas Holer","position":"ST","nationality":"Germany","age":31,"pace":78,"shooting":80,"passing":76,"dribbling":78,"defending":48,"physical":80,"overall":79},
@@ -289,16 +275,13 @@
         {"player_id":7206,"name":"Pavel Kaderabek","position":"RB","nationality":"Czech Republic","age":33,"pace":80,"shooting":52,"passing":74,"dribbling":74,"defending":76,"physical":76,"overall":75},
         {"player_id":7207,"name":"Arthur Chaves","position":"CB","nationality":"Brazil","age":23,"pace":78,"shooting":38,"passing":70,"dribbling":68,"defending":77,"physical":80,"overall":73},
         {"player_id":7208,"name":"Vladimir Coufal","position":"RB","nationality":"Czech Republic","age":33,"pace":78,"shooting":50,"passing":74,"dribbling":72,"defending":78,"physical":78,"overall":76},
-        {"player_id":7209,"name":"Anton Stach","position":"CDM","nationality":"Germany","age":26,"pace":74,"shooting":70,"passing":80,"dribbling":78,"defending":80,"physical":82,"overall":80},
         {"player_id":7210,"name":"Grischa Promel","position":"CM","nationality":"Germany","age":30,"pace":74,"shooting":72,"passing":80,"dribbling":78,"defending":74,"physical":78,"overall":78},
         {"player_id":7211,"name":"Tom Bischof","position":"CM","nationality":"Germany","age":20,"pace":76,"shooting":70,"passing":80,"dribbling":82,"defending":66,"physical":72,"overall":77},
         {"player_id":7212,"name":"Umut Tohumcu","position":"CM","nationality":"Germany","age":21,"pace":76,"shooting":66,"passing":76,"dribbling":78,"defending":68,"physical":72,"overall":73},
         {"player_id":7213,"name":"Wouter Burger","position":"CDM","nationality":"Netherlands","age":24,"pace":72,"shooting":66,"passing":76,"dribbling":76,"defending":78,"physical":82,"overall":77},
         {"player_id":7214,"name":"Andrej Kramaric","position":"CAM","nationality":"Croatia","age":34,"pace":72,"shooting":82,"passing":80,"dribbling":82,"defending":46,"physical":72,"overall":80},
-        {"player_id":7215,"name":"Marius Bulter","position":"LW","nationality":"Germany","age":32,"pace":80,"shooting":80,"passing":76,"dribbling":80,"defending":46,"physical":76,"overall":78},
         {"player_id":7216,"name":"Bazoumana Toure","position":"RW","nationality":"Ivory Coast","age":20,"pace":90,"shooting":72,"passing":70,"dribbling":82,"defending":36,"physical":68,"overall":74},
         {"player_id":7217,"name":"Adam Hlozek","position":"ST","nationality":"Czech Republic","age":23,"pace":82,"shooting":78,"passing":76,"dribbling":80,"defending":42,"physical":76,"overall":78},
-        {"player_id":7218,"name":"Haris Tabakovic","position":"ST","nationality":"Bosnia and Herzegovina","age":31,"pace":74,"shooting":80,"passing":72,"dribbling":74,"defending":42,"physical":84,"overall":77},
         {"player_id":7219,"name":"Fisnik Asllani","position":"ST","nationality":"Kosovo","age":23,"pace":82,"shooting":76,"passing":72,"dribbling":78,"defending":38,"physical":76,"overall":74},
         {"player_id":7220,"name":"Gift Orban","position":"ST","nationality":"Nigeria","age":23,"pace":90,"shooting":78,"passing":68,"dribbling":78,"defending":36,"physical":74,"overall":76}
       ]
@@ -308,7 +291,6 @@
       "name": "Werder Bremen",
       "badge_url": "",
       "players": [
-        {"player_id":7221,"name":"Michael Zetterer","position":"GK","nationality":"Germany","age":30,"pace":50,"shooting":18,"passing":70,"dribbling":42,"defending":14,"physical":76,"overall":78},
         {"player_id":7222,"name":"Mio Backhaus","position":"GK","nationality":"Germany","age":21,"pace":52,"shooting":16,"passing":66,"dribbling":42,"defending":13,"physical":74,"overall":73},
         {"player_id":7223,"name":"Marco Friedl","position":"CB","nationality":"Austria","age":27,"pace":76,"shooting":44,"passing":74,"dribbling":70,"defending":81,"physical":80,"overall":79},
         {"player_id":7224,"name":"Niklas Stark","position":"CB","nationality":"Germany","age":30,"pace":74,"shooting":42,"passing":72,"dribbling":66,"defending":80,"physical":82,"overall":77},
@@ -351,7 +333,6 @@
         {"player_id":7254,"name":"Andrej Ilic","position":"ST","nationality":"Serbia","age":25,"pace":82,"shooting":78,"passing":72,"dribbling":78,"defending":40,"physical":80,"overall":77},
         {"player_id":7255,"name":"Ilyas Ansah","position":"RW","nationality":"Germany","age":21,"pace":92,"shooting":74,"passing":70,"dribbling":80,"defending":36,"physical":70,"overall":74},
         {"player_id":7256,"name":"Oliver Burke","position":"ST","nationality":"Scotland","age":28,"pace":90,"shooting":76,"passing":70,"dribbling":78,"defending":42,"physical":82,"overall":76},
-        {"player_id":7257,"name":"Benedict Hollerbach","position":"LW","nationality":"Germany","age":24,"pace":88,"shooting":74,"passing":74,"dribbling":82,"defending":44,"physical":74,"overall":77},
         {"player_id":7258,"name":"Woo-yeong Jeong","position":"CAM","nationality":"South Korea","age":26,"pace":82,"shooting":74,"passing":78,"dribbling":82,"defending":48,"physical":70,"overall":76},
         {"player_id":7259,"name":"Danilho Doekhi","position":"CB","nationality":"Netherlands","age":27,"pace":76,"shooting":48,"passing":70,"dribbling":68,"defending":80,"physical":84,"overall":78},
         {"player_id":7260,"name":"Marin Ljubicic","position":"ST","nationality":"Croatia","age":23,"pace":80,"shooting":76,"passing":70,"dribbling":76,"defending":40,"physical":80,"overall":74}
@@ -403,7 +384,6 @@
         {"player_id":7292,"name":"Paul Nebel","position":"CAM","nationality":"Germany","age":22,"pace":80,"shooting":72,"passing":80,"dribbling":83,"defending":50,"physical":70,"overall":77},
         {"player_id":7293,"name":"Lee Jae-sung","position":"CM","nationality":"South Korea","age":33,"pace":74,"shooting":74,"passing":80,"dribbling":80,"defending":62,"physical":74,"overall":78},
         {"player_id":7294,"name":"Nelson Weiper","position":"ST","nationality":"Germany","age":20,"pace":80,"shooting":76,"passing":72,"dribbling":78,"defending":40,"physical":80,"overall":75},
-        {"player_id":7295,"name":"Jonathan Burkardt","position":"ST","nationality":"Germany","age":25,"pace":84,"shooting":80,"passing":74,"dribbling":80,"defending":42,"physical":78,"overall":79},
         {"player_id":7296,"name":"Armindo Sieb","position":"ST","nationality":"Germany","age":22,"pace":84,"shooting":74,"passing":74,"dribbling":80,"defending":40,"physical":74,"overall":75},
         {"player_id":7297,"name":"Benedict Hollerbach","position":"LW","nationality":"Germany","age":24,"pace":88,"shooting":74,"passing":74,"dribbling":82,"defending":44,"physical":74,"overall":77},
         {"player_id":7298,"name":"Nikolas Veratschnig","position":"LB","nationality":"Austria","age":23,"pace":84,"shooting":52,"passing":72,"dribbling":74,"defending":74,"physical":74,"overall":73},
@@ -431,7 +411,6 @@
         {"player_id":7313,"name":"Mathias Pereira Lage","position":"CAM","nationality":"France","age":29,"pace":82,"shooting":72,"passing":78,"dribbling":82,"defending":50,"physical":70,"overall":76},
         {"player_id":7314,"name":"Andreas Hountondji","position":"ST","nationality":"Benin","age":22,"pace":84,"shooting":74,"passing":68,"dribbling":76,"defending":38,"physical":78,"overall":73},
         {"player_id":7315,"name":"Morgan Guilavogui","position":"ST","nationality":"Guinea","age":27,"pace":84,"shooting":76,"passing":70,"dribbling":78,"defending":42,"physical":80,"overall":75},
-        {"player_id":7316,"name":"Elias Saad","position":"LW","nationality":"Tunisia","age":25,"pace":88,"shooting":74,"passing":74,"dribbling":83,"defending":42,"physical":70,"overall":77},
         {"player_id":7317,"name":"Oladapo Afolayan","position":"RW","nationality":"England","age":28,"pace":86,"shooting":74,"passing":74,"dribbling":82,"defending":42,"physical":74,"overall":75},
         {"player_id":7318,"name":"Danel Sinani","position":"CAM","nationality":"Luxembourg","age":28,"pace":78,"shooting":72,"passing":78,"dribbling":80,"defending":50,"physical":70,"overall":74},
         {"player_id":7319,"name":"Robert Wagner","position":"CM","nationality":"Germany","age":22,"pace":76,"shooting":66,"passing":76,"dribbling":78,"defending":68,"physical":74,"overall":72},
@@ -444,7 +423,6 @@
       "badge_url": "",
       "players": [
         {"player_id":7321,"name":"Marvin Schwabe","position":"GK","nationality":"Germany","age":30,"pace":52,"shooting":20,"passing":72,"dribbling":44,"defending":15,"physical":78,"overall":79},
-        {"player_id":7322,"name":"Jonas Urbig","position":"GK","nationality":"Germany","age":22,"pace":52,"shooting":18,"passing":68,"dribbling":42,"defending":14,"physical":74,"overall":75},
         {"player_id":7323,"name":"Timo Hubers","position":"CB","nationality":"Germany","age":29,"pace":74,"shooting":44,"passing":72,"dribbling":66,"defending":80,"physical":82,"overall":77},
         {"player_id":7324,"name":"Dominique Heintz","position":"CB","nationality":"Germany","age":32,"pace":72,"shooting":42,"passing":70,"dribbling":64,"defending":79,"physical":80,"overall":74},
         {"player_id":7325,"name":"Joel Schmied","position":"CB","nationality":"Switzerland","age":27,"pace":76,"shooting":40,"passing":70,"dribbling":66,"defending":78,"physical":82,"overall":74},

@@ -254,7 +254,21 @@ public class SeasonRepository {
      * Must be called from a background thread.
      * Returns true on success.
      */
+    /** Interactive single matchday: try Gemini first for AI flavour. */
     public boolean simulateMatchday(int clubId, int matchday, String apiKey) {
+        return simulateMatchday(clubId, matchday, apiKey, true);
+    }
+
+    /**
+     * Simulates all matches for the given matchday. Must run on a background thread.
+     *
+     * @param useGemini when true, asks Gemini first (used for the single matchday
+     *        the user plays interactively); when false, goes straight to the local
+     *        engine — this is what the "simulate whole season" path uses so the
+     *        season aggregates (champion points, Golden Boot) stay realistic and
+     *        the run doesn't fire ~38 network calls.
+     */
+    public boolean simulateMatchday(int clubId, int matchday, String apiKey, boolean useGemini) {
         List<Fixture> fixtures = fixtureDao.getFixturesByMatchdaySync(clubId, matchday);
         if (fixtures.isEmpty()) return false;
 
@@ -266,40 +280,25 @@ public class SeasonRepository {
         // Effective rating (avg overall + trait synergy) for every team this matchday.
         Map<String, Integer> ratings = buildRatingsMap(fixtures, club, userInfo);
 
-        // Try Gemini with full prompt (injected — fakeable in tests).
-        String raw = gemini.callSync(MatchSimulator.buildPrompt(fixtures, userInfo, ratings), apiKey);
-        List<MatchSimulator.ParsedMatch> results = MatchSimulator.parseResponse(raw, fixtures.size());
+        // Full rosters (position/overall/shooting) keyed by team name, so the local
+        // engine can weight scorers by quality and position.
+        Map<String, List<RealPlayer>> rosters = buildRosters(fixtures, club, clubId);
 
-        // Retry with simplified prompt
-        if (results == null) {
-            raw = gemini.callSync(MatchSimulator.buildSimplePrompt(fixtures, ratings), apiKey);
+        List<MatchSimulator.ParsedMatch> results = null;
+
+        if (useGemini) {
+            String raw = gemini.callSync(
+                MatchSimulator.buildPrompt(fixtures, userInfo, ratings), apiKey);
             results = MatchSimulator.parseResponse(raw, fixtures.size());
+            if (results == null) {
+                raw = gemini.callSync(MatchSimulator.buildSimplePrompt(fixtures, ratings), apiKey);
+                results = MatchSimulator.parseResponse(raw, fixtures.size());
+            }
         }
 
-        // Fall back to local simulator
+        // Local engine: realistic, strength-driven fallback (and the default for
+        // whole-season simulation).
         if (results == null) {
-            Map<String, List<RealPlayer>> rosters = new HashMap<>();
-            
-            if (userInfo != null && userInfo.players != null) {
-                List<RealPlayer> userPlayers = new ArrayList<>();
-                for (MatchSimulator.PlayerEntry pe : userInfo.players) {
-                    RealPlayer rp = new RealPlayer();
-                    rp.setName(pe.name);
-                    userPlayers.add(rp);
-                }
-                rosters.put(userInfo.name, userPlayers);
-            }
-            
-            for (Fixture f : fixtures) {
-                if (!rosters.containsKey(f.getHomeTeamName())) {
-                    List<RealPlayer> p = realPlayerDao.getPlayersByTeamSync(f.getHomeTeamId());
-                    rosters.put(f.getHomeTeamName(), p != null ? p : new ArrayList<>());
-                }
-                if (!rosters.containsKey(f.getAwayTeamName())) {
-                    List<RealPlayer> p = realPlayerDao.getPlayersByTeamSync(f.getAwayTeamId());
-                    rosters.put(f.getAwayTeamName(), p != null ? p : new ArrayList<>());
-                }
-            }
             results = LocalSimulator.simulateAll(fixtures, ratings, rosters);
         }
 
@@ -307,6 +306,29 @@ public class SeasonRepository {
         recalculateStandings(clubId);
         applyPlayerGrowth(clubId, fixtures, results);
         return true;
+    }
+
+    /**
+     * Team-name → full roster for every club in the matchday. The user's club uses
+     * its drafted starting XI (real attributes); opponents use their seeded squad.
+     */
+    private Map<String, List<RealPlayer>> buildRosters(List<Fixture> fixtures,
+                                                       UserClub club, int clubId) {
+        Map<String, List<RealPlayer>> rosters = new HashMap<>();
+        List<RealPlayer> userXi = userStartingXi(clubId);
+        if (!userXi.isEmpty()) rosters.put(club.getClubName(), userXi);
+
+        for (Fixture f : fixtures) {
+            if (!rosters.containsKey(f.getHomeTeamName())) {
+                List<RealPlayer> p = realPlayerDao.getPlayersByTeamSync(f.getHomeTeamId());
+                rosters.put(f.getHomeTeamName(), p != null ? p : new ArrayList<>());
+            }
+            if (!rosters.containsKey(f.getAwayTeamName())) {
+                List<RealPlayer> p = realPlayerDao.getPlayersByTeamSync(f.getAwayTeamId());
+                rosters.put(f.getAwayTeamName(), p != null ? p : new ArrayList<>());
+            }
+        }
+        return rosters;
     }
 
     // ─── Dynamic player growth ────────────────────────────────────────────────

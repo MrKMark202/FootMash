@@ -32,6 +32,10 @@ public class PlayerStatsFragment extends Fragment {
 
     private ItemStatRowBinding rowPace, rowShoot, rowPass, rowDrib, rowDef, rowPhys;
 
+    /** Drives press-and-hold auto-repeat on the +/- buttons. */
+    private final android.os.Handler repeatHandler =
+        new android.os.Handler(android.os.Looper.getMainLooper());
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -70,8 +74,52 @@ public class PlayerStatsFragment extends Fragment {
 
     private void wireRow(ItemStatRowBinding row, String label, int index) {
         row.textStatLabel.setText(label);
-        row.btnStatMinus.setOnClickListener(v -> { viewModel.bumpStat(index, -1); refreshUi(); });
-        row.btnStatPlus .setOnClickListener(v -> { viewModel.bumpStat(index, +1); refreshUi(); });
+        attachRepeat(row.btnStatMinus, index, -1);
+        attachRepeat(row.btnStatPlus,  index, +1);
+    }
+
+    /**
+     * Makes a +/- button repeat while held, accelerating from ~3/s up to ~30/s so
+     * a full 100-point budget can be poured into a stat in about a second instead
+     * of 100 taps. A quick tap still nudges by one (and keeps TalkBack working).
+     */
+    @android.annotation.SuppressLint("ClickableViewAccessibility")
+    private void attachRepeat(View button, int index, int delta) {
+        button.setOnClickListener(v -> { viewModel.bumpStat(index, delta); refreshUi(); });
+        button.setOnTouchListener(new View.OnTouchListener() {
+            boolean held;
+            long interval;
+            final Runnable repeater = new Runnable() {
+                @Override public void run() {
+                    held = true;
+                    viewModel.bumpStat(index, delta);
+                    refreshUi();
+                    interval = Math.max(30, interval - 35);   // accelerate
+                    repeatHandler.postDelayed(this, interval);
+                }
+            };
+            @Override public boolean onTouch(View v, android.view.MotionEvent e) {
+                switch (e.getActionMasked()) {
+                    case android.view.MotionEvent.ACTION_DOWN:
+                        held = false;
+                        interval = 300;
+                        v.setPressed(true);
+                        repeatHandler.postDelayed(repeater, 350);  // hold threshold
+                        return true;
+                    case android.view.MotionEvent.ACTION_UP:
+                        v.setPressed(false);
+                        repeatHandler.removeCallbacks(repeater);
+                        if (!held) v.performClick();               // it was a tap
+                        return true;
+                    case android.view.MotionEvent.ACTION_CANCEL:
+                        v.setPressed(false);
+                        repeatHandler.removeCallbacks(repeater);
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
     }
 
     private void bindPositionDropdown() {
@@ -117,6 +165,7 @@ public class PlayerStatsFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        repeatHandler.removeCallbacksAndMessages(null);
         binding = null;
         rowPace = rowShoot = rowPass = rowDrib = rowDef = rowPhys = null;
     }

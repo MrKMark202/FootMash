@@ -170,24 +170,20 @@ public class TransferOffersFragment extends Fragment {
 
     private void stayAtCurrentClub() {
         if (player == null) return;
-        // Snapshot the seasons-at-club count so the next window opens 2 sims
-        // from now, not on the immediate next return to the hub.
-        int n = countSeasonsAtClub();
-        player.setTransferDismissedAt(n);
 
         AppDatabase db = FootMashApp.container(requireContext()).database();
         new Thread(() -> {
+            // Snapshot the seasons-at-club count so the next window opens 2 sims
+            // from now, not on the immediate next return to the hub. This query
+            // (like the update below) must run off the main thread.
+            int n = db.playerCareerSeasonDao()
+                .countSeasonsAtClub(player.getId(), player.getTargetTeamId());
+            player.setTransferDismissedAt(n);
             db.customPlayerDao().update(player);
             if (!isAdded()) return;
             requireActivity().runOnUiThread(() ->
                 Navigation.findNavController(requireView()).popBackStack());
         }).start();
-    }
-
-    private int countSeasonsAtClub() {
-        AppDatabase db = FootMashApp.container(requireContext()).database();
-        return db.playerCareerSeasonDao()
-            .countSeasonsAtClub(player.getId(), player.getTargetTeamId());
     }
 
     /** Mirrors PlayerClubOffersFragment.tierLabel so the wording matches. */

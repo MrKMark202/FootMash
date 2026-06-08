@@ -20,7 +20,6 @@
         {"player_id":5007,"name":"Ferland Mendy","position":"LB","nationality":"France","age":29,"pace":88,"shooting":56,"passing":72,"dribbling":74,"defending":82,"physical":78,"overall":84},
         {"player_id":5008,"name":"Lucas Vazquez","position":"RB","nationality":"Spain","age":33,"pace":78,"shooting":60,"passing":70,"dribbling":70,"defending":76,"physical":68,"overall":79},
         {"player_id":5009,"name":"Jude Bellingham","position":"CAM","nationality":"England","age":21,"pace":78,"shooting":86,"passing":86,"dribbling":88,"defending":64,"physical":78,"overall":90},
-        {"player_id":5010,"name":"Luka Modric","position":"CM","nationality":"Croatia","age":39,"pace":66,"shooting":74,"passing":90,"dribbling":88,"defending":66,"physical":66,"overall":87},
         {"player_id":5011,"name":"Federico Valverde","position":"CM","nationality":"Uruguay","age":26,"pace":86,"shooting":78,"passing":84,"dribbling":82,"defending":72,"physical":78,"overall":87},
         {"player_id":5012,"name":"Aurelien Tchouameni","position":"CDM","nationality":"France","age":24,"pace":72,"shooting":64,"passing":80,"dribbling":74,"defending":84,"physical":80,"overall":85},
         {"player_id":5013,"name":"Eduardo Camavinga","position":"CM","nationality":"France","age":22,"pace":82,"shooting":64,"passing":80,"dribbling":80,"defending":74,"physical":74,"overall":84},
@@ -124,7 +123,6 @@
         {"player_id":5083,"name":"Aihen Munoz","position":"LB","nationality":"Spain","age":28,"pace":78,"shooting":48,"passing":64,"dribbling":64,"defending":70,"physical":64,"overall":77},
         {"player_id":5084,"name":"Andoni Gorosabel","position":"RB","nationality":"Spain","age":26,"pace":76,"shooting":52,"passing":64,"dribbling":62,"defending":72,"physical":66,"overall":77},
         {"player_id":5085,"name":"Sergio Gomez","position":"LB","nationality":"Spain","age":23,"pace":78,"shooting":50,"passing":66,"dribbling":64,"defending":66,"physical":60,"overall":76},
-        {"player_id":5086,"name":"Martin Zubimendi","position":"CDM","nationality":"Spain","age":25,"pace":68,"shooting":62,"passing":84,"dribbling":76,"defending":84,"physical":76,"overall":85},
         {"player_id":5087,"name":"Igor Zubeldia","position":"CM","nationality":"Spain","age":26,"pace":68,"shooting":58,"passing":72,"dribbling":64,"defending":72,"physical":72,"overall":79},
         {"player_id":5088,"name":"Brais Mendez","position":"CM","nationality":"Spain","age":27,"pace":72,"shooting":70,"passing":76,"dribbling":70,"defending":60,"physical":64,"overall":80},
         {"player_id":5089,"name":"Luka Sucic","position":"CM","nationality":"Croatia","age":22,"pace":74,"shooting":66,"passing":74,"dribbling":72,"defending":56,"physical":66,"overall":79},
@@ -142,9 +140,7 @@
       "badge_url": "https://apiv2.allsportsapi.com/logo/101_villarreal.jpg",
       "players": [
         {"player_id":5096,"name":"Diego Conde","position":"GK","nationality":"Spain","age":25,"pace":46,"shooting":14,"passing":60,"dribbling":34,"defending":10,"physical":70,"overall":75},
-        {"player_id":5097,"name":"Filip Jorgensen","position":"GK","nationality":"Denmark","age":22,"pace":48,"shooting":14,"passing":60,"dribbling":34,"defending":10,"physical":68,"overall":74},
         {"player_id":5098,"name":"Juan Foyth","position":"RB","nationality":"Argentina","age":27,"pace":80,"shooting":58,"passing":68,"dribbling":68,"defending":76,"physical":72,"overall":79},
-        {"player_id":5099,"name":"Pau Torres","position":"CB","nationality":"Spain","age":27,"pace":72,"shooting":46,"passing":78,"dribbling":70,"defending":84,"physical":78,"overall":83},
         {"player_id":5100,"name":"Jorge Cuenca","position":"CB","nationality":"Spain","age":26,"pace":72,"shooting":38,"passing":62,"dribbling":56,"defending":74,"physical":74,"overall":75},
         {"player_id":5101,"name":"Eric Bailly","position":"CB","nationality":"Ivory Coast","age":30,"pace":80,"shooting":38,"passing":58,"dribbling":58,"defending":76,"physical":80,"overall":76},
         {"player_id":5102,"name":"Alfonso Pedraza","position":"LB","nationality":"Spain","age":28,"pace":82,"shooting":54,"passing":68,"dribbling":68,"defending":72,"physical":66,"overall":79},
@@ -154,11 +150,9 @@
         {"player_id":5106,"name":"Francis Coquelin","position":"CDM","nationality":"France","age":33,"pace":68,"shooting":52,"passing":70,"dribbling":62,"defending":74,"physical":72,"overall":76},
         {"player_id":5107,"name":"Santi Comesana","position":"CM","nationality":"Spain","age":24,"pace":66,"shooting":58,"passing":68,"dribbling":62,"defending":62,"physical":64,"overall":74},
         {"player_id":5108,"name":"Alex Baena","position":"LW","nationality":"Spain","age":23,"pace":86,"shooting":74,"passing":72,"dribbling":82,"defending":30,"physical":62,"overall":82},
-        {"player_id":5109,"name":"Yeremy Pino","position":"RW","nationality":"Spain","age":22,"pace":88,"shooting":72,"passing":66,"dribbling":76,"defending":30,"physical":62,"overall":79},
         {"player_id":5110,"name":"Nicolas Pepe","position":"LW","nationality":"Ivory Coast","age":29,"pace":88,"shooting":72,"passing":66,"dribbling":80,"defending":28,"physical":66,"overall":78},
         {"player_id":5111,"name":"Ilias Akhomach","position":"LW","nationality":"Spain","age":20,"pace":88,"shooting":64,"passing":62,"dribbling":78,"defending":24,"physical":56,"overall":76},
-        {"player_id":5112,"name":"Gerard Moreno","position":"ST","nationality":"Spain","age":32,"pace":76,"shooting":82,"passing":70,"dribbling":70,"defending":38,"physical":70,"overall":81},
-        {"player_id":5113,"name":"Thierno Barry","position":"ST","nationality":"Guinea","age":22,"pace":82,"shooting":72,"passing":54,"dribbling":66,"defending":24,"physical":76,"overall":75}
+        {"player_id":5112,"name":"Gerard Moreno","position":"ST","nationality":"Spain","age":32,"pace":76,"shooting":82,"passing":70,"dribbling":70,"defending":38,"physical":70,"overall":81}
       ]
     },
     {
@@ -171,7 +165,6 @@
         {"player_id":5116,"name":"Marc Bartra","position":"CB","nationality":"Spain","age":33,"pace":68,"shooting":40,"passing":66,"dribbling":60,"defending":76,"physical":72,"overall":77},
         {"player_id":5117,"name":"Natan","position":"CB","nationality":"Brazil","age":22,"pace":78,"shooting":36,"passing":60,"dribbling":60,"defending":74,"physical":76,"overall":75},
         {"player_id":5118,"name":"Hector Bellerin","position":"RB","nationality":"Spain","age":29,"pace":80,"shooting":56,"passing":66,"dribbling":68,"defending":72,"physical":66,"overall":77},
-        {"player_id":5119,"name":"Juan Miranda","position":"LB","nationality":"Spain","age":24,"pace":76,"shooting":50,"passing":64,"dribbling":62,"defending":68,"physical":62,"overall":77},
         {"player_id":5120,"name":"Sokratis","position":"CB","nationality":"Greece","age":36,"pace":60,"shooting":42,"passing":60,"dribbling":50,"defending":76,"physical":80,"overall":75},
         {"player_id":5121,"name":"Guido Rodriguez","position":"CDM","nationality":"Argentina","age":30,"pace":66,"shooting":56,"passing":74,"dribbling":62,"defending":78,"physical":76,"overall":80},
         {"player_id":5122,"name":"Sergio Canales","position":"CM","nationality":"Spain","age":33,"pace":64,"shooting":66,"passing":78,"dribbling":72,"defending":52,"physical":60,"overall":77},
@@ -182,8 +175,7 @@
         {"player_id":5127,"name":"Antony","position":"LW","nationality":"Brazil","age":24,"pace":84,"shooting":68,"passing":64,"dribbling":80,"defending":28,"physical":60,"overall":75},
         {"player_id":5128,"name":"Ayoze Perez","position":"FW","nationality":"Spain","age":31,"pace":74,"shooting":70,"passing":68,"dribbling":70,"defending":38,"physical":60,"overall":76},
         {"player_id":5129,"name":"Borja Iglesias","position":"ST","nationality":"Spain","age":31,"pace":66,"shooting":74,"passing":60,"dribbling":58,"defending":28,"physical":76,"overall":77},
-        {"player_id":5130,"name":"Vitor Roque","position":"ST","nationality":"Brazil","age":19,"pace":82,"shooting":72,"passing":56,"dribbling":70,"defending":24,"physical":74,"overall":78},
-        {"player_id":5131,"name":"Assane Diao","position":"LW","nationality":"Spain","age":18,"pace":90,"shooting":62,"passing":58,"dribbling":76,"defending":22,"physical":58,"overall":73}
+        {"player_id":5130,"name":"Vitor Roque","position":"ST","nationality":"Brazil","age":19,"pace":82,"shooting":72,"passing":56,"dribbling":70,"defending":24,"physical":74,"overall":78}
       ]
     },
     {
@@ -191,9 +183,7 @@
       "name": "Valencia CF",
       "badge_url": "https://apiv2.allsportsapi.com/logo/124_valencia.jpg",
       "players": [
-        {"player_id":5132,"name":"Giorgi Mamardashvili","position":"GK","nationality":"Georgia","age":23,"pace":50,"shooting":16,"passing":66,"dribbling":38,"defending":12,"physical":74,"overall":82},
         {"player_id":5133,"name":"Alisson Safira","position":"GK","nationality":"Brazil","age":27,"pace":44,"shooting":12,"passing":56,"dribbling":28,"defending":9,"physical":66,"overall":71},
-        {"player_id":5134,"name":"Cristhian Mosquera","position":"CB","nationality":"Spain","age":21,"pace":78,"shooting":36,"passing":60,"dribbling":56,"defending":76,"physical":76,"overall":74},
         {"player_id":5135,"name":"Mouctar Diakhaby","position":"CB","nationality":"France","age":27,"pace":76,"shooting":38,"passing":58,"dribbling":56,"defending":76,"physical":78,"overall":77},
         {"player_id":5136,"name":"Cesar Tarrega","position":"CB","nationality":"Spain","age":22,"pace":72,"shooting":34,"passing":58,"dribbling":52,"defending":72,"physical":72,"overall":75},
         {"player_id":5137,"name":"Jose Luis Gaya","position":"LB","nationality":"Spain","age":29,"pace":78,"shooting":56,"passing":70,"dribbling":68,"defending":74,"physical":64,"overall":79},
@@ -282,7 +272,6 @@
         {"player_id":5199,"name":"Randy Nteka","position":"LW","nationality":"D.R. Congo","age":25,"pace":82,"shooting":62,"passing":54,"dribbling":68,"defending":26,"physical":66,"overall":72},
         {"player_id":5200,"name":"Raul de Tomas","position":"ST","nationality":"Spain","age":30,"pace":68,"shooting":72,"passing":56,"dribbling":58,"defending":24,"physical":66,"overall":74},
         {"player_id":5201,"name":"Jorge de Frutos","position":"RW","nationality":"Spain","age":27,"pace":80,"shooting":60,"passing":58,"dribbling":68,"defending":28,"physical":58,"overall":71},
-        {"player_id":5202,"name":"Santi Comesana","position":"CM","nationality":"Spain","age":24,"pace":64,"shooting":50,"passing":60,"dribbling":56,"defending":52,"physical":56,"overall":68},
         {"player_id":5203,"name":"Andrei Ratiu","position":"RB","nationality":"Romania","age":25,"pace":80,"shooting":46,"passing":56,"dribbling":56,"defending":62,"physical":60,"overall":70}
       ]
     },
@@ -327,12 +316,10 @@
         {"player_id":5230,"name":"Carles Alena","position":"CM","nationality":"Spain","age":26,"pace":66,"shooting":56,"passing":66,"dribbling":62,"defending":54,"physical":56,"overall":70},
         {"player_id":5231,"name":"Jose Macia (Portu)","position":"RW","nationality":"Spain","age":29,"pace":80,"shooting":62,"passing":56,"dribbling":64,"defending":28,"physical":58,"overall":71},
         {"player_id":5232,"name":"Borja Mayoral","position":"ST","nationality":"Spain","age":27,"pace":74,"shooting":72,"passing":56,"dribbling":60,"defending":24,"physical":66,"overall":73},
-        {"player_id":5233,"name":"Mason Greenwood","position":"RW","nationality":"England","age":23,"pace":82,"shooting":76,"passing":62,"dribbling":78,"defending":26,"physical":72,"overall":79},
         {"player_id":5234,"name":"Chrisantus Uche","position":"FW","nationality":"Nigeria","age":23,"pace":86,"shooting":62,"passing":50,"dribbling":68,"defending":22,"physical":64,"overall":71},
         {"player_id":5235,"name":"Yellu Santiago","position":"CM","nationality":"Spain","age":23,"pace":66,"shooting":52,"passing":60,"dribbling":54,"defending":54,"physical":56,"overall":67},
         {"player_id":5236,"name":"Nemanja Maksimovic","position":"CDM","nationality":"Serbia","age":28,"pace":62,"shooting":50,"passing":62,"dribbling":52,"defending":68,"physical":68,"overall":69},
         {"player_id":5237,"name":"Juan Iglesias","position":"LB","nationality":"Spain","age":23,"pace":72,"shooting":40,"passing":52,"dribbling":50,"defending":60,"physical":56,"overall":66},
-        {"player_id":5238,"name":"Enes Unal","position":"ST","nationality":"Turkey","age":27,"pace":72,"shooting":72,"passing":52,"dribbling":56,"defending":24,"physical":72,"overall":74},
         {"player_id":5239,"name":"Isidro Buen dia","position":"CB","nationality":"Spain","age":24,"pace":66,"shooting":32,"passing":50,"dribbling":44,"defending":66,"physical":66,"overall":66}
       ]
     },
@@ -344,7 +331,6 @@
         {"player_id":5240,"name":"Orjan Nyland","position":"GK","nationality":"Norway","age":34,"pace":46,"shooting":12,"passing":60,"dribbling":32,"defending":9,"physical":68,"overall":76},
         {"player_id":5241,"name":"Alvaro Fernandez","position":"GK","nationality":"Spain","age":22,"pace":44,"shooting":10,"passing":56,"dribbling":26,"defending":8,"physical":62,"overall":70},
         {"player_id":5242,"name":"Gonzalo Montiel","position":"RB","nationality":"Argentina","age":27,"pace":78,"shooting":56,"passing":66,"dribbling":64,"defending":72,"physical":68,"overall":75},
-        {"player_id":5243,"name":"Loic Bade","position":"CB","nationality":"France","age":24,"pace":80,"shooting":40,"passing":62,"dribbling":58,"defending":78,"physical":76,"overall":76},
         {"player_id":5244,"name":"Marcao","position":"CB","nationality":"Brazil","age":28,"pace":72,"shooting":38,"passing":56,"dribbling":52,"defending":74,"physical":76,"overall":74},
         {"player_id":5245,"name":"Marcos Acuna","position":"LB","nationality":"Argentina","age":32,"pace":78,"shooting":54,"passing":66,"dribbling":64,"defending":70,"physical":64,"overall":76},
         {"player_id":5246,"name":"Jose Angel Carmona","position":"CB","nationality":"Spain","age":22,"pace":72,"shooting":36,"passing":58,"dribbling":52,"defending":72,"physical":70,"overall":72},
@@ -372,7 +358,6 @@
         {"player_id":5261,"name":"Daley Blind","position":"CB","nationality":"Netherlands","age":34,"pace":62,"shooting":44,"passing":72,"dribbling":58,"defending":72,"physical":60,"overall":75},
         {"player_id":5262,"name":"Ladislav Krejci","position":"CB","nationality":"Czech Republic","age":23,"pace":74,"shooting":38,"passing":62,"dribbling":54,"defending":74,"physical":72,"overall":74},
         {"player_id":5263,"name":"Miguel Gutierrez","position":"LB","nationality":"Spain","age":23,"pace":82,"shooting":52,"passing":64,"dribbling":64,"defending":66,"physical":60,"overall":73},
-        {"player_id":5264,"name":"Eric Garcia","position":"CB","nationality":"Spain","age":23,"pace":70,"shooting":36,"passing":68,"dribbling":58,"defending":76,"physical":68,"overall":74},
         {"player_id":5265,"name":"Donny van de Beek","position":"CM","nationality":"Netherlands","age":27,"pace":72,"shooting":62,"passing":74,"dribbling":72,"defending":56,"physical":62,"overall":72},
         {"player_id":5266,"name":"Oriol Romeu","position":"CDM","nationality":"Spain","age":33,"pace":62,"shooting":52,"passing":68,"dribbling":56,"defending":72,"physical":66,"overall":72},
         {"player_id":5267,"name":"Viktor Tsygankov","position":"LW","nationality":"Ukraine","age":26,"pace":82,"shooting":66,"passing":60,"dribbling":72,"defending":28,"physical":58,"overall":73},
@@ -398,7 +383,6 @@
         {"player_id":5280,"name":"Abqar Abqar","position":"CB","nationality":"Morocco","age":24,"pace":70,"shooting":32,"passing":52,"dribbling":46,"defending":66,"physical":66,"overall":67},
         {"player_id":5281,"name":"Ruben Duarte","position":"LB","nationality":"Spain","age":29,"pace":72,"shooting":44,"passing":56,"dribbling":52,"defending":62,"physical":58,"overall":68},
         {"player_id":5282,"name":"Jon Guridi","position":"CDM","nationality":"Spain","age":25,"pace":62,"shooting":48,"passing":62,"dribbling":52,"defending":64,"physical":62,"overall":68},
-        {"player_id":5283,"name":"Luis Rioja","position":"LW","nationality":"Spain","age":27,"pace":80,"shooting":62,"passing":58,"dribbling":64,"defending":28,"physical":56,"overall":72},
         {"player_id":5284,"name":"Toni Moya","position":"CM","nationality":"Spain","age":24,"pace":66,"shooting":54,"passing":62,"dribbling":56,"defending":54,"physical":58,"overall":68},
         {"player_id":5285,"name":"Conechny","position":"CM","nationality":"Argentina","age":24,"pace":72,"shooting":56,"passing":60,"dribbling":58,"defending":50,"physical":58,"overall":68},
         {"player_id":5286,"name":"Theo Zidane","position":"CM","nationality":"France","age":22,"pace":70,"shooting":50,"passing":58,"dribbling":56,"defending":48,"physical":54,"overall":65},
@@ -427,7 +411,6 @@
         {"player_id":5302,"name":"Antonio Sanchez","position":"CM","nationality":"Spain","age":24,"pace":68,"shooting":54,"passing":62,"dribbling":56,"defending":56,"physical":58,"overall":68},
         {"player_id":5303,"name":"Iddrisu Baba","position":"CDM","nationality":"Ghana","age":28,"pace":70,"shooting":46,"passing":60,"dribbling":52,"defending":70,"physical":72,"overall":70},
         {"player_id":5304,"name":"Samu Costa","position":"CM","nationality":"Portugal","age":24,"pace":68,"shooting":52,"passing":60,"dribbling":54,"defending":58,"physical":60,"overall":68},
-        {"player_id":5305,"name":"Lee Kang-in","position":"CAM","nationality":"South Korea","age":23,"pace":78,"shooting":72,"passing":74,"dribbling":78,"defending":38,"physical":60,"overall":75},
         {"player_id":5306,"name":"Abdón Prats","position":"FW","nationality":"Spain","age":31,"pace":64,"shooting":64,"passing":52,"dribbling":52,"defending":22,"physical":60,"overall":65},
         {"player_id":5307,"name":"Vedat Muriqi","position":"ST","nationality":"Kosovo","age":30,"pace":68,"shooting":72,"passing":44,"dribbling":50,"defending":24,"physical":82,"overall":72},
         {"player_id":5308,"name":"Sergi Darder","position":"CM","nationality":"Spain","age":31,"pace":68,"shooting":60,"passing":68,"dribbling":62,"defending":52,"physical":58,"overall":69},
@@ -491,7 +474,6 @@
       "name": "Levante UD",
       "badge_url": "https://apiv2.allsportsapi.com/logo/153_levante.jpg",
       "players": [
-        {"player_id":5348,"name":"Mathew Ryan","position":"GK","nationality":"Australia","age":32,"pace":50,"shooting":16,"passing":66,"dribbling":40,"defending":12,"physical":74,"overall":80},
         {"player_id":5349,"name":"Jeremy Toljan","position":"RB","nationality":"Germany","age":29,"pace":82,"shooting":46,"passing":68,"dribbling":64,"defending":72,"physical":70,"overall":77},
         {"player_id":5350,"name":"Matías Moreno","position":"CB","nationality":"Argentina","age":20,"pace":70,"shooting":32,"passing":54,"dribbling":50,"defending":74,"physical":76,"overall":74},
         {"player_id":5351,"name":"Adrián De la Fuente","position":"CB","nationality":"Spain","age":25,"pace":68,"shooting":38,"passing":56,"dribbling":48,"defending":72,"physical":74,"overall":73},

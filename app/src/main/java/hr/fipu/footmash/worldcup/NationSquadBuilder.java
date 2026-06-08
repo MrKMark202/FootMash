@@ -51,7 +51,18 @@ public final class NationSquadBuilder {
         List<WcPlayer> pool = new ArrayList<>();
         if (dao != null && nation != null && !nation.englishNames.isEmpty()) {
             List<RealPlayer> real = dao.getPlayersByNationalityInSync(nation.englishNames);
-            if (real != null) for (RealPlayer p : real) pool.add(WcPlayer.fromReal(p));
+            if (real != null) {
+                // The bundled leagues are snapshots from different seasons, so a
+                // player who transferred (e.g. Modrić: Real Madrid → AC Milan)
+                // appears in two files. Collapse same-name duplicates, keeping the
+                // first (highest overall, since the query is ordered desc) so a
+                // nation never lists the same person twice.
+                java.util.Set<String> seen = new java.util.HashSet<>();
+                for (RealPlayer p : real) {
+                    String key = p.getName() == null ? "" : p.getName().trim().toLowerCase();
+                    if (seen.add(key)) pool.add(WcPlayer.fromReal(p));
+                }
+            }
         }
         addFillers(pool, nation);
         return pool;

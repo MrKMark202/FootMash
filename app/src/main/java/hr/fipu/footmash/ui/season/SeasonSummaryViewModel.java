@@ -53,6 +53,7 @@ public class SeasonSummaryViewModel extends AndroidViewModel {
 
     private final AppDatabase db;
     private final MutableLiveData<SummaryData> summaryData = new MutableLiveData<>();
+    private final MutableLiveData<List<SeasonStanding>> fullTable = new MutableLiveData<>();
 
     public SeasonSummaryViewModel(@NonNull Application application) {
         super(application);
@@ -64,6 +65,7 @@ public class SeasonSummaryViewModel extends AndroidViewModel {
             List<SeasonStanding> standings = db.standingDao().getStandingsSync(clubId);
             List<TopScorerRow> topScorers = db.standingDao().getTopScorers(clubId);
             if (standings.isEmpty()) return;
+            fullTable.postValue(standings);
 
             SeasonStanding champ = standings.get(0);
 
@@ -95,4 +97,6 @@ public class SeasonSummaryViewModel extends AndroidViewModel {
     }
 
     public LiveData<SummaryData> getSummaryData() { return summaryData; }
+
+    public LiveData<List<SeasonStanding>> getFullTable() { return fullTable; }
 }

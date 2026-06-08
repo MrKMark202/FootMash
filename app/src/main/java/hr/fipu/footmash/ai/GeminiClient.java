@@ -1,5 +1,6 @@
 package hr.fipu.footmash.ai;
 
+import hr.fipu.footmash.BuildConfig;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -12,8 +13,13 @@ public class GeminiClient {
     public static Retrofit getClient() {
         if (retrofit == null) {
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-            
+            // Never log request bodies/URLs in release: the URL carries the
+            // Gemini API key as a ?key= query param. Debug builds keep full
+            // logging for development.
+            logging.setLevel(BuildConfig.DEBUG
+                    ? HttpLoggingInterceptor.Level.BODY
+                    : HttpLoggingInterceptor.Level.NONE);
+
             OkHttpClient client = new OkHttpClient.Builder()
                     .addInterceptor(logging)
                     .build();

@@ -211,6 +211,12 @@ public class MatchSimulator {
                 m.homeGoals = Math.max(0, Math.min(7, m.homeGoals));
                 m.awayGoals = Math.max(0, Math.min(7, m.awayGoals));
                 if (m.scorers == null) m.scorers = new ArrayList<>();
+                // Keep the scorer list consistent with the (possibly clamped)
+                // scoreline so a card never shows more scorers than goals.
+                int totalGoals = m.homeGoals + m.awayGoals;
+                if (m.scorers.size() > totalGoals) {
+                    m.scorers = new ArrayList<>(m.scorers.subList(0, totalGoals));
+                }
             }
             return list;
         } catch (Exception e) {

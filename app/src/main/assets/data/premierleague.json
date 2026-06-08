@@ -142,7 +142,7 @@
       ]
     },
     {
-      "team_id": 73,
+      "team_id": 47,
       "name": "Tottenham Hotspur",
       "badge_url": "",
       "players": [
@@ -353,7 +353,6 @@
         {"player_id":2256,"name":"Yeremy Pino","position":"RW","nationality":"Spain","age":23,"pace":82,"shooting":72,"passing":74,"dribbling":80,"defending":44,"physical":62,"overall":78},
         {"player_id":2257,"name":"Jean-Philippe Mateta","position":"ST","nationality":"France","age":28,"pace":76,"shooting":80,"passing":72,"dribbling":76,"defending":40,"physical":82,"overall":82},
         {"player_id":2258,"name":"Eddie Nketiah","position":"ST","nationality":"England","age":26,"pace":78,"shooting":76,"passing":68,"dribbling":74,"defending":36,"physical":72,"overall":77},
-        {"player_id":2259,"name":"Odsonne Edouard","position":"ST","nationality":"France","age":27,"pace":74,"shooting":74,"passing":70,"dribbling":74,"defending":34,"physical":76,"overall":74},
         {"player_id":2260,"name":"Justin Devenny","position":"CM","nationality":"N. Ireland","age":21,"pace":74,"shooting":64,"passing":72,"dribbling":74,"defending":66,"physical":68,"overall":70}
       ]
     },
@@ -432,7 +431,6 @@
         {"player_id":2314,"name":"David Brooks","position":"RW","nationality":"Wales","age":28,"pace":78,"shooting":74,"passing":74,"dribbling":80,"defending":42,"physical":62,"overall":76},
         {"player_id":2315,"name":"Antoine Semenyo","position":"RW","nationality":"Ghana","age":25,"pace":88,"shooting":78,"passing":74,"dribbling":82,"defending":46,"physical":80,"overall":83},
         {"player_id":2316,"name":"Justin Kluivert","position":"LW","nationality":"Netherlands","age":26,"pace":86,"shooting":76,"passing":74,"dribbling":82,"defending":42,"physical":66,"overall":81},
-        {"player_id":2317,"name":"Dango Ouattara","position":"RW","nationality":"Burkina Faso","age":23,"pace":88,"shooting":72,"passing":70,"dribbling":76,"defending":40,"physical":74,"overall":78},
         {"player_id":2318,"name":"Evanilson","position":"ST","nationality":"Brazil","age":26,"pace":82,"shooting":80,"passing":74,"dribbling":80,"defending":40,"physical":76,"overall":82},
         {"player_id":2319,"name":"Enes Unal","position":"ST","nationality":"Turkey","age":28,"pace":74,"shooting":78,"passing":72,"dribbling":74,"defending":38,"physical":76,"overall":78},
         {"player_id":2320,"name":"Daniel Jebbison","position":"ST","nationality":"England","age":22,"pace":78,"shooting":72,"passing":68,"dribbling":72,"defending":34,"physical":76,"overall":72}
