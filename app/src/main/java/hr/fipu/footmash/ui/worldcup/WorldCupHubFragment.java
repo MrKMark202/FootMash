@@ -49,6 +49,10 @@ public class WorldCupHubFragment extends Fragment {
             Navigation.findNavController(v).navigate(R.id.action_hub_to_bracket));
         binding.buttonChampion.setOnClickListener(v ->
             Navigation.findNavController(v).navigate(R.id.action_hub_to_champion));
+        binding.buttonStats.setOnClickListener(v ->
+            Navigation.findNavController(v).navigate(R.id.action_hub_to_stats));
+        binding.buttonFormation.setOnClickListener(v ->
+            Navigation.findNavController(v).navigate(R.id.action_hub_to_formation));
 
         viewModel.getState().observe(getViewLifecycleOwner(), this::bind);
         viewModel.getBusy().observe(getViewLifecycleOwner(), busy -> {
@@ -68,6 +72,8 @@ public class WorldCupHubFragment extends Fragment {
         binding.buttonChampion.setVisibility(done ? View.VISIBLE : View.GONE);
         binding.buttonSimulate.setVisibility(done ? View.GONE : View.VISIBLE);
         binding.cardNextMatch.setVisibility(done ? View.GONE : View.VISIBLE);
+        // The team can be reshaped at any point while the tournament is running.
+        binding.buttonFormation.setVisibility(done ? View.GONE : View.VISIBLE);
 
         WcTournament.WcMatch next = nextUserMatch(t);
         if (next != null) {
@@ -124,6 +130,9 @@ public class WorldCupHubFragment extends Fragment {
 
     private void showResults(List<WcTournament.WcMatch> matches) {
         if (matches == null || matches.isEmpty() || !isAdded()) return;
+        // One-shot: clear so re-observing (e.g. returning from the bracket) won't
+        // re-pop the same results dialog.
+        viewModel.consumeResults();
         WcTournament t = viewModel.getState().getValue();
         String userKey = t != null ? t.userNationKey : null;
         StringBuilder sb = new StringBuilder();

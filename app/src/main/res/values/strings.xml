@@ -37,6 +37,30 @@
     <string name="wc_round_third">Za 3. mjesto</string>
     <string name="wc_group_stage">Skupine · kolo %1$d/3</string>
     <string name="wc_eliminated">Tvoja reprezentacija je ispala</string>
+    <string name="wc_stats">Statistika</string>
+    <string name="wc_stats_title">🏆 Statistika prvenstva</string>
+    <string name="wc_top_scorers">Najbolji strijelci</string>
+    <string name="wc_top_assists">Najbolji asistenti</string>
+    <string name="wc_stats_goals">gol.</string>
+    <string name="wc_stats_assists">asist.</string>
+    <string name="wc_stats_empty">Statistika će se pojaviti nakon prvih utakmica.</string>
+    <string name="wc_change_formation">Promijeni formaciju</string>
+    <string name="wc_change_formation_title">⚙️ Formacija i postava</string>
+    <string name="wc_change_formation_sub">Odaberi formaciju — početna postava se automatski raspoređuje</string>
+    <string name="wc_save_formation">Spremi formaciju</string>
+    <string name="wc_edit_team">Uredi postavu</string>
+    <string name="wc_edit_team_title">⚙️ Postava i formacija</string>
+    <string name="wc_edit_team_sub">Promijeni formaciju i odaberi početnih 11 — kad god želiš</string>
+    <string name="wc_save_team">Spremi postavu</string>
+    <string name="wc_xi_label">Početnih XI</string>
+    <string name="wc_xi_full">Postava je popunjena — ukloni igrača prije dodavanja</string>
+    <string name="wc_auto_xi">Auto postava</string>
+    <string name="wc_edit_team_help">Tapni slot ili igrača na klupi da mijenjaš sastav. Formaciju biraš gore.</string>
+    <string name="wc_to_bench">Na klupu</string>
+    <string name="wc_to_xi">U prvi sastav</string>
+    <string name="wc_close">Zatvori</string>
+    <string name="wc_fill_slot">Popuni poziciju</string>
+    <string name="wc_no_bench_for_slot">Nema igrača na klupi za ovu poziciju.</string>
 
     <!-- Home -->
     <string name="welcome_title">Dobrodošli u FootMash</string>

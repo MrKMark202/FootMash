@@ -65,7 +65,25 @@
         <action
             android:id="@+id/action_hub_to_champion"
             app:destination="@id/nav_wc_champion" />
+        <action
+            android:id="@+id/action_hub_to_stats"
+            app:destination="@id/nav_wc_stats" />
+        <action
+            android:id="@+id/action_hub_to_formation"
+            app:destination="@id/nav_wc_formation" />
     </fragment>
+
+    <fragment
+        android:id="@+id/nav_wc_stats"
+        android:name="hr.fipu.footmash.ui.worldcup.WorldCupStatsFragment"
+        android:label="@string/wc_stats"
+        tools:layout="@layout/fragment_wc_stats" />
+
+    <fragment
+        android:id="@+id/nav_wc_formation"
+        android:name="hr.fipu.footmash.ui.worldcup.WorldCupFormationFragment"
+        android:label="@string/wc_change_formation"
+        tools:layout="@layout/fragment_wc_formation" />
 
     <fragment
         android:id="@+id/nav_wc_groups"

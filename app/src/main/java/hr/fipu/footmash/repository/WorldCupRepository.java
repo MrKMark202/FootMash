@@ -134,6 +134,26 @@ public class WorldCupRepository {
         return t;
     }
 
+    /**
+     * Saves the user's team setup mid-tournament: a new formation and/or a manually
+     * chosen starting XI (ids into the squad, in slot order). The user's nation
+     * rating is refreshed from the resulting XI. Persists and returns the updated
+     * state, or {@code null} if there is no active tournament.
+     */
+    public WcTournament saveTeam(String formation, List<Integer> xiIds) {
+        WcTournament t = load();
+        if (t == null) return null;
+        if (formation != null) t.formation = formation;
+        if (xiIds != null && !xiIds.isEmpty()) {
+            t.startingXiIds = new ArrayList<>(xiIds);
+        }
+        if (t.ratings != null && t.userNationKey != null) {
+            t.ratings.put(t.userNationKey, clampRating(NationSquadBuilder.ratingOf(userXi(t))));
+        }
+        save(t);
+        return t;
+    }
+
     /** Seeds nations into 4 pots by rating and draws one per pot into each group. */
     private void drawGroups(WcTournament t) {
         List<String> keys = new ArrayList<>();

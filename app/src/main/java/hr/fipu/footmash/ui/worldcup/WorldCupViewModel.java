@@ -86,6 +86,25 @@ public class WorldCupViewModel extends AndroidViewModel {
         }).start();
     }
 
+    /**
+     * Clears the one-shot results so the dialog isn't re-shown when the hub view is
+     * recreated (e.g. after returning from the bracket/groups screen).
+     */
+    public void consumeResults() {
+        lastResults.setValue(null);
+    }
+
+    /** Saves a new formation and/or manually chosen starting XI (slot order). */
+    public void saveTeam(String formation, List<Integer> xiIds) {
+        if (Boolean.TRUE.equals(busy.getValue())) return;
+        busy.setValue(true);
+        new Thread(() -> {
+            WcTournament t = repo.saveTeam(formation, xiIds);
+            state.postValue(t);
+            busy.postValue(false);
+        }).start();
+    }
+
     private List<WcTournament.WcMatch> extractResults(WcTournament t, String prevStage, int prevMd) {
         List<WcTournament.WcMatch> out = new ArrayList<>();
         if (t == null) return out;
